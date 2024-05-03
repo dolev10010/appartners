@@ -1,0 +1,191 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.backgroundImage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  position: relative;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: #5E6C5B;
+}
+
+.logo {
+  font-size: 52px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.welcome {
+  font-size: 30px;
+  margin-top: 40px;
+}
+
+.pageName {
+  font-size: 24px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.boxTitle {
+  font-size: 12px;
+  margin-top: 1px;
+  text-align: left;
+}
+
+.middleBox {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.middleFormBox {
+  margin-top: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.formBoxes,.loginBox,.buttons {
+  width: 345.5px;
+  height: 65.4px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+}
+
+.formBoxes {
+  background-color: #d6e0e2;
+  color: #162a2c;
+}
+
+.buttons {
+  color: #FEFCF6;
+  background-color: #162a2c;
+  margin-top: 20px;
+}
+
+.loginBox {
+  background-color: #162a2c;
+  color: #d6e0e2;
+  margin-top: 20px;
+}
+
+.text {
+  margin-top: 20px;
+}
+
+.smallText {
+  font-size: 15px;
+  margin-top: 15px;
+  color: #5E6C5B;
+}
+
+.checkBoxText {
+  font-size: 15px;
+  margin-top: 15px;
+  color: #5E6C5B;
+  text-align: left;
+}
+
+.inlineButton {
+  background: none;
+  border: none;
+  color: #5E6C5B; 
+  cursor: pointer;
+  font-size: inherit; 
+  padding: 0;
+}
+
+.nonBoxButton {
+  width: 345.5px;
+  height: 65.4px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: transparent;
+  color: #5E6C5B;
+}
+
+.guestButton:hover {
+  text-decoration: underline;
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-bottom: none;
+  background-color: transparent;
+  text-align: center;}
+
+.input::placeholder {
+  color: #162A2C;
+}
+
+/* Default styles for both web and mobile */
+.backgroundImage {
+  display: none; /* Hide by default */
+}
+
+.backgroundImageMobile {
+  display: none; /* Hide by default */
+}
+
+/* Show background image for larger screens (e.g., computers) */
+
+/* welcome Page */
+@media (min-width: 768px) {
+  .backgroundImage {
+    display: block;
+    background-image: url('./background-pictures/welcome-background-web.jpg'); /* Provide the correct path */
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .backgroundImageNewAccount {
+    display: block;
+    background-image: url('./background-pictures/newAccount-background-web.jpg'); /* Provide the correct path */
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .backgroundImageMobile {
+    display: block;
+    background-image: url('./background-pictures/welcome-background-mobile.jpg'); /* Provide the correct path */
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .backgroundImageMobileNewAccount {
+    display: block;
+    background-image: url('./background-pictures/newAccount-background-mobile.jpg'); /* Provide the correct path */
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+  }
+}

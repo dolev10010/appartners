@@ -1,17 +1,17 @@
 class Queries:
 
-    # @staticmethod
-    # def insert_health_query(table_name):
-    #     return f"INSERT INTO {table_name} VALUES(to_timestamp(%s))"
+    @staticmethod
+    def insert_health_query(table_name):
+        return f"INSERT INTO {table_name} VALUES(to_timestamp(%s))"
 
     @staticmethod
     def insert_registration_info_query(table_name):
         # creation timestamp, email, password
-        return f"INSERT INTO {table_name} VALUES(to_timestamp(%s), %s, %s)"
+        return f"INSERT INTO {table_name} (creation_time, email, password) VALUES(to_timestamp(%s), %s, %s)"
 
     @staticmethod
     def insert_new_user_profile_query(table_name):
-        return f"INSERT INTO {table_name} VALUES(%s)"  # 18 params
+        return f"INSERT INTO {table_name} (user_id) VALUES(%s)"
 
     @staticmethod
     def update_user_profile_query(table_name, profile_id):
@@ -30,7 +30,7 @@ class Queries:
         return f"INSERT INTO {table_name} VALUES(%s, %s, %s)"
 
     @staticmethod
-    def fetch_email_query(table_name, email):
+    def fetch_user_email_query(table_name, email):
         return f"SELECT email FROM {table_name} WHERE email = '{email}'"
 
     @staticmethod
@@ -38,6 +38,6 @@ class Queries:
         return f"SELECT user_id FROM {table_name} WHERE email = '{email}'"
 
     @staticmethod
-    def fetch_user_password(table_name, email):
-        return f"SELECT password FROM {table_name} WHERE email = {email}"
+    def fetch_user_password_query(table_name, email):
+        return f"SELECT password FROM {table_name} WHERE email = '{email}'"
 

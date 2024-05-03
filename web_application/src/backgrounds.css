@@ -1,0 +1,55 @@
+/* Default styles for both web and mobile */
+.backgroundImage {
+    display: none; /* Hide by default */
+  }
+  
+  .backgroundImageMobile {
+    display: none; /* Hide by default */
+  }
+  
+  /* Show background image for larger screens (e.g., computers) */
+  
+  /* welcome Page */
+  @media (min-width: 768px) {
+    .backgroundImageWelcome {
+      display: block;
+      background-image: url('./background-pictures/welcome-background-web.jpg'); /* Provide the correct path */
+      background-size: cover;
+      object-fit: cover;
+      background-position: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  @media (max-width: 767px) {
+    .backgroundImageMobileWelcome {
+      display: block;
+      background-image: url('./background-pictures/welcome-background-mobile.jpg'); /* Provide the correct path */
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+    /* new account Page */
+    @media (min-width: 768px) {
+        .backgroundImageNewAccount {
+          display: block;
+          background-image: url('./background-pictures/newAccount-background-web.jpg'); /* Provide the correct path */
+          background-size: cover;
+          background-position: center;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      @media (max-width: 767px) {
+        .backgroundImageMobileNewAccount {
+          display: block;
+          background-image: url('./background-pictures/newAccount-background-mobile.jpg'); /* Provide the correct path */
+          background-size: cover;
+          background-position: center;
+          width: 100%;
+          height: 100%;
+        }
+      }

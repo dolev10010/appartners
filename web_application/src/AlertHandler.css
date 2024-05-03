@@ -1,0 +1,40 @@
+.alertHandlerOverlay {
+    position: fixed;
+    top: 0;
+    left: 10px;
+    width: 300px; /* Set a fixed width for the sidebar */
+    height: 100%; /* Full height */
+    display: flex;
+    justify-content: start; /* Align content to the left side */
+    align-items: flex-start; /* Align items to the top */
+    z-index: 1000; /* High z-index to overlay on top of other content */
+}
+
+.alertHandlerContent {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    margin-top: 20px; /* Optional: add some top margin for aesthetics */
+}
+
+button {
+    padding: 10px 20px; /* Increased padding for better clickability */
+    font-size: 16px; /* Larger font size for readability */
+    color: #fff; /* White text */
+    background-color: #50a0ae; /* A matching color for the button */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Cursor indicates the element is clickable */
+    outline: none; /* Remove the outline to keep the design clean */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions for hover and active states */
+}
+
+button:hover {
+    background-color: #387880; /* Darker shade on hover */
+}
+
+button:active {
+    transform: scale(0.95); /* Slightly scale down when clicked */
+}
+
