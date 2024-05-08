@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./styles.css";
 import AlertHandler from './AlertHandler';
+import config from './config.json';
+
 
 function CreateAccountPage({ setCurrentPage }) {
     const [email, setEmail] = useState(null); // State to hold the entered email
@@ -65,7 +67,7 @@ function CreateAccountPage({ setCurrentPage }) {
       
         console.log("Sending data to server:", userData);
       
-        fetch('http://localhost:5433/registration-info', {
+        fetch(`http://${config.serverPublicIP}:5433/registration-info`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
