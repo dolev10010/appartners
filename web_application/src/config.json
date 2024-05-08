@@ -1,4 +1,5 @@
 {
-    "serverPublicIP": "localhost"
+    "serverPublicIP": "localhost",
+    "test": "test"
 }
   
