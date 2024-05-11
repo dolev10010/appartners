@@ -72,6 +72,10 @@
   color: #162a2c;
 }
 
+.formBoxes,.loginBox {
+  line-height: 65.4px;
+}
+
 .buttons {
   color: #FEFCF6;
   background-color: #162a2c;
@@ -110,9 +114,8 @@
   padding: 0;
 }
 
-.nonBoxButton {
-  width: 345.5px;
-  height: 65.4px;
+
+ .nonBoxButton {
   margin-top: 20px;
   border: none;
   border-radius: 10px;

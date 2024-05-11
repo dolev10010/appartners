@@ -1,4 +1,8 @@
 {
-    "serverPublicIP": "localhost"
+    "serverPublicIP": "localhost",
+    "awsCognito": {
+        "UserPoolId": "",
+        "ClientId": ""
+    }
 }
   
