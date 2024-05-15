@@ -151,6 +151,55 @@
   display: none; /* Hide by default */
 }
 
+.profileImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-top: 20px;
+  background-image: url(./background-pictures/profilePicture.jpg);
+  }
+
+  .formRow {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px; /* Adjust the gap between the elements */
+    text-align: center;
+  }
+
+  .smallBox {
+    width: 165.25px;
+    height: 65.4px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    background-color: #d6e0e2;
+    color: #162a2c;
+  }
+
+  .bigBox {
+    width: 345.5px;
+    height: 90px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    background-color: #d6e0e2;
+    color: #162a2c;
+  }
+
+  .rowBoxTitle {
+    font-size: 12px;
+    margin-top: 1px;
+    margin-right: 100px; 
+    text-align: left;
+  }
+
 /* Show background image for larger screens (e.g., computers) */
 
 /* welcome Page */
