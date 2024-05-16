@@ -11,7 +11,10 @@ class Queries:
 
     @staticmethod
     def insert_new_user_profile_query(table_name):
-        return f"INSERT INTO {table_name} (user_id) VALUES(%s)"
+        return f"""INSERT INTO {table_name} (user_id, profile_bio, photo_url, first_name, last_name, sex, 
+            birthday, age, smoking, like_animals, keeps_kosher, first_roomate_appartment, profession, status, 
+            hobbies, has_animals, alergies) 
+            VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
 
     @staticmethod
     def update_user_profile_query(table_name, profile_id):
@@ -40,4 +43,5 @@ class Queries:
     @staticmethod
     def fetch_user_password_query(table_name, email):
         return f"SELECT password FROM {table_name} WHERE email = '{email}'"
+
 

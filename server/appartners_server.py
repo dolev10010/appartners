@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import time
+import datetime
 import re
 from server_logger import Logger
 from writer_to_postgres import DataBase
@@ -18,6 +19,19 @@ def is_email_already_exists(email):
     if matching_email:
         return True
     return False
+
+
+def validate_date_format(date_str):
+    try:
+        datetime.datetime.strptime(date_str, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+
+def validate_photo_format(photo_url):
+    allowed_extensions = ['jpg', 'jpeg', 'png']
+    return any(photo_url.lower().endswith(ext) for ext in allowed_extensions)
 
 
 def is_password_ok(password):
@@ -86,7 +100,7 @@ def login():
         registration_password = postgres_client.read_from_db(password_query)
         if registration_password == password:
             logger.log_info(f"successful login with email {email}")
-            return jsonify({"errorMessage": "successful login"}), 200
+            return jsonify({"message": "successful login"}), 200
         else:
             logger.log_info(f"login failed with email {email} | reason: wrong information")
             return jsonify({"errorMessage": "wrong info"}), 401
@@ -95,5 +109,65 @@ def login():
         return jsonify({"errorMessage": str(e)}), 500
 
 
+@app.route('/update-profile', methods=['POST', 'OPTIONS'])
+def update_profile():
+    try:
+        if request.method == 'OPTIONS':
+            return {}, 200
+        profile_data = request.get_json()
+        user_id = profile_data.get('user_id')
+        profile_bio = profile_data.get('profile_bio')
+        photo_url = profile_data.get('photo_url')
+        first_name = profile_data.get('first_name')
+        last_name = profile_data.get('last_name')
+        sex = profile_data.get('sex')
+        birthday = profile_data.get('birthday')
+        age = profile_data.get('age')
+        smoking = profile_data.get('smoking')
+        like_animals = profile_data.get('like_animals')
+        keeps_kosher = profile_data.get('keeps_kosher')
+        first_roomate_appartment = profile_data.get('first_roomate_appartment')
+        profession = profile_data.get('profession')
+        status = profile_data.get('status')
+        hobbies = profile_data.get('hobbies')
+        has_animals = profile_data.get('has_animals')
+        alergies = profile_data.get('alergies')
+
+        if not first_name or not first_name.strip():
+            logger.log_error(f"Profile creation falied for user - {user_id}. First name is mandatory value.")
+            return jsonify({"errorMessage": "First name is required"}), 400
+        if not last_name or not last_name.strip():
+            logger.log_error(f"Profile creation falied for user - {user_id}. Last name is mandatory value.")
+            return jsonify({"errorMessage": "Last name is required"}), 400
+        if not sex or not sex.strip():
+            logger.log_error(f"Profile creation falied for user - {user_id}. Gender is mandatory value.")
+            return jsonify({"errorMessage": "Sex is required"}), 400
+        if not birthday:
+            logger.log_error(f"Profile creation falied for user - {user_id}. Birthday is mandatory value.")
+            return jsonify({"errorMessage": "Birthday is required"}), 400
+        if not validate_date_format(birthday):
+            logger.log_error(f"Profile creation falied for user - {user_id}. The given birth date- "
+                            f"{birthday} is in wrong format.")
+            return jsonify({"errorMessage": f"Invalid birth date- {birthday}."
+                                            f" Date should be in yyyy-mm-dd format."}), 400
+        if not validate_photo_format(photo_url):
+            logger.log_error(f"Profile creation falied for user - {user_id}. Invalid photo file format.")
+            return jsonify({"errorMessage": "Invalid photo format. Photo file should be in jpg/jpeg/png format."}), 400
+
+        profile_query = Queries.insert_new_user_profile_query('user_profile')
+        postgres_client.write_to_db(profile_query, [
+            user_id, profile_bio, photo_url, first_name, last_name, sex, birthday, age,
+            smoking, like_animals, keeps_kosher, first_roomate_appartment, profession,
+            status, hobbies, has_animals, alergies
+        ])
+
+        logger.log_info(f"Profile created successfully for user_id: {user_id}, name: {first_name} {last_name}")
+        return jsonify({"message": "Profile created successfully"}), 200
+
+    except Exception as e:
+        logger.log_error(f"Profile creation failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5433)
+    app.run(host="0.0.0.0", port=5433, debug=True)
