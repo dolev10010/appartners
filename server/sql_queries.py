@@ -44,7 +44,4 @@ class Queries:
     def fetch_user_password_query(table_name, email):
         return f"SELECT password FROM {table_name} WHERE email = '{email}'"
 
-    @staticmethod
-    def fetch_user_by_name_query(table_name, first_name, last_name):
-        return f"SELECT user_id FROM {table_name} WHERE first_name = '{first_name}' AND last_name = '{last_name}'"
 

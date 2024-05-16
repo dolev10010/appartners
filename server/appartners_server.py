@@ -34,15 +34,6 @@ def validate_photo_format(photo_url):
     return any(photo_url.lower().endswith(ext) for ext in allowed_extensions)
 
 
-def is_name_unique(first_name, last_name):
-    query = Queries.fetch_user_by_name_query("user_profile", first_name, last_name)
-    matching_name = postgres_client.read_from_db(query)
-    if matching_name:
-        return False
-    else:
-        return True
-
-
 def is_password_ok(password):
     # Check the length of the password
     if len(password) < 8 or len(password) > 20:
@@ -118,8 +109,8 @@ def login():
         return jsonify({"errorMessage": str(e)}), 500
 
 
-@app.route('/create-profile', methods=['POST', 'OPTIONS'])
-def create_profile():
+@app.route('/update-profile', methods=['POST', 'OPTIONS'])
+def update_profile():
     try:
         if request.method == 'OPTIONS':
             return {}, 200
@@ -159,11 +150,6 @@ def create_profile():
                             f"{birthday} is in wrong format.")
             return jsonify({"errorMessage": f"Invalid birth date- {birthday}."
                                             f" Date should be in yyyy-mm-dd format."}), 400
-        if not is_name_unique(first_name, last_name):
-            logger.log_error(f"Profile creation falied for user - {user_id}. A user with the name- {first_name} "
-                            f"{last_name} is already exists in the system.")
-            return jsonify({"errorMessage": f"A user with the name- {first_name} {last_name}"
-                                            f"is already exists in the system."}), 400
         if not validate_photo_format(photo_url):
             logger.log_error(f"Profile creation falied for user - {user_id}. Invalid photo file format.")
             return jsonify({"errorMessage": "Invalid photo format. Photo file should be in jpg/jpeg/png format."}), 400
