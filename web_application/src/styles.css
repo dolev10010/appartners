@@ -5,6 +5,47 @@
   height: 100%;
 }
 
+.pictureButtenContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pictureButton {
+  border: none;
+  background: none;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.pictureButtonInput {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.rowBoxesContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  text-align: left;    
+}
+
+.labelAndBoxContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: space-between;
+  margin-right: 15px;
+}
+
 .backgroundImage {
   position: absolute;
   width: 100%;
@@ -39,7 +80,8 @@
 
 .boxTitle {
   font-size: 12px;
-  margin-top: 1px;
+  margin-top: 15px;
+  /*DolevA - did the margin top 15px for the profile page, i need to check if making issues in other pages (was 1) */
   text-align: left;
 }
 
@@ -98,11 +140,11 @@
   color: #5E6C5B;
 }
 
-.checkBoxText {
-  font-size: 15px;
+.checkBox {
   margin-top: 15px;
   color: #5E6C5B;
   text-align: left;
+  border-color: #d6e0e2;
 }
 
 .inlineButton {
@@ -150,6 +192,55 @@
 .backgroundImageMobile {
   display: none; /* Hide by default */
 }
+
+.profileImage {
+  width: 107.2px;
+  height: 107.2px;
+  border-radius: 50%;
+  margin-top: 20px;
+  src: url(./background-pictures/profilePicture.jpg);
+  }
+
+  .formRow {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px; /* Adjust the gap between the elements */
+    text-align: center;
+  }
+
+  .smallBox {
+    width: 165.25px;
+    height: 65.4px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    background-color: #d6e0e2;
+    color: #162a2c;
+  }
+
+  .bigBox {
+    width: 345.5px;
+    height: 90px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    background-color: #d6e0e2;
+    color: #162a2c;
+  }
+
+  .rowBoxTitle {
+    font-size: 12px;
+    margin-top: 1px;
+    margin-right: 100px; 
+    text-align: left;
+  }
 
 /* Show background image for larger screens (e.g., computers) */
 
