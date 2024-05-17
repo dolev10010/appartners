@@ -4,8 +4,27 @@ import AlertHandler from './AlertHandler';
 import { useNavigate } from 'react-router-dom';
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import userpool from './UserPool';
+import config from './config.json'
 
-function CreateAccountPage({ setCurrentPage }) {
+function CreateUserProfile(userData) {
+  fetch(`http://${config.serverPublicIP}:5433/create-profile`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        })
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          if (data.errorMessage) {
+            console.log(`error creating user profile, ${data.errorMessage}`)
+            }
+          });
+      }
+
+function CreateAccountPage() {
   const Navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -61,7 +80,7 @@ function CreateAccountPage({ setCurrentPage }) {
 };
 
   const handleSignUp = () => {
-    console.log("Attempting to sign up with", email, password, confirmPassword);
+    console.log("Attempting to sign up with", email);
   
     if (!email || !password || !confirmPassword) {
       setAlertHandlerMessage("Please fill in all fields.");
@@ -87,6 +106,10 @@ function CreateAccountPage({ setCurrentPage }) {
       setAlertHandlerOpen(true);
       return;
     }
+    
+    const userData = {
+      email: email,
+    };
 
     const attributeList = [];
     attributeList.push(
@@ -105,6 +128,7 @@ function CreateAccountPage({ setCurrentPage }) {
         console.log(data);
         setAlertHandlerMessage('successful registration\n verification mail was sent');
         setAlertHandlerOpen(true);
+        CreateUserProfile(userData);
         setTimeout(() => {
           Navigate('/login');
         }, 5000);

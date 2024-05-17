@@ -5,6 +5,7 @@ import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
 import EntryPage from "./EntryPage";
 import userpool from './UserPool';
+import CreateProfilePage from './ProfilePage';
 import "./styles.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
     const checkUser = async () => {
       let user = userpool.getCurrentUser();
       if (user) {
+        console.log(user);
         setIsLoggedIn(true);
       }
     };
@@ -26,7 +28,8 @@ function App() {
         <Route path="*" element={<EntryPage />} />
         <Route path="/signup" element={<CreateAccountPage />} />
         <Route path="/login" element={<LoginPage />} />
-        {isLoggedIn ? <Route path="/homepage" element={<HomePage />} /> : null}
+        <Route path="/homepage" element={<HomePage />} />
+        {isLoggedIn ? <Route path="/profile" element={<CreateProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
       </Routes>
     </Router>
   );

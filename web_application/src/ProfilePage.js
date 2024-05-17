@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./styles.css";
 
-function CreateProfilePage({}) {
+function CreateProfilePage() {
     //const Navigate = useNavigate();
     const [fullName, setFullName] = useState('');
     const [gender, setGender] = useState('');
@@ -271,4 +271,4 @@ function CreateProfilePage({}) {
   );
 }
 
-export default ProfilePage;
+export default CreateProfilePage;

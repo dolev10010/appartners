@@ -1,27 +1,15 @@
 class Queries:
 
     @staticmethod
-    def insert_health_query(table_name):
-        return f"INSERT INTO {table_name} VALUES(to_timestamp(%s))"
-
-    @staticmethod
-    def insert_registration_info_query(table_name):
-        # creation timestamp, email, password
-        return f"INSERT INTO {table_name} (creation_time, email, password) VALUES(to_timestamp(%s), %s, %s)"
-
-    @staticmethod
     def insert_new_user_profile_query(table_name):
-        return f"""INSERT INTO {table_name} (user_id, profile_bio, photo_url, first_name, last_name, sex, 
-            birthday, age, smoking, like_animals, keeps_kosher, first_roomate_appartment, profession, status, 
-            hobbies, has_animals, alergies) 
-            VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        return f"INSERT INTO {table_name} (email, creation_time) VALUES(%s, to_timestamp(%s))"
 
     @staticmethod
-    def update_user_profile_query(table_name, profile_id):
+    def update_user_profile_query(table_name, email):
         return f"UPDATE {table_name} SET profile_bio = %s, photo_url= %s, first_name = %s, last_name = %s," \
                f"sex = %s, birthday = %s, age = %s, smoking = %s, like_animals = %s, keep_kosher = %s," \
                f"first_Roomate_appartment = %s, profession = %s, status = %s, hobbies = %s, has_animals = %s," \
-               f"alergies = %s WHERE profile_id = {profile_id}"
+               f"alergies = %s WHERE email = {email}"
 
     @staticmethod
     def insert_new_appartment_post_query(table_name):
