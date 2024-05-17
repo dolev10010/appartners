@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import "./styles.css";
 
 function CreateProfilePage({}) {
@@ -12,10 +12,10 @@ function CreateProfilePage({}) {
     const [kosher, setKosher] = useState(false);
     const [profession, setProfession] = useState('');
     const [relationshipStatus, setRelationshipStatus] = useState('');
-    const [animalOwnership, setAnimalOwnership] = useState([]);
-    const [allergies, setAllergies] = useState([]);
-    const [hobbies, setHobbies] = useState([]);
-    const [bio, setBio] = useState([]);
+    const [animalOwnership, setAnimalOwnership] = useState('');
+    const [allergies, setAllergies] = useState('');
+    const [hobbies, setHobbies] = useState('');
+    const [bio, setBio] = useState('');
 
     // Validation functions
     const validateDateOfBirth = () => {
@@ -112,18 +112,16 @@ function CreateProfilePage({}) {
                 <h1 className="logo">Appartners</h1>
                 <h2 className="pageName">Create Profile</h2>
                 <div className="middleFormBox">
-                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <button style={{ border: "none", background: "none", position: "relative", overflow: "hidden", marginBottom:"15px" }}>
+                    <div className="pictureButtenContainer">
+                        <button className="pictureButton">
                             <img
-                                //src="./background-pictures/profilePicture.jpg"
-                                //alt="profile"
+                                src="./background-pictures/profilePicture.jpg"
                                 className="profileImage"
-                                style={{ width: "107.2px", height: "107.2px", borderRadius: "50%" }}
                             /> {/* Placeholder image */}
                             <input
                                 type="file"
                                 accept="image/*"
-                                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
+                                className="pictureButtonInput"
                                 onChange={handleImageChange} 
                             />
                         </button>
@@ -139,8 +137,8 @@ function CreateProfilePage({}) {
                                 className="input"
                             />
                         </div> 
-                    <div  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "15px", textAlign: "left"}}>
-                        <div style={{ display: "flex", alignItems: "left", justifyContent: "space-between", flexDirection: "column", marginRight: "15px"}}>
+                    <div className="rowBoxesContainer">
+                        <div className="labelAndBoxContainer">
                             <label htmlFor="gender" className="boxTitle">GENDER</label>
                             <div className="smallBox">
                                 <select 
@@ -158,7 +156,7 @@ function CreateProfilePage({}) {
                                 </select>
                             </div>
                         </div>
-                        <div style={{ display: "flex", alignItems: "left", justifyContent: "space-between", flexDirection: "column"}}>
+                        <div className="labelAndBoxContainer">
                             <label htmlFor="dateOfBirth" className="boxTitle">DATE OF BIRTH</label>
                             <div className="smallBox">
                                 <input
@@ -173,20 +171,22 @@ function CreateProfilePage({}) {
                             </div>
                         </div>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "15px"}}>
-                        <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center"}}>
-                            <label htmlFor="smoker" className="rowBoxTitle">SMOKER </label>
-                            <label htmlFor="animalLover" className="rowBoxTitle">ANIMAL LOVER</label>
-                            <label htmlFor="kosher" className="boxTitle">KEEPS KOSHER</label>
+                    <div className="rowBoxesContainer">
+                        <div className="labelAndBoxContainer">
+                            <label htmlFor="smoker" className="boxTitle">SMOKER</label>
+                            <input type="checkbox" id="smoker" name="smoker" checked={smoker} onChange={handleSmokerChange} />
                         </div>
-                        <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "left"}}>
-                            <input type="checkbox" id="smoker" name="smoker" checked={smoker} onChange={handleSmokerChange} style={{marginRight: "110px", backgroundColor: "transparent", border: "#d6e0e2"}} />
-                            <input type="checkbox" id="animalLover" name="animalLover" checked={animalLover} onChange={handleAnimalLoverChange} style={{marginRight: "140px", backgroundColor: "transparent"}} />
-                            <input type="checkbox" id="kosher" name="kosher" checked={kosher} onChange={handleKosherChange} style={{backgroundColor: "transparent"}} />
+                        <div className="labelAndBoxContainer">
+                            <label htmlFor="animalLover" className="boxTitle">ANIMAL LOVER</label>
+                            <input type="checkbox" id="animalLover" name="animalLover" checked={animalLover} onChange={handleAnimalLoverChange} />
+                        </div>
+                        <div className="labelAndBoxContainer">
+                            <label htmlFor="kosher" className="boxTitle">KEEPS KOSHER</label>
+                            <input type="checkbox" id="kosher" name="kosher" checked={kosher} onChange={handleKosherChange} />
                         </div>
                     </div>
-                    <div  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "15px", marginBottom:"15px", textAlign: "left"}}>
-                        <div style={{ display: "flex", alignItems: "left", justifyContent: "space-between", flexDirection: "column", marginRight: "15px"}}>
+                    <div  className="rowBoxesContainer">
+                        <div className="labelAndBoxContainer">
                             <label htmlFor="gender" className="boxTitle">PROFESSION</label>
                             <div className="smallBox">
                                 <input
@@ -199,7 +199,7 @@ function CreateProfilePage({}) {
                                 />
                             </div>
                         </div>
-                        <div style={{ display: "flex", alignItems: "left", justifyContent: "space-between", flexDirection: "column"}}>
+                        <div className="labelAndBoxContainer">
                             <label htmlFor="dateOfBirth" className="boxTitle">RELATIONSHIP</label>
                             <div className="smallBox">
                                 <select 
@@ -213,7 +213,7 @@ function CreateProfilePage({}) {
                                     <option value="" disabled selected hidden>Relationship Status</option>
                                     <option value="single">Single</option>
                                     <option value="inRelationship">In Relationship</option>
-                                    {/* Add more options */}
+                                    {/* Add more options if needed */}
                                     <option value="other">Other</option>
                                 </select>
                             </div>
@@ -230,7 +230,7 @@ function CreateProfilePage({}) {
                             className="input"
                         />
                     </div>
-                    <text className="boxTitle" style={{marginTop: "15px"}}>ALLERGIES</text>
+                    <text className="boxTitle">ALLERGIES</text>
                     <div className="formBoxes">
                         <input
                             type="text" 
@@ -241,7 +241,7 @@ function CreateProfilePage({}) {
                             className="input"
                         />
                     </div>
-                    <text className="boxTitle" style={{marginTop: "15px"}}>HOBBIES</text>
+                    <text className="boxTitle">HOBBIES</text>
                     <div className="formBoxes">
                         <input
                             type="text" 
@@ -252,7 +252,7 @@ function CreateProfilePage({}) {
                             className="input"
                         />
                     </div>
-                    <text className="boxTitle" style={{marginTop: "15px"}}>BIO</text>
+                    <text className="boxTitle">BIO</text>
                     <div className="bigBox">
                         <input
                             type="text" 
@@ -264,11 +264,11 @@ function CreateProfilePage({}) {
                         />
                     </div>
                 </div>
-                <button className="buttons">Create Profile</button>
+                <button className="buttons">Save Profile</button>
                 {/* onClick={handleCreateProfile} */}
             </div> 
     </div>
   );
 }
 
-export default CreateProfilePage;
+export default ProfilePage;
