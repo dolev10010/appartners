@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./styles.css";
 import AlertHandler from './AlertHandler';
 import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 import userPool from './UserPool';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import { useNavigate } from 'react-router-dom';
+import UserContext from './UserContext'; // Import UserContext for storing user email
 
 function LoginPage() {
-  const [email, setEmail] = useState(''); // Initialize as empty string
-  const [password, setPassword] = useState(''); // Initialize as empty string
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [alertHandlerOpen, setAlertHandlerOpen] = useState(false);
   const [alertHandlerMessage, setAlertHandlerMessage] = useState('');
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
+  const { setUserEmail } = useContext(UserContext); // Access setUserEmail from context
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -40,7 +42,8 @@ function LoginPage() {
     cognitoUser.authenticateUser(authDetails, {
       onSuccess: (result) => {
         console.log("Authentication successful!", result);
-        navigate("/home"); // Navigate to the home page
+        setUserEmail(email); // Store user email in context
+        navigate("/home");
       },
       onFailure: (err) => {
         console.log(err.message)
@@ -57,7 +60,7 @@ function LoginPage() {
   };
 
   const handleDontHaveUserClick = () => {
-    navigate("/signup"); // Navigate to create account page
+    navigate("/signup");
   };
 
   const handleForgetPasswordClick = () => {
