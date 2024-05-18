@@ -1,3 +1,12 @@
+body {
+  background-image: url('./background-pictures/welcome-background-web.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100vh;
+  width: 100%;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -5,7 +14,7 @@
   height: 100%;
 }
 
-.pictureButtenContainer {
+.pictureButtonContainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,6 +26,7 @@
   position: relative;
   overflow: hidden;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 
 .pictureButtonInput {
@@ -25,9 +35,9 @@
   right: 0;
   margin: 0;
   padding: 0;
-  font-size: 20px;
   cursor: pointer;
   opacity: 0;
+  z-index: 1;
 }
 
 .rowBoxesContainer {
@@ -36,6 +46,9 @@
   align-items: center;
   margin-top: 15px;
   text-align: left;    
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
 }
 
 .labelAndBoxContainer {
@@ -44,6 +57,8 @@
   align-items: left;
   justify-content: space-between;
   margin-right: 15px;
+  justify-content: center;
+  align-items: center;
 }
 
 .backgroundImage {
@@ -96,6 +111,8 @@
   margin-top: 1px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .formBoxes,.loginBox,.buttons {
@@ -245,25 +262,6 @@
 /* Show background image for larger screens (e.g., computers) */
 
 /* welcome Page */
-@media (min-width: 768px) {
-  .backgroundImage {
-    display: block;
-    background-image: url('./background-pictures/welcome-background-web.jpg'); /* Provide the correct path */
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .backgroundImageNewAccount {
-    display: block;
-    background-image: url('./background-pictures/newAccount-background-web.jpg'); /* Provide the correct path */
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    height: 100%;
-  }
-}
 @media (max-width: 767px) {
   .backgroundImageMobile {
     display: block;

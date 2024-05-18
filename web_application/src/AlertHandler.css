@@ -30,9 +30,12 @@ button {
     transition: background-color 0.3s, transform 0.2s; /* Smooth transitions for hover and active states */
 }
 
-button:hover {
-    background-color: #387880; /* Darker shade on hover */
-}
+/* button:hover {
+    background-color: #387880; 
+} 
+DolevA - when moving on button, the color changes to a darker shade of the original color. 
+i'm keeping it so we can use it again */
+*/
 
 button:active {
     transform: scale(0.95); /* Slightly scale down when clicked */
