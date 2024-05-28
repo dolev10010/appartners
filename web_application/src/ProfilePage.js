@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./styles.css";
+import profileImage from "./background-pictures/profilePicture.jpg";
 
 function CreateProfilePage() {
     //const Navigate = useNavigate();
@@ -16,6 +17,7 @@ function CreateProfilePage() {
     const [allergies, setAllergies] = useState('');
     const [hobbies, setHobbies] = useState('');
     const [bio, setBio] = useState('');
+    const [uploadedImage, setFile] = useState();
 
     // Validation functions
     const validateDateOfBirth = () => {
@@ -36,7 +38,7 @@ function CreateProfilePage() {
 
     // Change handlers
     const handleImageChange = (event) => {
-        // Handle image upload 
+        setFile(URL.createObjectURL(event.target.files[0]));
     };
 
     const handleFullNameChange = (event) => {
@@ -51,18 +53,18 @@ function CreateProfilePage() {
     setBirthDate(event.target.value);
     };
 
-    const handleSmokerChange = (event) => {
-    setSmoker(event.target.value);
+    const handleSmokerChange = () => {
+        setSmoker(!smoker);
     }
-
-    const handleAnimalLoverChange = (event) => {
-    setAnimalLover(event.target.value);
+    
+    const handleAnimalLoverChange = () => {
+        setAnimalLover(!animalLover);
     }
-
-    const handleKosherChange = (event) => {
-    setKosher(event.target.value);
+    
+    const handleKosherChange = () => {
+        setKosher(!kosher);
     }
-
+  
     const handleProfessionChange = (event) => {
     setProfession(event.target.value);
     }
@@ -88,7 +90,7 @@ function CreateProfilePage() {
     }
 
     // const handleCreateProfile = () => {
-    //     if (!fullName || !hobbies || !bio || !allergies || !animalOwnership || !relationshipStatus || !profession || !dateOfBirth || !gender) {
+    //     if (!fullName || !dateOfBirth || !gender) {
     //         setAlertHandlerMessage("Please fill in all fields.");
     //         setAlertHandlerOpen(true);
     //         return;
@@ -110,21 +112,22 @@ function CreateProfilePage() {
         <div className="backgroundImageMobile"></div> {/* For smaller screens */}
             <div className="content">
                 <h1 className="logo">Appartners</h1>
-                <h2 className="pageName">Create Profile</h2>
+                <h2 className="pageName">Profile</h2>
                 <div className="middleFormBox">
-                    <div className="pictureButtenContainer">
-                        <button className="pictureButton">
+                    <div className="pictureButtonContainer">
+                        <label className="pictureButton">
                             <img
-                                src="./background-pictures/profilePicture.jpg"
+                                src={uploadedImage || profileImage}
                                 className="profileImage"
-                            /> {/* Placeholder image */}
+                                alt=""
+                            />
                             <input
                                 type="file"
                                 accept="image/*"
                                 className="pictureButtonInput"
                                 onChange={handleImageChange} 
                             />
-                        </button>
+                        </label>
                     </div>
                     <text className="boxTitle">FULL NAME</text>
                         <div className="formBoxes">
