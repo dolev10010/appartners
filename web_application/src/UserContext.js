@@ -10,14 +10,23 @@ export const UserProvider = ({ children }) => {
     if (storedEmail) {
       setUserEmail(storedEmail);
     }
-  }, []); // Empty dependency array means this effect runs only once when the component mounts
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem('userEmail', userEmail);
-  }, [userEmail]); // This effect runs whenever userEmail changes
+    if (userEmail) {
+      localStorage.setItem('userEmail', userEmail);
+    } else {
+      localStorage.removeItem('userEmail');
+    }
+  }, [userEmail]);
+
+  const clearUserEmail = () => {
+    setUserEmail('');
+    localStorage.removeItem('userEmail');
+  };
 
   return (
-    <UserContext.Provider value={{ userEmail, setUserEmail }}>
+    <UserContext.Provider value={{ userEmail, setUserEmail, clearUserEmail }}>
       {children}
     </UserContext.Provider>
   );

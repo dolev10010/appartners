@@ -43,7 +43,7 @@ function LoginPage() {
       onSuccess: (result) => {
         console.log("Authentication successful!", result);
         setUserEmail(email); // Store user email in context
-        navigate("/home");
+        navigate("/homepage");
       },
       onFailure: (err) => {
         console.log(err.message)

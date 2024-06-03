@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
+import userPool from './UserPool';
+import UserContext from './UserContext';
 import "./styles.css";
 import profileImage from "./background-pictures/profilePicture.jpg";
 
 function CreateProfilePage() {
-    //const Navigate = useNavigate();
+    const navigate = useNavigate();
+    const { clearUserEmail } = useContext(UserContext);
     const [fullName, setFullName] = useState('');
     const [gender, setGender] = useState('');
     const [dateOfBirth, setBirthDate] = useState('');
@@ -43,76 +46,69 @@ function CreateProfilePage() {
 
     const handleFullNameChange = (event) => {
         setFullName(event.target.value);
-      };
-    
-    const handleGenderChange = (event) => {
-    setGender(event.target.value);
     };
-    
+
+    const handleGenderChange = (event) => {
+        setGender(event.target.value);
+    };
+
     const handleDateOfBirthChange = (event) => {
-    setBirthDate(event.target.value);
+        setBirthDate(event.target.value);
     };
 
     const handleSmokerChange = () => {
         setSmoker(!smoker);
-    }
-    
+    };
+
     const handleAnimalLoverChange = () => {
         setAnimalLover(!animalLover);
-    }
-    
+    };
+
     const handleKosherChange = () => {
         setKosher(!kosher);
-    }
-  
+    };
+
     const handleProfessionChange = (event) => {
-    setProfession(event.target.value);
-    }
+        setProfession(event.target.value);
+    };
 
     const handleRelationshipChange = (event) => {
-    setRelationshipStatus(event.target.value);
-    }
+        setRelationshipStatus(event.target.value);
+    };
 
     const handleAnimalOwnershipChange = (event) => {
-    setAnimalOwnership(event.target.value);
-    }
+        setAnimalOwnership(event.target.value);
+    };
 
     const handleAllergiesChange = (event) => {
-    setAllergies(event.target.value);
-    }
-    
+        setAllergies(event.target.value);
+    };
+
     const handleHobbiesChange = (event) => {
-    setHobbies(event.target.value);
-    }
+        setHobbies(event.target.value);
+    };
 
     const handleBioChange = (event) => {
-    setBio(event.target.value);
-    }
+        setBio(event.target.value);
+    };
 
-    // const handleCreateProfile = () => {
-    //     if (!fullName || !dateOfBirth || !gender) {
-    //         setAlertHandlerMessage("Please fill in all fields.");
-    //         setAlertHandlerOpen(true);
-    //         return;
-    //     }
+    const handleLogout = () => {
+        const cognitoUser = userPool.getCurrentUser();
+        if (cognitoUser) {
+            cognitoUser.signOut();
+            clearUserEmail(); // Clear the user email from context and local storage
+            navigate('/login');
+        }
+    };
 
-    //     if (!validateDateOfBirth()) {
-    //         setAlertHandlerMessage("You must be older than 18 years old to create a profile.");
-    //         setAlertHandlerOpen(true);
-    //         return;
-    //     }
-
-    //     Navigate('/HomePage');
-    // };
-
-
-  return (
-    <div className="container">
-        <div className="backgroundImage"></div> {/* For larger screens */}
-        <div className="backgroundImageMobile"></div> {/* For smaller screens */}
+    return (
+        <div className="container profileContainer">
+            <div className="backgroundImage"></div> {/* For larger screens */}
+            <div className="backgroundImageMobile"></div> {/* For smaller screens */}
             <div className="content">
                 <h1 className="logo">Appartners</h1>
                 <h2 className="pageName">Profile</h2>
+                <button className="logoutButton" onClick={handleLogout}>Log Out</button>
                 <div className="middleFormBox">
                     <div className="pictureButtonContainer">
                         <label className="pictureButton">
@@ -125,26 +121,26 @@ function CreateProfilePage() {
                                 type="file"
                                 accept="image/*"
                                 className="pictureButtonInput"
-                                onChange={handleImageChange} 
+                                onChange={handleImageChange}
                             />
                         </label>
                     </div>
                     <text className="boxTitle">FULL NAME</text>
-                        <div className="formBoxes">
-                            <input
-                                type="text" 
-                                id="Full Name" 
-                                value={fullName} 
-                                onChange={handleFullNameChange}
-                                placeholder="Please enter your full name"
-                                className="input"
-                            />
-                        </div> 
+                    <div className="formBoxes">
+                        <input
+                            type="text"
+                            id="Full Name"
+                            value={fullName}
+                            onChange={handleFullNameChange}
+                            placeholder="Please enter your full name"
+                            className="input"
+                        />
+                    </div>
                     <div className="rowBoxesContainer">
                         <div className="labelAndBoxContainer">
                             <label htmlFor="gender" className="boxTitle">GENDER</label>
                             <div className="smallBox">
-                                <select 
+                                <select
                                     id="gender"
                                     name="Gender"
                                     value={gender}
@@ -188,14 +184,14 @@ function CreateProfilePage() {
                             <input type="checkbox" id="kosher" name="kosher" checked={kosher} onChange={handleKosherChange} />
                         </div>
                     </div>
-                    <div  className="rowBoxesContainer">
+                    <div className="rowBoxesContainer">
                         <div className="labelAndBoxContainer">
                             <label htmlFor="gender" className="boxTitle">PROFESSION</label>
                             <div className="smallBox">
                                 <input
-                                    type="text" 
-                                    id="Profession" 
-                                    value={profession} 
+                                    type="text"
+                                    id="Profession"
+                                    value={profession}
                                     onChange={handleProfessionChange}
                                     placeholder="Profession"
                                     className="input"
@@ -203,9 +199,9 @@ function CreateProfilePage() {
                             </div>
                         </div>
                         <div className="labelAndBoxContainer">
-                            <label htmlFor="dateOfBirth" className="boxTitle">RELATIONSHIP</label>
+                            <label htmlFor="relationshipStatus" className="boxTitle">RELATIONSHIP</label>
                             <div className="smallBox">
-                                <select 
+                                <select
                                     id="relationshipStatus"
                                     name="relationshipStatus"
                                     value={relationshipStatus}
@@ -225,9 +221,9 @@ function CreateProfilePage() {
                     <text className="boxTitle">ANIMAL OWNERSHIP</text>
                     <div className="formBoxes">
                         <input
-                            type="text" 
-                            id="animalOwnership" 
-                            value={animalOwnership} 
+                            type="text"
+                            id="animalOwnership"
+                            value={animalOwnership}
                             onChange={handleAnimalOwnershipChange}
                             placeholder="Animal type and quantity"
                             className="input"
@@ -236,9 +232,9 @@ function CreateProfilePage() {
                     <text className="boxTitle">ALLERGIES</text>
                     <div className="formBoxes">
                         <input
-                            type="text" 
-                            id="allergies" 
-                            value={allergies} 
+                            type="text"
+                            id="allergies"
+                            value={allergies}
                             onChange={handleAllergiesChange}
                             placeholder="Please enter your allergies"
                             className="input"
@@ -247,9 +243,9 @@ function CreateProfilePage() {
                     <text className="boxTitle">HOBBIES</text>
                     <div className="formBoxes">
                         <input
-                            type="text" 
-                            id="hobbies" 
-                            value={hobbies} 
+                            type="text"
+                            id="hobbies"
+                            value={hobbies}
                             onChange={handleHobbiesChange}
                             placeholder="Please enter your hobbies"
                             className="input"
@@ -258,9 +254,9 @@ function CreateProfilePage() {
                     <text className="boxTitle">BIO</text>
                     <div className="bigBox">
                         <input
-                            type="text" 
-                            id="bio" 
-                            value={bio} 
+                            type="text"
+                            id="bio"
+                            value={bio}
                             onChange={handleBioChange}
                             placeholder="Please enter short BIO"
                             className="input"
@@ -269,9 +265,9 @@ function CreateProfilePage() {
                 </div>
                 <button className="buttons">Save Profile</button>
                 {/* onClick={handleCreateProfile} */}
-            </div> 
-    </div>
-  );
+            </div>
+        </div>
+    );
 }
 
 export default CreateProfilePage;
