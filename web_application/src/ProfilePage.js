@@ -4,10 +4,27 @@ import userPool from './UserPool';
 import UserContext from './UserContext';
 import "./styles.css";
 import profileImage from "./background-pictures/profilePicture.jpg";
+import config from './config.json';
+import AWS from 'aws-sdk';
 
-function CreateProfilePage() {
+const labCredentials = config.labCredentials;
+const accessKeyId = labCredentials.accessKeyId;
+const secretAccessKey = labCredentials.secretAccessKey;
+const sessionToken = labCredentials.sessionToken;
+const region = labCredentials.region;
+
+AWS.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
+    sessionToken: sessionToken,
+    region: region
+});
+
+const s3 = new AWS.S3();
+
+function ProfilePage() {
     const navigate = useNavigate();
-    const { clearUserEmail } = useContext(UserContext);
+    const { userEmail, clearUserEmail } = useContext(UserContext);
     const [fullName, setFullName] = useState('');
     const [gender, setGender] = useState('');
     const [dateOfBirth, setBirthDate] = useState('');
@@ -21,6 +38,40 @@ function CreateProfilePage() {
     const [hobbies, setHobbies] = useState('');
     const [bio, setBio] = useState('');
     const [uploadedImage, setFile] = useState();
+    const [presentedImage, setImage] = useState();
+
+    const uploadToS3 = (file) => {
+        const fileExtension = file.name.split('.').pop(); // Get the file extension
+        const fileName = `${userEmail}.${fileExtension}`; // Construct the new file name
+        const uploadParams = {
+            Bucket: 'appartners-profile-images', // Replace with your bucket name
+            Key: fileName,
+            Body: file,
+        };
+    
+        return new Promise((resolve, reject) => {
+            s3.upload(uploadParams, (err, data) => {
+                if (err) {
+                    console.error('Error uploading file:', err);
+                    reject(err);
+                } else {
+                    console.log('File uploaded successfully:', data.Location);
+                    resolve(data.Location);
+                }
+            });
+        });
+    };
+
+    const calculateAge = (birthdate) => {
+        const today = new Date();
+        const dob = new Date(birthdate);
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        return age;
+    }
 
     // Validation functions
     const validateDateOfBirth = () => {
@@ -41,7 +92,9 @@ function CreateProfilePage() {
 
     // Change handlers
     const handleImageChange = (event) => {
-        setFile(URL.createObjectURL(event.target.files[0]));
+        const file = event.target.files[0];
+        setImage(URL.createObjectURL(file));
+        setFile(file);
     };
 
     const handleFullNameChange = (event) => {
@@ -92,6 +145,55 @@ function CreateProfilePage() {
         setBio(event.target.value);
     };
 
+    const handleSaveProfile = async () => {
+        console.log("Save button clicked");
+        const [firstName, lastName] = fullName.split(" ");
+        
+        try {
+            // Upload image to S3
+            const imageUrl = uploadedImage ? await uploadToS3(uploadedImage) : null;
+    
+            // Prepare profile data
+            const profileData = {
+                email: userEmail,
+                profile_bio: bio,
+                photo_url: imageUrl, // Use the S3 image URL
+                first_name: firstName,
+                last_name: lastName,
+                sex: gender,
+                birthday: dateOfBirth,
+                age: calculateAge(dateOfBirth),
+                smoking: smoker,
+                like_animals: animalLover,
+                keeps_kosher: kosher,
+                first_roomate_appartment: null,
+                profession: profession,
+                status: relationshipStatus,
+                hobbies: hobbies,
+                has_animals: true,
+                alergies: allergies
+            };
+    
+            // Send profile data to server
+            const response = await fetch(`http://${config.serverPublicIP}:5433//update-profile`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(profileData)
+            });
+    
+            if (response.ok) {
+                console.log("Profile updated successfully");
+                navigate('/homepage');
+            } else {
+                console.error("Failed to update profile");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
     const handleLogout = () => {
         const cognitoUser = userPool.getCurrentUser();
         if (cognitoUser) {
@@ -113,7 +215,7 @@ function CreateProfilePage() {
                     <div className="pictureButtonContainer">
                         <label className="pictureButton">
                             <img
-                                src={uploadedImage || profileImage}
+                                src={presentedImage || profileImage}
                                 className="profileImage"
                                 alt=""
                             />
@@ -263,11 +365,10 @@ function CreateProfilePage() {
                         />
                     </div>
                 </div>
-                <button className="buttons">Save Profile</button>
-                {/* onClick={handleCreateProfile} */}
+                <button className="buttons" onClick={handleSaveProfile}>Save Profile</button>
             </div>
         </div>
     );
 }
 
-export default CreateProfilePage;
+export default ProfilePage;
