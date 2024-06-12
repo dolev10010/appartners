@@ -6,10 +6,10 @@ class Queries:
 
     @staticmethod
     def update_user_profile_query(table_name, email):
-        return f"UPDATE {table_name} SET profile_bio = %s, photo_url= %s, first_name = %s, last_name = %s," \
-               f"sex = %s, birthday = %s, age = %s, smoking = %s, like_animals = %s, keep_kosher = %s," \
-               f"first_Roomate_appartment = %s, profession = %s, status = %s, hobbies = %s, has_animals = %s," \
-               f"alergies = %s WHERE email = {email}"
+        return f"UPDATE {table_name} SET profile_bio = %s, photo_url = %s, first_name = %s, last_name = %s, sex = %s," \
+               f" birthday = %s, age = %s, smoking = %s, like_animals = %s, keeps_kosher = %s," \
+               f" first_roomate_appartment = %s, profession = %s, status = %s, hobbies = %s, has_animals = %s," \
+               f" alergies = %s WHERE email = '{email}'"
 
     @staticmethod
     def insert_new_appartment_post_query(table_name):
@@ -25,11 +25,9 @@ class Queries:
         return f"SELECT email FROM {table_name} WHERE email = '{email}'"
 
     @staticmethod
-    def fetch_user_id_query(table_name, email):
-        return f"SELECT user_id FROM {table_name} WHERE email = '{email}'"
+    def fetch_user_profile_query(table_name, email):
+        return f"SELECT * FROM {table_name} WHERE email = '{email}'"
 
-    @staticmethod
-    def fetch_user_password_query(table_name, email):
-        return f"SELECT password FROM {table_name} WHERE email = '{email}'"
+
 
 
