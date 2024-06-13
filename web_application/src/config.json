@@ -3,6 +3,13 @@
     "awsCognito": {
         "UserPoolId": "",
         "ClientId": ""
+    },
+    "labCredentials": 
+    {
+        "accessKeyId": "",
+        "secretAccessKey": "",
+        "sessionToken": "",
+        "region": ""
     }
 }
   
