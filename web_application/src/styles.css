@@ -227,8 +227,7 @@ body {
   padding: 0;
 }
 
-
- .nonBoxButton {
+.nonBoxButton {
   margin-top: 20px;
   border: none;
   border-radius: 10px;
@@ -249,7 +248,8 @@ body {
   border: none;
   border-bottom: none;
   background-color: transparent;
-  text-align: center;}
+  text-align: center;
+}
 
 .input::placeholder {
   color: #162A2C;
@@ -270,124 +270,118 @@ body {
   border-radius: 50%;
   margin-top: 20px;
   src: url(./background-pictures/profilePicture.jpg);
-  }
+}
 
-  .formRow {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    gap: 20px; /* Adjust the gap between the elements */
-    text-align: center;
-  }
+.formRow {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 20px; /* Adjust the gap between the elements */
+  text-align: center;
+}
 
-  .smallBox {
-    width: 165.25px;
-    height: 65.4px;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    background-color: #d6e0e2;
-    color: #162a2c;
-  }
+.smallBox {
+  width: 165.25px;
+  height: 65.4px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  background-color: #d6e0e2;
+  color: #162a2c;
+}
 
-  .bigBox {
-    width: 345.5px;
-    height: 90px;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    background-color: #d6e0e2;
-    color: #162a2c;
-  }
+.bigBox {
+  width: 345.5px;
+  height: 90px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  background-color: #d6e0e2;
+  color: #162a2c;
+}
 
-  .rowBoxTitle {
-    font-size: 12px;
-    margin-top: 1px;
-    margin-right: 100px; 
-    text-align: left;
-  }
+.rowBoxTitle {
+  font-size: 12px;
+  margin-top: 1px;
+  margin-right: 100px; 
+  text-align: left;
+}
 
-  .profileImageHomePage {
-    width: 45px;
-    height: 45px;
-    background-color: "transparent";
-    cursor: pointer;
-  }
-  
-  .pictureButtonProfileImageHomePage {
-    border: none;
-    background: none;
-    position: relative;
-  }
-  
-  /* try : */
-  * {
-    box-sizing: border-box;
-  }
-  
-  .wrapper {
-    max-width: 360px;
-    margin: 0 auto;
-    display: grid;
-    /* grid-template-columns: minmax(171px, 171px) minmax(171px, 268px);
-    grid-template-rows: minmax(171px, 171px) minmax(171px, 268px); */
-    grid-template-columns: repeat(2, 1767x);
-    grid-template-rows: 171px 91px 171px;
-    /* Define heights for each row */
-    gap: 10px;
-  }
-  
-  .wrapper>button {
-    background-color: #d6e0e2;
-    color: #162a2c;
-    padding: 1em;
-    border-radius: 10px;
-    cursor: pointer;
-    border: none;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .findRoomate {
-    grid-column: 1;
-    grid-row: 1 / 2;
-  }
-  
-  .postApartment {
-    grid-column: 2;
-    grid-row: 1 / 3;
-  }
-  
-  .findApartment {
-    grid-column: 1;
-    grid-row: 2 / 4;
-  }
-  
-  .apartmentInMyArea {
-    grid-column: 2;
-    grid-row: 3 / 4;
-  }
-  
-  /* Additional styling for labels and images */
-  .label {
-    font-weight: bold;
-    font-size: 15px;
-    color: #162A2C;
-    font-family: 'Montserrat' sans-serif;
-    padding: 0;
-    margin-bottom: 0;
-  }
-  
+.profileImageHomePage {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.pictureButtonProfileImageHomePage {
+  border: none;
+  background: none;
+  position: relative;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  max-width: 360px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 176px);
+  grid-template-rows: 171px 91px 171px;
+  gap: 10px;
+}
+
+.wrapper>button {
+  background-color: #d6e0e2;
+  color: #162a2c;
+  padding: 1em;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.findRoomate {
+  grid-column: 1;
+  grid-row: 1 / 2;
+}
+
+.postApartment {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+.findApartment {
+  grid-column: 1;
+  grid-row: 2 / 4;
+}
+
+.apartmentInMyArea {
+  grid-column: 2;
+  grid-row: 3 / 4;
+}
+
+/* Additional styling for labels and images */
+.label {
+  font-weight: bold;
+  font-size: 15px;
+  color: #162A2C;
+  font-family: 'Montserrat', sans-serif;
+  padding: 0;
+  margin-bottom: 0;
+}
 
 /* Show background image for larger screens (e.g., computers) */
-
-/* welcome Page */
 @media (max-width: 767px) {
   .backgroundImageMobile {
     display: block;

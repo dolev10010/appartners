@@ -20,9 +20,7 @@ def get_current_timestamp():
 def is_email_already_exists(email):
     query = Queries.fetch_user_email_query("register_info", email)
     matching_email = postgres_client.read_from_db(query)
-    if matching_email:
-        return True
-    return False
+    return bool(matching_email)
 
 
 def validate_date_format(date_str):
@@ -46,6 +44,9 @@ def create_profile():
         creation_timestamp = get_current_timestamp()
         user_info = request.get_json()
         email = user_info.get('email')
+        if is_email_already_exists(email):
+            logger.log_error(f"Profile creation failed | reason: Email already exists: {email}")
+            return jsonify({"errorMessage": "Email already exists"}), 400
         new_user_query = Queries.insert_new_user_profile_query(table_name='user_profile')
         postgres_client.write_to_db(new_user_query, values=[email, creation_timestamp])
         logger.log_info(f"successful profile creation, email: {email}")
@@ -63,7 +64,7 @@ def update_profile():
         profile_data = request.get_json()
         email = profile_data.get('email')
         existing_profile_query = Queries.fetch_user_profile_query('user_profile', email)
-        existing_profile_list = list(postgres_client.read_from_db(existing_profile_query, single_match=False)[0])
+        existing_profile_list = list(postgres_client.read_from_db(existing_profile_query, single_match=False))
         if not existing_profile_list:
             logger.log_error(f"Profile update failed for {email} | reason: Profile does not exist")
             return jsonify({"errorMessage": "Profile does not exist"}), 400
@@ -71,7 +72,7 @@ def update_profile():
                    'birthday', 'age', 'smoking', 'like_animals', 'keeps_kosher',
                    'first_roomate_appartment', 'profession', 'status', 'hobbies',
                    'has_animals', 'alergies']
-        existing_profile_dict = {columns[i]: existing_profile_list[i] for i in range(len(columns))}
+        existing_profile_dict = {columns[i]: existing_profile_list[0][i] for i in range(len(columns))}
         updated_profile = {
             'profile_bio': profile_data.get('profile_bio', existing_profile_dict['profile_bio']),
             'photo_url': profile_data.get('photo_url', existing_profile_dict['photo_url']),
@@ -99,8 +100,7 @@ def update_profile():
             return jsonify({"errorMessage": f"Missing mandatory fields: {', '.join(missing_fields)}"}), 400
         if not validate_date_format(updated_profile['birthday']):
             logger.log_error(f"Profile update failed for {email} | reason: Invalid date format for birthday")
-            return jsonify({"errorMessage": "Invalid date format for birthday."
-                                            " Date should be in yyyy-mm-dd format."}), 400
+            return jsonify({"errorMessage": "Invalid date format for birthday. Date should be in yyyy-mm-dd format."}), 400
         if updated_profile['photo_url'] and not validate_photo_format(updated_profile['photo_url']):
             logger.log_error(f"Profile update failed for {email} | reason: Invalid photo format")
             return jsonify({"errorMessage": "Invalid photo format. Photo file should be in jpg/jpeg/png format."}), 400
@@ -112,6 +112,47 @@ def update_profile():
 
     except Exception as e:
         logger.log_error(f"Profile update failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+@app.route('/get-profile', methods=['GET', 'OPTIONS'])
+def get_profile():
+    try:
+        if request.method == 'OPTIONS':
+            return {}, 200
+
+        email = request.args.get('email')
+        if not email:
+            return jsonify({"errorMessage": "Email is required"}), 400
+
+        existing_profile_query = Queries.fetch_user_profile_query('user_profile', email)
+        existing_profile_data = postgres_client.read_from_db(existing_profile_query, single_match=False)
+        if not existing_profile_data:
+            logger.log_error(f"Get profile failed for {email} | reason: Profile does not exist")
+            return jsonify({"errorMessage": "Profile does not exist"}), 400
+
+        existing_profile_data_list = existing_profile_data[0]
+        profile = {
+            "profile_bio": existing_profile_data_list[2],
+            "photo_url": existing_profile_data_list[3],
+            "first_name": existing_profile_data_list[4],
+            "last_name": existing_profile_data_list[5],
+            "sex": existing_profile_data_list[6],
+            "birthday": existing_profile_data_list[7],
+            "age": existing_profile_data_list[8],
+            "smoking": existing_profile_data_list[9],
+            "like_animals": existing_profile_data_list[10],
+            "keeps_kosher": existing_profile_data_list[11],
+            "first_roomate_appartment": existing_profile_data_list[12],
+            "profession": existing_profile_data_list[13],
+            "status": existing_profile_data_list[14],
+            "hobbies": existing_profile_data_list[15],
+            "has_animals": existing_profile_data_list[16],
+            "alergies": existing_profile_data_list[17],
+        }
+        return jsonify(profile), 200
+    except Exception as e:
+        logger.log_error(f"Profile retrieval failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
 

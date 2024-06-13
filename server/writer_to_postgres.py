@@ -1,51 +1,74 @@
 import psycopg2
-from psycopg2 import OperationalError
+from psycopg2 import OperationalError, pool
 import config
 
 
 class DataBase:
-
     def __init__(self):
-        self.connection = None
-        self.db_cursor = None
-        self.create_connection_to_db()
+        self.connection_pool = None
+        self.create_connection_pool()
 
-    def create_connection_to_db(self):
+    def create_connection_pool(self):
         try:
-            # Connect to an existing database
-            self.connection = psycopg2.connect(
+            # Initialize the connection pool
+            self.connection_pool = psycopg2.pool.SimpleConnectionPool(
+                1, 20,  # Minimum and maximum number of connections in the pool
                 database=config.database,
                 user=config.user,
                 password=config.password,
                 host=config.host,
                 port=config.port
             )
-            self.connection.autocommit = True
-            # Open a cursor to perform database operations
-            self.db_cursor = self.connection.cursor()
+            if self.connection_pool:
+                print("Connection pool created successfully")
         except OperationalError as e:
-            print(f"Couldn't connect to DB | reason: '{e}'")
+            print(f"Couldn't create connection pool | reason: '{e}'")
 
-    def close_connection(self):
-        # Close communication with the database
-        self.db_cursor.close()
-        self.connection.close()
-
-    def write_to_db(self, query, values):  # support one row per query
+    def get_connection(self):
         try:
-            if len(values) > 1:
-                self.db_cursor.execute(query, values)
-            else:
-                self.db_cursor.execute(query, (values[0],))
+            return self.connection_pool.getconn()
         except Exception as e:
-            print(e)
+            print(f"Error getting connection from pool | reason: '{e}'")
+
+    def release_connection(self, connection):
+        try:
+            self.connection_pool.putconn(connection)
+        except Exception as e:
+            print(f"Error releasing connection back to pool | reason: '{e}'")
+
+    def close_all_connections(self):
+        try:
+            self.connection_pool.closeall()
+        except Exception as e:
+            print(f"Error closing all connections | reason: '{e}'")
+
+    def write_to_db(self, query, values):
+        connection = self.get_connection()
+        if connection:
+            try:
+                cursor = connection.cursor()
+                cursor.execute(query, values if len(values) > 1 else (values[0],))
+                connection.commit()
+                cursor.close()
+            except Exception as e:
+                print(e)
+            finally:
+                self.release_connection(connection)
 
     def read_from_db(self, query, single_match=True):
-        try:
-            self.db_cursor.execute(query)
-            if single_match:
-                result = self.db_cursor.fetchone()
-                return result[0] if result else None
-            return self.db_cursor.fetchall()
-        except Exception as e:
-            print(e)
+        connection = self.get_connection()
+        if connection:
+            try:
+                cursor = connection.cursor()
+                cursor.execute(query)
+                if single_match:
+                    result = cursor.fetchone()
+                    cursor.close()
+                    return result[0] if result else None
+                result = cursor.fetchall()
+                cursor.close()
+                return result
+            except Exception as e:
+                print(e)
+            finally:
+                self.release_connection(connection)

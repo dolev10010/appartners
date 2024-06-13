@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import userPool from './UserPool';
 import UserContext from './UserContext';
@@ -25,6 +25,7 @@ const s3 = new AWS.S3();
 function ProfilePage() {
     const navigate = useNavigate();
     const { userEmail, clearUserEmail } = useContext(UserContext);
+    const [loading, setLoading] = useState(true);
     const [fullName, setFullName] = useState('');
     const [gender, setGender] = useState('');
     const [dateOfBirth, setBirthDate] = useState('');
@@ -38,17 +39,75 @@ function ProfilePage() {
     const [hobbies, setHobbies] = useState('');
     const [bio, setBio] = useState('');
     const [uploadedImage, setFile] = useState();
-    const [presentedImage, setImage] = useState();
+    const [presentedImage, setImage] = useState(profileImage);
+
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const response = await fetch(`http://${config.serverPublicIP}:5433/get-profile?email=${userEmail}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data) {
+                        setFullName(`${data.first_name} ${data.last_name}`);
+                        setGender(data.sex);
+                        setBirthDate(formatDate(data.birthday));
+                        setSmoker(data.smoking);
+                        setAnimalLover(data.like_animals);
+                        setKosher(data.keeps_kosher);
+                        setProfession(data.profession);
+                        setRelationshipStatus(data.status);
+                        setAnimalOwnership(data.has_animals ? 'true' : 'false');
+                        setAllergies(data.alergies);
+                        setHobbies(data.hobbies);
+                        setBio(data.profile_bio);
+                        setImage(data.photo_url || profileImage);
+                    } else {
+                        // Default values for a new user
+                        setFullName('');
+                        setGender('');
+                        setBirthDate('');
+                        setSmoker(false);
+                        setAnimalLover(false);
+                        setKosher(false);
+                        setProfession('');
+                        setRelationshipStatus('');
+                        setAnimalOwnership('');
+                        setAllergies('');
+                        setHobbies('');
+                        setBio('');
+                        setImage(profileImage);
+                    }
+                } else {
+                    console.error('Failed to fetch profile data');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                setLoading(false); // Set loading to false after fetching data
+            }
+        };
+
+        fetchProfileData();
+    }, [userEmail]);
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
 
     const uploadToS3 = (file) => {
-        const fileExtension = file.name.split('.').pop(); // Get the file extension
-        const fileName = `${userEmail}.${fileExtension}`; // Construct the new file name
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${userEmail}.${fileExtension}`;
         const uploadParams = {
-            Bucket: 'appartners-profile-images', // Replace with your bucket name
+            Bucket: 'appartners-profile-images',
             Key: fileName,
             Body: file,
         };
-    
+
         return new Promise((resolve, reject) => {
             s3.upload(uploadParams, (err, data) => {
                 if (err) {
@@ -71,9 +130,8 @@ function ProfilePage() {
             age--;
         }
         return age;
-    }
+    };
 
-    // Validation functions
     const validateDateOfBirth = () => {
         if (!dateOfBirth) {
             return false;
@@ -83,18 +141,17 @@ function ProfilePage() {
         const ageDifference = currentDate.getFullYear() - birthDate.getFullYear();
         const isOlderThan18 = ageDifference > 18 || (ageDifference === 18 && currentDate.getMonth() > birthDate.getMonth());
         return isOlderThan18;
-    }
+    };
 
     const validateAnimalOwnership = () => {
         const alphanumericRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])/;
         return alphanumericRegex.test(animalOwnership);
     };
 
-    // Change handlers
     const handleImageChange = (event) => {
         const file = event.target.files[0];
-        setImage(URL.createObjectURL(file));
         setFile(file);
+        setImage(URL.createObjectURL(file));
     };
 
     const handleFullNameChange = (event) => {
@@ -150,14 +207,12 @@ function ProfilePage() {
         const [firstName, lastName] = fullName.split(" ");
         
         try {
-            // Upload image to S3
-            const imageUrl = uploadedImage ? await uploadToS3(uploadedImage) : null;
-    
-            // Prepare profile data
+            const imageUrl = uploadedImage ? await uploadToS3(uploadedImage) : presentedImage;
+
             const profileData = {
                 email: userEmail,
                 profile_bio: bio,
-                photo_url: imageUrl, // Use the S3 image URL
+                photo_url: imageUrl,
                 first_name: firstName,
                 last_name: lastName,
                 sex: gender,
@@ -170,19 +225,18 @@ function ProfilePage() {
                 profession: profession,
                 status: relationshipStatus,
                 hobbies: hobbies,
-                has_animals: true,
+                has_animals: animalOwnership === 'true',
                 alergies: allergies
             };
-    
-            // Send profile data to server
-            const response = await fetch(`http://${config.serverPublicIP}:5433//update-profile`, {
+
+            const response = await fetch(`http://${config.serverPublicIP}:5433/update-profile`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(profileData)
             });
-    
+
             if (response.ok) {
                 console.log("Profile updated successfully");
                 navigate('/homepage');
@@ -198,15 +252,19 @@ function ProfilePage() {
         const cognitoUser = userPool.getCurrentUser();
         if (cognitoUser) {
             cognitoUser.signOut();
-            clearUserEmail(); // Clear the user email from context and local storage
+            clearUserEmail();
             navigate('/login');
         }
     };
 
+    if (loading) {
+        return null;
+    }
+
     return (
         <div className="container profileContainer">
-            <div className="backgroundImage"></div> {/* For larger screens */}
-            <div className="backgroundImageMobile"></div> {/* For smaller screens */}
+            <div className="backgroundImage"></div>
+            <div className="backgroundImageMobile"></div>
             <div className="content">
                 <h1 className="logo">Appartners</h1>
                 <h2 className="pageName">Profile</h2>
@@ -215,9 +273,9 @@ function ProfilePage() {
                     <div className="pictureButtonContainer">
                         <label className="pictureButton">
                             <img
-                                src={presentedImage || profileImage}
+                                src={presentedImage}
                                 className="profileImage"
-                                alt=""
+                                alt="Profile"
                             />
                             <input
                                 type="file"
@@ -311,10 +369,9 @@ function ProfilePage() {
                                     placeholder="relationshipStatus"
                                     className="input"
                                 >
-                                    <option value="" disabled selected hidden>Relationship Status</option>
+                                    <option value="" disabled hidden>Relationship Status</option>
                                     <option value="single">Single</option>
                                     <option value="inRelationship">In Relationship</option>
-                                    {/* Add more options if needed */}
                                     <option value="other">Other</option>
                                 </select>
                             </div>

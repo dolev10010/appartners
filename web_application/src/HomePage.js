@@ -1,40 +1,68 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
 import logo from "./background-pictures/Logo.jpg";
 import postApartment from "./background-pictures/post.png";
 import findApartment from "./background-pictures/findA.png";
 import findRoomate from "./background-pictures/findR.png";
 import apartmentsInMyArea from "./background-pictures/map.png";
-import profileImage from "./background-pictures/profilePicture.jpg";
+import profilePlaceholder from "./background-pictures/profilePicture.jpg";
 import { useNavigate } from 'react-router-dom';
+import config from './config.json';
 
 function HomePage() {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const { userEmail } = useContext(UserContext);
+  const [profileImage, setProfileImage] = useState(null); // Initialize as null to handle loading state
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetch(`http://${config.serverPublicIP}:5433/get-profile?email=${userEmail}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProfileImage(data.photo_url || profilePlaceholder);
+        } else {
+          console.error('Failed to fetch profile image');
+          setProfileImage(profilePlaceholder);
+        }
+      } catch (error) {
+        console.error('Error fetching profile image:', error);
+        setProfileImage(profilePlaceholder);
+      }
+    };
+
+    if (userEmail) {
+      fetchProfileImage();
+    }
+  }, [userEmail]);
 
   const handlePostApartmentClick = () => {
-    Navigate('/post apartment');
+    navigate('/post apartment');
   }
-  
+
   const handleFindApartmentClick = () => {
-    Navigate('/find apartment');
+    navigate('/find apartment');
   }
-  
+
   const handleFindRoomateClick = () => {
-    Navigate('/find roomate');
+    navigate('/find roomate');
   }
-  
+
   const handleApartmentsInMyAreaClick = () => {
-    Navigate('/apartments in my area');
+    navigate('/apartments in my area');
   }
-  
+
   const handleProfileImageClick = () => {
     if (localStorage.getItem('userEmail')) {
-      Navigate('/profile');
+      navigate('/profile');
     } else {
-      Navigate('/login');
+      navigate('/login');
     }
   };
+
+  if (profileImage === null) {
+    return null; // Don't render anything until the profile image is fetched
+  }
 
   return (
     <div className="container">
@@ -45,6 +73,7 @@ function HomePage() {
           <img
             src={profileImage}
             className="profileImageHomePage"
+            alt="Profile"
           />
         </button>
       </div>
@@ -58,7 +87,6 @@ function HomePage() {
         </div>
         <h3 className="welcome">welcome {userEmail}</h3>
         <div className="middleFormBox">
-
           <div className="wrapper">
             <button className="findRoomate" onClick={handleFindRoomateClick}>
               <label className="label">Find Roomate</label>
@@ -68,8 +96,7 @@ function HomePage() {
               />
             </button>
             <button className="postApartment" onClick={handlePostApartmentClick}>
-              <label className="label">Post Apartment
-              </label>
+              <label className="label">Post Apartment</label>
               <img
                 src={postApartment}
                 className="postApartmentImg"

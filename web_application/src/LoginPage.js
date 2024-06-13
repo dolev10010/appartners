@@ -48,7 +48,7 @@ function LoginPage() {
       onFailure: (err) => {
         console.log(err.message)
         if (err.message === "User is not confirmed.") {
-          setAlertHandlerMessage("email is not verified yet");
+          setAlertHandlerMessage("Email is not verified yet");
         }
         else {
           setAlertHandlerMessage(err.message);
@@ -105,7 +105,7 @@ function LoginPage() {
             />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "15px"}}>
-            <label htmlFor="staySignedInCheckbox">
+            <label htmlFor="staySignedInCheckbox" style={{ display: "flex", alignItems: "center", marginRight: "10px" }}>
               <input type="checkbox" id="staySignedInCheckbox" />
               Stay signed in
             </label>
