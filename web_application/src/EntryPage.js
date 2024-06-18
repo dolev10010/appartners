@@ -4,6 +4,7 @@ import HomePage from "./HomePage";
 import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
 import "./styles.css";
+import ProfilePage from "./ProfilePage";
 
 export default function App() {
   return (
@@ -12,13 +13,13 @@ export default function App() {
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       
       <div className="content">
-        <h1 className="logo">Appartners</h1>
         
         <Routes>
           <Route path="/" element={<WelcomePage />} />
           <Route path="/signup" element={<CreateAccountPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/homepage" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
     </div>
@@ -28,6 +29,7 @@ export default function App() {
 function WelcomePage() {
   return (
     <div>
+      <h1 className="logo">Appartners</h1>
       <h2 className="welcome">WELCOME!</h2>
       <div className="middleBox">
         <Link className="formBoxes" to="/signup">Create Account</Link>
