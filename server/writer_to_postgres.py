@@ -26,7 +26,11 @@ class DataBase:
 
     def get_connection(self):
         try:
-            return self.connection_pool.getconn()
+            connection = self.connection_pool.getconn()
+            if not self.is_connection_valid(connection):
+                self.connection_pool.putconn(connection, close=True)
+                connection = self.connection_pool.getconn()
+            return connection
         except Exception as e:
             print(f"Error getting connection from pool | reason: '{e}'")
 
@@ -41,6 +45,15 @@ class DataBase:
             self.connection_pool.closeall()
         except Exception as e:
             print(f"Error closing all connections | reason: '{e}'")
+
+    def is_connection_valid(self, connection):
+        try:
+            cursor = connection.cursor()
+            cursor.execute('SELECT 1')
+            cursor.close()
+            return True
+        except OperationalError:
+            return False
 
     def write_to_db(self, query, values):
         connection = self.get_connection()
