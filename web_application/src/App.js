@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from "./HomePage";
 import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
 import EntryPage from "./EntryPage";
+import ProfilePage from "./ProfilePage";
+import PostApartmentPage from "./PostApartmentPage";
+import FindApartmentPage from "./FindApartmentPage";
+import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
 import userpool from './UserPool';
-import CreateProfilePage from './ProfilePage';
 import "./styles.css";
 
 function App() {
@@ -29,7 +32,10 @@ function App() {
         <Route path="/signup" element={<CreateAccountPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/homepage" element={<HomePage />} />
-        {isLoggedIn ? <Route path="/profile" element={<CreateProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
+        {isLoggedIn ? <Route path="/profile" element={<ProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
+        <Route path="/post-apartment" element={<PostApartmentPage />} />
+        <Route path="/find-apartment" element={<FindApartmentPage />} />
+        <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
       </Routes>
     </Router>
   );

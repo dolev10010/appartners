@@ -12,7 +12,7 @@ import config from './config.json';
 function HomePage() {
   const navigate = useNavigate();
   const { userEmail } = useContext(UserContext);
-  const [profileImage, setProfileImage] = useState(null); // Initialize as null to handle loading state
+  const [profileImage, setProfileImage] = useState(profilePlaceholder);
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -23,11 +23,9 @@ function HomePage() {
           setProfileImage(data.photo_url || profilePlaceholder);
         } else {
           console.error('Failed to fetch profile image');
-          setProfileImage(profilePlaceholder);
         }
       } catch (error) {
         console.error('Error fetching profile image:', error);
-        setProfileImage(profilePlaceholder);
       }
     };
 
@@ -37,19 +35,19 @@ function HomePage() {
   }, [userEmail]);
 
   const handlePostApartmentClick = () => {
-    navigate('/post apartment');
+    navigate('/post-apartment');
   }
 
   const handleFindApartmentClick = () => {
-    navigate('/find apartment');
+    navigate('/find-apartment');
   }
 
   const handleFindRoomateClick = () => {
-    navigate('/find roomate');
+    navigate('/find-roomate');
   }
 
   const handleApartmentsInMyAreaClick = () => {
-    navigate('/apartments in my area');
+    navigate('/apartments-in-my-area');
   }
 
   const handleProfileImageClick = () => {
@@ -59,10 +57,6 @@ function HomePage() {
       navigate('/login');
     }
   };
-
-  if (profileImage === null) {
-    return null; // Don't render anything until the profile image is fetched
-  }
 
   return (
     <div className="container">
@@ -74,6 +68,7 @@ function HomePage() {
             src={profileImage}
             className="profileImageHomePage"
             alt="Profile"
+            loading="lazy"
           />
         </button>
       </div>
@@ -82,6 +77,8 @@ function HomePage() {
           <img
             src={logo}
             className="logoImg"
+            alt="Logo"
+            loading="lazy"
           />
           <h1 className="logo">Appartners</h1>
         </div>
@@ -93,6 +90,8 @@ function HomePage() {
               <img
                 src={findRoomate}
                 className="findRoomateImg"
+                alt="Find Roomate"
+                loading="lazy"
               />
             </button>
             <button className="postApartment" onClick={handlePostApartmentClick}>
@@ -100,6 +99,8 @@ function HomePage() {
               <img
                 src={postApartment}
                 className="postApartmentImg"
+                alt="Post Apartment"
+                loading="lazy"
               />
             </button>
             <button className="findApartment" onClick={handleFindApartmentClick}>
@@ -107,6 +108,8 @@ function HomePage() {
               <img
                 src={findApartment}
                 className="findApartmentImg"
+                alt="Find Apartment"
+                loading="lazy"
               />
             </button>
             <button className="apartmentInMyArea" onClick={handleApartmentsInMyAreaClick}>
@@ -114,6 +117,8 @@ function HomePage() {
               <img
                 src={apartmentsInMyArea}
                 className="apartmentInMyAreaImg"
+                alt="Apartments in my area"
+                loading="lazy"
               />
             </button>
           </div>

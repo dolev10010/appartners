@@ -2,6 +2,9 @@ import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import HomePage from "./HomePage";
 import CreateAccountPage from "./CreateAccountPage";
+import PostApartmentPage from "./PostApartmentPage";
+import FindApartmentPage from "./FindApartmentPage";
+import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
 import LoginPage from "./LoginPage";
 import "./styles.css";
 import ProfilePage from "./ProfilePage";
@@ -20,6 +23,9 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/homepage" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/post-apartment" element={<PostApartmentPage />} />
+          <Route path="/find-apartment" element={<FindApartmentPage />} />
+          <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
         </Routes>
       </div>
     </div>

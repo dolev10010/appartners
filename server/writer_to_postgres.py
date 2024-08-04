@@ -68,19 +68,37 @@ class DataBase:
             finally:
                 self.release_connection(connection)
 
-    def read_from_db(self, query, single_match=True):
+    def read_from_db(self, query, single_match=True, values=None):
         connection = self.get_connection()
         if connection:
             try:
                 cursor = connection.cursor()
-                cursor.execute(query)
+                if values:
+                    cursor.execute(query, values)
+                else:
+                    cursor.execute(query)
+
                 if single_match:
                     result = cursor.fetchone()
                     cursor.close()
                     return result[0] if result else None
+
                 result = cursor.fetchall()
                 cursor.close()
                 return result
+            except Exception as e:
+                print(e)
+            finally:
+                self.release_connection(connection)
+
+    def delete_from_db(self, query, values):
+        connection = self.get_connection()
+        if connection:
+            try:
+                cursor = connection.cursor()
+                cursor.execute(query, values if len(values) > 1 else (values[0],))
+                connection.commit()
+                cursor.close()
             except Exception as e:
                 print(e)
             finally:

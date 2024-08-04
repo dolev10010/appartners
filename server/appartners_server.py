@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
-import time
 import datetime
 import re
+import json
 from server_logger import Logger
 from writer_to_postgres import DataBase
 from sql_queries import Queries
@@ -14,7 +14,7 @@ logger = Logger()
 
 
 def get_current_timestamp():
-    return time.time()
+    return datetime.datetime.now()
 
 
 def is_email_already_exists(email):
@@ -153,6 +153,223 @@ def get_profile():
         return jsonify(profile), 200
     except Exception as e:
         logger.log_error(f"Profile retrieval failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+@app.route('/post-apartment', methods=['POST', 'OPTIONS'])
+def post_apartment():
+    try:
+        if request.method == 'OPTIONS':
+            return {}, 200
+        apartment_data = request.get_json()
+        print(apartment_data)
+        email = apartment_data.get('email')
+        city = apartment_data.get('city')
+        street = apartment_data.get('street')
+        number = apartment_data.get('number')
+        floor = apartment_data.get('floor')
+        total_rooms = apartment_data.get('total_rooms')
+        appartment_size = apartment_data.get('appartment_size')
+        available_rooms = apartment_data.get('available_rooms')
+        num_of_toilets = apartment_data.get('num_of_toilets')
+        price = apartment_data.get('price')
+        post_bio = apartment_data.get('post_bio')
+        has_parking = apartment_data.get('has_parking')
+        has_elevator = apartment_data.get('has_elevator')
+        has_mamad = apartment_data.get('has_mamad')
+        num_of_roommates = apartment_data.get('num_of_roommates')
+        allow_pets = apartment_data.get('allow_pets')
+        has_balcony = apartment_data.get('has_balcony')
+        status = apartment_data.get('status')
+        has_sun_water_heater = apartment_data.get('has_sun_water_heater')
+        is_accessible_to_disabled = apartment_data.get('is_accessible_to_disabled')
+        has_air_conditioner = apartment_data.get('has_air_conditioner')
+        has_bars = apartment_data.get('has_bars')
+        entry_date = apartment_data.get('entry_date')
+        is_sublet = apartment_data.get('is_sublet')
+        end_date = apartment_data.get('end_date') if apartment_data.get('end_date') else None
+        photos_url = json.dumps(apartment_data.get('photos_url') if apartment_data.get('photos_url') else [])
+        roommate_emails = apartment_data.get('roommate_emails') if apartment_data.get('roommate_emails') else []
+        creation_timestamp = get_current_timestamp()
+
+        # Ensure all required fields are provided and not None
+        required_fields = [
+            email, city, street, number, floor, total_rooms, appartment_size, available_rooms,
+            num_of_toilets, price, post_bio, has_parking, has_elevator, has_mamad, num_of_roommates,
+            allow_pets, has_balcony, status, has_sun_water_heater, is_accessible_to_disabled,
+            has_air_conditioner, has_bars, entry_date, is_sublet, roommate_emails
+        ]
+        for field in required_fields:
+            if field is None:
+                return jsonify({"errorMessage": f"{field} cannot be None"}), 400
+
+        new_apartment_query = Queries.insert_new_apartment_post_query(table_name='apartments_post')
+        print(new_apartment_query)
+        postgres_client.write_to_db(new_apartment_query, values=[
+            email, city, street, number, floor, total_rooms, appartment_size, available_rooms,
+            num_of_toilets, price, post_bio, has_parking, has_elevator, has_mamad, num_of_roommates,
+            allow_pets, has_balcony, status, has_sun_water_heater, is_accessible_to_disabled,
+            has_air_conditioner, has_bars, entry_date, is_sublet, end_date, photos_url, roommate_emails,
+            creation_timestamp,
+        ])
+        logger.log_info(f"Apartment posted successfully by email: {email}")
+        return jsonify({"message": "Apartment posted successfully"}), 200
+    except Exception as e:
+        logger.log_error(f"Apartment posting failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+
+
+
+@app.route('/user-apartments', methods=['GET'])
+def user_apartments():
+    try:
+        email = request.args.get('email')
+        if not email:
+            return jsonify({"errorMessage": "Email is required"}), 400
+
+        fetch_apartments_query = Queries.fetch_user_apartments_query('apartments_post', email)
+        apartments = postgres_client.read_from_db(fetch_apartments_query, single_match=False)
+        return jsonify(apartments), 200
+    except Exception as e:
+        logger.log_error(f"Fetching user apartments failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+@app.route('/update-apartment', methods=['POST', 'OPTIONS'])
+def update_apartment():
+    try:
+        if request.method == 'OPTIONS':
+            return {}, 200
+        apartment_data = request.get_json()
+        email = apartment_data.get('email')
+        post_id = apartment_data.get('post_id')
+
+        # Fetch existing apartment data
+        existing_apartment_query = Queries.fetch_apartment_query('apartments_post', email, post_id)
+        existing_apartment_list = list(postgres_client.read_from_db(existing_apartment_query, single_match=False))
+        if not existing_apartment_list:
+            logger.log_error(f"Apartment update failed for post_id: {post_id} | reason: Apartment does not exist")
+            return jsonify({"errorMessage": "Apartment does not exist"}), 400
+
+        columns = ['post_id', 'email', 'city', 'street', 'number', 'floor', 'total_rooms', 'appartment_size',
+                   'available_rooms', 'num_of_toilets', 'price', 'post_bio', 'has_parking', 'has_elevator', 'has_mamad',
+                   'num_of_roommates', 'allow_pets', 'has_balcony', 'status', 'has_sun_water_heater',
+                   'is_accessible_to_disabled', 'has_air_conditioner', 'has_bars', 'entry_date', 'is_sublet',
+                   'end_date', 'photos_url', 'roommate_emails', 'creation_timestamp']
+
+        existing_apartment_dict = {columns[i]: existing_apartment_list[0][i] for i in range(len(columns))}
+
+        updated_apartment = {
+            'city': apartment_data.get('city'),
+            'street': apartment_data.get('street'),
+            'number': apartment_data.get('number'),
+            'floor': apartment_data.get('floor'),
+            'total_rooms': apartment_data.get('total_rooms'),
+            'appartment_size': apartment_data.get('appartment_size'),
+            'available_rooms': apartment_data.get('available_rooms'),
+            'num_of_toilets': apartment_data.get('num_of_toilets'),
+            'price': apartment_data.get('price'),
+            'post_bio': apartment_data.get('post_bio'),
+            'has_parking': apartment_data.get('has_parking'),
+            'has_elevator': apartment_data.get('has_elevator'),
+            'has_mamad': apartment_data.get('has_mamad'),
+            'num_of_roommates': apartment_data.get('num_of_roommates'),
+            'allow_pets': apartment_data.get('allow_pets'),
+            'has_balcony': apartment_data.get('has_balcony'),
+            'status': apartment_data.get('status'),
+            'has_sun_water_heater': apartment_data.get('has_sun_water_heater'),
+            'is_accessible_to_disabled': apartment_data.get('is_accessible_to_disabled'),
+            'has_air_conditioner': apartment_data.get('has_air_conditioner'),
+            'has_bars': apartment_data.get('has_bars'),
+            'entry_date': apartment_data.get('entry_date'),
+            'is_sublet': apartment_data.get('is_sublet'),
+            'end_date': apartment_data.get('end_date') if apartment_data.get('is_sublet') else None,
+            'photos_url': json.dumps(apartment_data.get('photos_url') if apartment_data.get('photos_url') else []),
+            'roommate_emails': apartment_data.get('roommate_emails') if apartment_data.get('roommate_emails') else [],
+            'creation_timestamp': existing_apartment_dict['creation_timestamp']}
+
+        update_apartment_query = Queries.update_apartment_post_query('apartments_post')
+        postgres_client.write_to_db(update_apartment_query, list(updated_apartment.values()) + [email, post_id])
+        logger.log_info(f"Apartment updated successfully for post_id: {post_id}")
+        return jsonify({"message": "Apartment updated successfully"}), 200
+    except Exception as e:
+        logger.log_error(f"Apartment updating failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+@app.route('/get-roommate-photos', methods=['POST', 'OPTIONS'])
+def get_roommate_photos():
+    if request.method == 'OPTIONS':
+        return {}, 200
+    try:
+        data = request.json
+        emails = data['emails']
+        placeholders = ','.join(['%s'] * len(emails))
+        query = Queries.fetch_photos_by_emails_query('user_profile', placeholders)
+        result = postgres_client.read_from_db(query, single_match=False, values=emails)
+        photos = {row[0]: row[1] for row in result} if result else {}
+        return jsonify(photos), 200
+    except Exception as e:
+        logger.log_error(f"Fetching roommate photos failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+@app.route('/delete-apartment', methods=['POST', 'OPTIONS'])
+def delete_apartment():
+    if request.method == 'OPTIONS':  # browser needs a response before sending information
+        return {}, 200
+    try:
+        data = request.json
+        email = data['email']
+        post_id = data['post_id']
+        delete_apartment_query = Queries.delete_user_apartment_query('apartments_post')
+        postgres_client.delete_from_db(delete_apartment_query, [email, post_id])
+
+        return jsonify({"message": "Apartment deleted successfully"}), 200
+    except Exception as e:
+        logger.log_error(f"Post deletion failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+@app.route('/validate-emails', methods=['POST', 'OPTIONS'])
+def validate_emails():
+    if request.method == 'OPTIONS':  # browser needs a response before sending information
+        return {}, 200
+    try:
+        data = request.json
+        emails = data['emails']
+        placeholders = ','.join(['%s'] * len(emails))
+        query = Queries.find_emails_query('user_profile', placeholders)
+        result = postgres_client.read_from_db(query, single_match=False, values=emails)
+        valid_emails = [row[0] for row in result] if result else []
+        invalid_emails = [email for email in emails if email not in valid_emails]
+        return jsonify({"valid_emails": valid_emails, "invalid_emails": invalid_emails}), 200
+    except Exception as e:
+        logger.log_error(f"Email validation failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+
+
+@app.route('/find-apartments', methods=['GET'])
+def find_apartments():
+    try:
+        city = request.args.get('city')
+        max_price = request.args.get('max_price')
+        query = Queries.fetch_apartments_query("apartments", city, max_price)
+        apartments = postgres_client.read_from_db(query, single_match=False)
+        return jsonify(apartments), 200
+    except Exception as e:
+        logger.log_error(f"Finding apartments failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+@app.route('/apartments-in-my-area', methods=['GET'])
+def apartments_in_my_area():
+    try:
+        user_location = request.args.get('location')
+        query = Queries.fetch_apartments_nearby_query("apartments", user_location)
+        apartments = postgres_client.read_from_db(query, single_match=False)
+        return jsonify(apartments), 200
+    except Exception as e:
+        logger.log_error(f"Fetching apartments in my area failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
 
