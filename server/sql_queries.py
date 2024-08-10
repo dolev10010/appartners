@@ -48,6 +48,10 @@ class Queries:
         return f"SELECT * FROM {table_name} WHERE email = '{email}'"
 
     @staticmethod
+    def fetch_all_user_profiles(table_name):
+        return f"SELECT * FROM {table_name}"
+
+    @staticmethod
     def fetch_apartment_query(table_name, email, post_id):
         return f"SELECT * FROM {table_name} WHERE email = '{email}' AND post_id = {post_id}"
 

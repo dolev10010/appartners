@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 import datetime
-import re
 import json
 from server_logger import Logger
 from writer_to_postgres import DataBase
@@ -370,6 +369,29 @@ def apartments_in_my_area():
         return jsonify(apartments), 200
     except Exception as e:
         logger.log_error(f"Fetching apartments in my area failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+@app.route('/get-roommate-profiles', methods=['GET'])
+def get_roommate_profiles():
+    try:
+        query = Queries.fetch_all_user_profiles('user_profile')
+        profiles = postgres_client.read_from_db(query, single_match=False)
+        if not profiles:
+            return jsonify({"errorMessage": "No profiles found"}), 404
+
+        formatted_profiles = [
+            {
+                "photo_url": profile[3],
+                "full_name": f"{profile[4]} {profile[5]}",
+                "bio": profile[2],
+                "profile_email": profile[0]
+            }
+            for profile in profiles
+        ]
+        return jsonify(formatted_profiles), 200
+    except Exception as e:
+        logger.log_error(f"Fetching roommate profiles failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
 
