@@ -9,6 +9,8 @@ import PostApartmentPage from "./PostApartmentPage";
 import FindApartmentPage from "./FindApartmentPage";
 import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
 import userpool from './UserPool';
+import CreateProfilePage from './ProfilePage';
+import FindRoommatePage from "./FindRoommatePage";
 import "./styles.css";
 
 function App() {
@@ -32,7 +34,8 @@ function App() {
         <Route path="/signup" element={<CreateAccountPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/homepage" element={<HomePage />} />
-        {isLoggedIn ? <Route path="/profile" element={<ProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
+        {isLoggedIn ? <Route path="/profile" element={<CreateProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
+        <Route path="/find-roomate" element={<FindRoommatePage />} />
         <Route path="/post-apartment" element={<PostApartmentPage />} />
         <Route path="/find-apartment" element={<FindApartmentPage />} />
         <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
