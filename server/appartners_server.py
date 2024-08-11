@@ -384,7 +384,8 @@ def get_roommate_profiles():
             {
                 "photo_url": profile[3],
                 "full_name": f"{profile[4]} {profile[5]}",
-                "bio": profile[2],
+                "age":profile[8],
+                "profession": profile[13],
                 "profile_email": profile[0]
             }
             for profile in profiles
