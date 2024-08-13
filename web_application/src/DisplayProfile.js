@@ -1,16 +1,16 @@
-import React, { useState, useContext, useEffect, useParams } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Logo from './Logo';
 import HeaderButtons from './HeaderButtons';
 import BackButton from './BackButton';
-import UserContext from './UserContext';
 import profileImagePlaceholder from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
+
 import { FaEdit, FaBirthdayCake, FaSmoking, FaPaw, FaDog, FaBriefcase, FaHeart, FaGamepad, FaStarOfDavid } from 'react-icons/fa';
 import { MdWc, MdLocalHospital } from 'react-icons/md';
 
 function DisplayProfile() {
-    const { username } = useParams();
-    const { userEmail } = useContext(UserContext);
+    const { email } = useParams();
     const [loading, setLoading] = useState(true);
     const [profileData, setProfileData] = useState({
         fullName: '',
@@ -31,13 +31,14 @@ function DisplayProfile() {
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const response = await fetch(`http://${config.serverPublicIP}:5433/get-profile?email=${userEmail}`);
+                const response = await fetch(`http://${config.serverPublicIP}:5433/get-profile?email=${email}`);
                 if (response.ok) {
                     const data = await response.json();
+                    const formattedDate = new Date(data.birthday).toLocaleDateString('en-GB'); // Format the date to DD/MM/YYYY
                     setProfileData({
                         fullName: `${data.first_name} ${data.last_name}`,
                         gender: data.sex,
-                        dateOfBirth: data.birthday,
+                        dateOfBirth: formattedDate,
                         smoker: data.smoking,
                         animalLover: data.like_animals,
                         kosher: data.keeps_kosher,
@@ -59,10 +60,10 @@ function DisplayProfile() {
             }
         };
 
-        if (userEmail) {
+        if (email) {
             fetchProfileData();
         }
-    }, [userEmail]);
+    }, [email]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -74,7 +75,6 @@ function DisplayProfile() {
             <div className="backgroundImageMobile"></div> {/* For smaller screens */}
             <div className="image-container">
                 <HeaderButtons badgeContent={4} />
-                <BackButton />
             </div>
             <div className="content">
                 <Logo />
@@ -96,7 +96,7 @@ function DisplayProfile() {
                         <p className='profileContent'><FaStarOfDavid /> I {profileData.kosher ? '' : 'dont'} eat kosher</p>
                         <p className='profileContent'><FaPaw /> I {profileData.animalLover ? '' : 'dont'} love animals</p>
                         <p className='profileContent'><FaDog /> I have {profileData.animalOwnership}</p>
-                        <p className='profileContent'><FaBriefcase /> I am {profileData.profession}</p>
+                        <p className='profileContent'><FaBriefcase /> My profession is {profileData.profession}</p>
                         <p className='profileContent'><FaHeart /> I am {profileData.relationshipStatus}</p>
                         <p className='profileContent'><MdLocalHospital /> My allergies are {profileData.allergies}</p>
                         <p className='profileContent'><FaGamepad /> My Hobbies are {profileData.hobbies}</p>

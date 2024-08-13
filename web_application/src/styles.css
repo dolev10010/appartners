@@ -552,11 +552,74 @@ body {
 }
 
 .back-button {
-  margin-left: auto; /* Push the back button to the right */
+  margin-left: 0; 
   padding: 0;
   font-size: 35px; 
   color: #162A2C;
   cursor: pointer;
   border: none;
   background: none;
+}
+
+.profileInfo {
+  flex-direction: column;
+  text-align: left;
+  align-items: flex-start;
+  text-align: left;
+  display: flex;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.profileFullName {
+  font-size: 18px;
+  color: #162A2C;
+  margin-bottom: 0;
+}
+
+.bioBox {
+  display: inline-block; /* Allow container to shrink to fit content */
+  border: none;
+  border-radius: 10px;
+  background-color: #D6E0E2;
+  color: #162a2c;
+  width: 345.5px; /* Fixed width */
+  max-width: 345.5px; /* Max width to keep it fixed */
+  word-wrap: break-word; /* Allow long words to wrap */
+  margin-top: 6px;
+}
+
+.bioHeader {
+  font-size: 17px;
+  color: #162A2C;
+  margin-left: 2px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.profileDetails {
+  font-size: 17px;
+  color: #162A2C;
+  margin-left: 2px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  text-decoration: underline;  
+}
+
+.profileContent {
+  font-size: 15px;
+  color: #162a2c;
+  margin-left: 2px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.profileImageProfile {
+  height: 110px;
+  width: 110px;
+  border-radius: 50%;
+  background-color: transparent;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0;
 }
