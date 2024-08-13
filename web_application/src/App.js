@@ -11,6 +11,7 @@ import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
 import userpool from './UserPool';
 import CreateProfilePage from './ProfilePage';
 import FindRoommatePage from "./FindRoommatePage";
+import DisplayProfile from "./DisplayProfile";
 import "./styles.css";
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/post-apartment" element={<PostApartmentPage />} />
         <Route path="/find-apartment" element={<FindApartmentPage />} />
         <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
+        <Route path="/:username-profile" element={<DisplayProfile />} />
       </Routes>
     </Router>
   );

@@ -1,13 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
-import logo from "./background-pictures/Logo.jpg";
+import UserButton from './UserButton';
+import ChatButton from './ChatButton';
+import Logo from './Logo';
+import { useNavigate } from 'react-router-dom';
+import config from './config.json';
+import profilePlaceholder from "./background-pictures/profilePicture.jpg";
 import postApartment from "./background-pictures/post.png";
 import findApartment from "./background-pictures/findA.png";
 import findRoomate from "./background-pictures/findR.png";
 import apartmentsInMyArea from "./background-pictures/map.png";
-import profilePlaceholder from "./background-pictures/profilePicture.jpg";
-import { useNavigate } from 'react-router-dom';
-import config from './config.json';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -50,38 +52,16 @@ function HomePage() {
     navigate('/apartments-in-my-area');
   }
 
-  const handleProfileImageClick = () => {
-    if (localStorage.getItem('userEmail')) {
-      navigate('/profile');
-    } else {
-      navigate('/login');
-    }
-  };
-
   return (
     <div className="container">
       <div className="createProfileBackground"></div> {/* For larger screens */}
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       <div className="image-container">
-        <button className="pictureButtonProfileImageHomePage" onClick={handleProfileImageClick}>
-          <img
-            src={profileImage}
-            className="profileImageHomePage"
-            alt="Profile"
-            loading="lazy"
-          />
-        </button>
+        <UserButton profileImage={profileImage} />
+        <ChatButton badgeContent={4} />
       </div>
       <div className="content">
-        <div className="logo-container">
-          <img
-            src={logo}
-            className="logoImg"
-            alt="Logo"
-            loading="lazy"
-          />
-          <h1 className="logo">Appartners</h1>
-        </div>
+        <Logo />
         <h3 className="welcome">welcome {userEmail}</h3>
         <div className="middleFormBox">
           <div className="wrapper">
