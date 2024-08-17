@@ -4,7 +4,6 @@ import HomePage from "./HomePage";
 import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
 import EntryPage from "./EntryPage";
-import ProfilePage from "./ProfilePage";
 import PostApartmentPage from "./PostApartmentPage";
 import FindApartmentPage from "./FindApartmentPage";
 import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
@@ -40,7 +39,7 @@ function App() {
         <Route path="/post-apartment" element={<PostApartmentPage />} />
         <Route path="/find-apartment" element={<FindApartmentPage />} />
         <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
-        <Route path="/:username-profile" element={<DisplayProfile />} />
+        <Route path="/profile/:email" element={<DisplayProfile />} />
       </Routes>
     </Router>
   );
