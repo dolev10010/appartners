@@ -6,7 +6,7 @@ import ChatButton from './ChatButton';
 
 const HeaderButtons = ({ badgeContent }) => {
   return (
-    <div className="header-icons">
+    <div className="image-container">
       <UserButton />
       <HomeButton />
       <ChatButton badgeContent={badgeContent} />
