@@ -9,7 +9,7 @@ import './PostApartmentPage.css';
 import './ApartmentForm.css';
 import './PostView.css';
 import AlertHandler from './AlertHandler';
-import ConfirmDialog from './ConfirmDialog'; // New component for confirmation dialog
+import ConfirmDialog from './ConfirmDialog';
 
 const labCredentials = config.labCredentials;
 const accessKeyId = labCredentials.accessKeyId;
@@ -99,6 +99,7 @@ function PostApartmentPage() {
   const [alertHandlerMessage, setAlertHandlerMessage] = useState('');
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
+  const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
 
   const fetchApartments = async () => {
     try {
@@ -280,7 +281,8 @@ function PostApartmentPage() {
       ...newApartment,
       photos_url: photoUrls,
       email: userEmail,
-      roommate_emails: JSON.stringify(newApartment.roommate_emails) // Ensure emails are stored as JSON string
+      roommate_emails: JSON.stringify(newApartment.roommate_emails), // Ensure emails are stored as JSON string
+      coordinates, // Add coordinates to the form data
     };
 
     try {
@@ -345,7 +347,8 @@ function PostApartmentPage() {
       photos_url: [...updatedPhotos, ...newPhotoUrls],
       email: userEmail,
       post_id: editingPost.post_id,
-      roommate_emails: JSON.stringify(newApartment.roommate_emails) // Ensure emails are stored as JSON string
+      roommate_emails: JSON.stringify(newApartment.roommate_emails), // Ensure emails are stored as JSON string
+      coordinates, // Add coordinates to the form data
     };
 
     try {
@@ -426,6 +429,7 @@ function PostApartmentPage() {
     });
     setImagePreviews([]);
     setEditingPost(null); // Reset editing post
+    setCoordinates({ lat: null, lng: null }); // Reset coordinates
   };
 
   const handleCancel = () => {
@@ -486,6 +490,7 @@ function PostApartmentPage() {
     });
     setImagePreviews(apartment.photos || []);
     setShowForm(true);
+    setCoordinates(apartment.coordinates || { lat: null, lng: null }); // Set coordinates if editing
   };
 
   const handleDeleteClick = (apartment) => {
@@ -502,6 +507,10 @@ function PostApartmentPage() {
   const handleCancelDelete = () => {
     setConfirmDialogOpen(false);
     setPostToDelete(null);
+  };
+
+  const handleCoordinatesChange = (newCoordinates) => {
+    setCoordinates(newCoordinates);
   };
 
   console.log('Apartments to be passed to PostView:', apartments);
@@ -540,6 +549,7 @@ function PostApartmentPage() {
               onRemovePhoto={handleRemovePhoto}
               onSubmit={editingPost ? handleUpdateApartment : handlePostApartment}
               onCancel={handleCancel}
+              onCoordinatesChange={handleCoordinatesChange} // Pass the coordinates handler to the form
             />
           ) : (
             <PostView apartments={apartments} onSelect={handleSelectPost} onDelete={handleDeleteClick} />

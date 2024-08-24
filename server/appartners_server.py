@@ -191,12 +191,16 @@ def post_apartment():
         roommate_emails = apartment_data.get('roommate_emails') if apartment_data.get('roommate_emails') else []
         creation_timestamp = get_current_timestamp()
 
+        # New fields for latitude and longitude
+        latitude = apartment_data.get('coordinates', {}).get('lat')
+        longitude = apartment_data.get('coordinates', {}).get('lng')
+
         # Ensure all required fields are provided and not None
         required_fields = [
             email, city, street, number, floor, total_rooms, appartment_size, available_rooms,
             num_of_toilets, price, post_bio, has_parking, has_elevator, has_mamad, num_of_roommates,
             allow_pets, has_balcony, status, has_sun_water_heater, is_accessible_to_disabled,
-            has_air_conditioner, has_bars, entry_date, is_sublet, roommate_emails
+            has_air_conditioner, has_bars, entry_date, is_sublet, roommate_emails, latitude, longitude
         ]
         for field in required_fields:
             if field is None:
@@ -209,16 +213,13 @@ def post_apartment():
             num_of_toilets, price, post_bio, has_parking, has_elevator, has_mamad, num_of_roommates,
             allow_pets, has_balcony, status, has_sun_water_heater, is_accessible_to_disabled,
             has_air_conditioner, has_bars, entry_date, is_sublet, end_date, photos_url, roommate_emails,
-            creation_timestamp,
+            creation_timestamp, latitude, longitude
         ])
         logger.log_info(f"Apartment posted successfully by email: {email}")
         return jsonify({"message": "Apartment posted successfully"}), 200
     except Exception as e:
         logger.log_error(f"Apartment posting failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
-
-
-
 
 
 @app.route('/user-apartments', methods=['GET'])
@@ -337,6 +338,8 @@ def validate_emails():
         emails = data['emails']
         placeholders = ','.join(['%s'] * len(emails))
         query = Queries.find_emails_query('user_profile', placeholders)
+        print(query)
+        print(emails)
         result = postgres_client.read_from_db(query, single_match=False, values=emails)
         valid_emails = [row[0] for row in result] if result else []
         invalid_emails = [email for email in emails if email not in valid_emails]
@@ -489,7 +492,6 @@ def find_apartments():
         logger.log_error(f"Fetching apartments list failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
-
 def filter_roommates(roommates, filters):
     for roommate in roommates:
         if filters['ageMin'] and roommate['age'] < int(filters['ageMin']):
@@ -519,15 +521,19 @@ def filter_roommates(roommates, filters):
     return False
 
 
-@app.route('/apartments-in-my-area', methods=['GET'])
-def apartments_in_my_area():
+@app.route('/apartments-by-city', methods=['GET'])
+def apartments_by_city():
     try:
-        user_location = request.args.get('location')
-        query = Queries.fetch_apartments_nearby_query("apartments", user_location)
+        city = request.args.get('city')
+        if not city:
+            return jsonify({"errorMessage": "City is required"}), 400
+
+        query = Queries.fetch_apartments_by_city_query("apartments_post", city)
         apartments = postgres_client.read_from_db(query, single_match=False)
+        print(apartments)
         return jsonify(apartments), 200
     except Exception as e:
-        logger.log_error(f"Fetching apartments in my area failed | reason: {e}")
+        logger.log_error(f"Fetching apartments by city failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
 

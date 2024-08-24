@@ -19,9 +19,9 @@ class Queries:
                         num_of_toilets, price, post_bio, has_parking, has_elevator, has_mamad, num_of_roommates,
                         allow_pets, has_balcony, status, has_sun_water_heater, is_accessible_to_disabled,
                         has_air_conditioner, has_bars, entry_date, is_sublet, end_date, photos_url, 
-                        roommate_emails, creation_timestamp
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """
+                        roommate_emails, creation_timestamp, latitude, longitude
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
 
     @staticmethod
     def update_apartment_post_query(table_name):
@@ -63,6 +63,7 @@ class Queries:
     def delete_user_apartment_query(table_name):
         return f"DELETE FROM {table_name} WHERE email = %s AND post_id = %s"
 
+    @staticmethod
     def find_emails_query(table_name, placeholders):
         return f"SELECT email FROM {table_name} WHERE email IN ({placeholders})"
 
@@ -70,6 +71,14 @@ class Queries:
     def fetch_photos_by_emails_query(table_name, placeholders):
         return f"SELECT email, photo_url FROM {table_name} WHERE email IN ({placeholders})"
 
+    @staticmethod
+    def fetch_apartments_by_city_query(table_name, city):
+        return f"""
+            SELECT *
+            FROM {table_name}
+            WHERE city = '{city}'
+        """
+      
     @staticmethod
     def fetch_all_apartments_query(table_name):
         return f"SELECT * FROM {table_name} WHERE 1=1"
@@ -97,5 +106,3 @@ class Queries:
                      a.photos_url, a.roommate_emails, a.creation_timestamp
         """
         return query
-
-
