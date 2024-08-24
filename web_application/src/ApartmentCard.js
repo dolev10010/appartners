@@ -7,7 +7,6 @@ import profileImagePlaceholder from './background-pictures/profilePicture.jpg';
 import { RiInfoI } from "react-icons/ri";
 import { CiLocationArrow1 } from "react-icons/ci";
 import config from './config.json';
-import ApartmentDetailsPopup from './ApartmentDetailsPopup'; // Import the popup component
 
 const ApartmentCard = ({ apartment, filters, sortOrder }) => {
   const navigate = useNavigate();
@@ -235,12 +234,6 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
           <p className="apartmentBio">{apartmentData.bio}</p>
         </div>
       </div>
-      {showDetails && (
-        <ApartmentDetailsPopup
-          apartment={apartmentData}
-          onClose={handleCloseApartmentPopup}
-        />
-      )}
     </div>
   );
 };
