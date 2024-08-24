@@ -63,6 +63,7 @@ class Queries:
     def delete_user_apartment_query(table_name):
         return f"DELETE FROM {table_name} WHERE email = %s AND post_id = %s"
 
+    @staticmethod
     def find_emails_query(table_name, placeholders):
         return f"SELECT email FROM {table_name} WHERE email IN ({placeholders})"
 
