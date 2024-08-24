@@ -37,6 +37,10 @@ function FindRoommatePage() {
     navigate('/homepage');
   };
 
+  const handleProfileClick = (email) => {
+    navigate(`/profile/${email}`);
+  };
+
   return (
     <div className="find-roommate-page">
       <header className="header">
@@ -64,7 +68,7 @@ function FindRoommatePage() {
                   <IconButton
                     sx={{ color: 'white', padding: '4px' }}
                     aria-label={`info about ${profile.full_name}`}
-                    onClick={() => alert('Show Profile Info')}
+                    onClick={() => handleProfileClick(profile.profile_email)}
                   >
                     <InfoIcon style={{ fontSize: '20px' }} />
                   </IconButton>
