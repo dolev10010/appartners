@@ -88,10 +88,10 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
         <div className="filter-sidebar">
             <button className="close-button" onClick={onClose}>X</button>
             <div className="filter-sidebar-header">
-                <h3>Filter Apartments:</h3>
+                <h3>Filter Menu</h3>
             </div>
             <div className="filter-sidebar-content">
-                <h5>Apartment Filters</h5>
+                <h5 className='filter-type-header'>Apartment Filters</h5>
                 <div className="filter-group">
                     <label>City</label>
                     <div className="input-with-clear">
@@ -100,6 +100,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="city"
                             value={filters.city}
                             onChange={handleChange}
+                            className='filter-box'
                         />
                         {filters.city && (
                             <button className="clear-button" onClick={() => handleClearField('city')}>
@@ -117,6 +118,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             placeholder="Min"
                             value={filters.priceMin}
                             onChange={handleChange}
+                            className='filter-box'
                         />
                         {filters.priceMin && (
                             <button className="clear-button" onClick={() => handleClearField('priceMin')}>
@@ -131,6 +133,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             placeholder="Max"
                             value={filters.priceMax}
                             onChange={handleChange}
+                            className='filter-box'
                         />
                         {filters.priceMax && (
                             <button className="clear-button" onClick={() => handleClearField('priceMax')}>
@@ -146,6 +149,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="hasParking"
                             checked={filters.hasParking}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Parking
                     </label>
@@ -157,6 +161,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="hasElevator"
                             checked={filters.hasElevator}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Elevator
                     </label>
@@ -168,6 +173,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="hasBalcony"
                             checked={filters.hasBalcony}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Balcony
                     </label>
@@ -179,6 +185,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="isFurnished"
                             checked={filters.isFurnished}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Furnished
                     </label>
@@ -190,6 +197,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="hasAirConditioner"
                             checked={filters.hasAirConditioner}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Air Conditioning
                     </label>
@@ -201,6 +209,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="allowPets"
                             checked={filters.allowPets}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Allow Pets
                     </label>
@@ -212,6 +221,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="hasSunWaterHeater"
                             checked={filters.hasSunWaterHeater}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Water Heater
                     </label>
@@ -223,6 +233,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="isAccessibleToDisabled"
                             checked={filters.isAccessibleToDisabled}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Accessible
                     </label>
@@ -234,6 +245,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="hasMamad"
                             checked={filters.hasMamad}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Mamad
                     </label>
@@ -245,6 +257,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="hasBars"
                             checked={filters.hasBars}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Bars
                     </label>
@@ -256,6 +269,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="keepKosher"
                             checked={filters.keepKosher}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Keep Kosher
                     </label>
@@ -267,6 +281,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="renovated"
                             checked={filters.renovated}
                             onChange={handleChange}
+                            className='filter-checkBox'
                         />
                         Renovated
                     </label>
@@ -279,6 +294,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             name="entryDate"
                             value={filters.entryDate}
                             onChange={handleChange}
+                            className='filter-box'
                         />
                         {filters.entryDate && (
                             <button className="clear-button" onClick={() => handleClearField('entryDate')}>
@@ -287,7 +303,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         )}
                     </div>
                 </div>
-                <h5>Roommate Filters:</h5>
+                <h5 className='filter-type-header'>Roommate Filters:</h5>
                 <div className="filter-group">
                     <label>Minimum Age</label>
                     <input
@@ -295,6 +311,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         name="ageMin"
                         value={filters.ageMin}
                         onChange={handleChange}
+                        className='filter-box'
                     />
                 </div>
                 <div className="filter-group">
@@ -304,6 +321,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         name="ageMax"
                         value={filters.ageMax}
                         onChange={handleChange}
+                        className='filter-box'
                     />
                 </div>
                 <div className="filter-group">
@@ -313,11 +331,12 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         name="profession"
                         value={filters.profession}
                         onChange={handleChange}
+                        className='filter-box'
                     />
                 </div>
                 <div className="filter-group">
                     <label>Smoking</label>
-                    <select name="smoking" value={filters.smoking} onChange={handleChange}>
+                    <select name="smoking" value={filters.smoking} onChange={handleChange} className='filter-box'>
                         <option value="">Any</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -325,7 +344,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                 </div>
                 <div className="filter-group">
                     <label>Likes Animals</label>
-                    <select name="likeAnimals" value={filters.likeAnimals} onChange={handleChange}>
+                    <select className='filter-box' name="likeAnimals" value={filters.likeAnimals} onChange={handleChange}>
                         <option value="">Any</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -333,7 +352,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                 </div>
                 <div className="filter-group">
                     <label>Has Animals</label>
-                    <select name="hasAnimals" value={filters.hasAnimals} onChange={handleChange}>
+                    <select className='filter-box' name="hasAnimals" value={filters.hasAnimals} onChange={handleChange}>
                         <option value="">Any</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -341,7 +360,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                 </div>
                 <div className="filter-group">
                     <label>Keeps Kosher</label>
-                    <select name="keepsKosherRoommate" value={filters.keepsKosherRoommate} onChange={handleChange}>
+                    <select className='filter-box' name="keepsKosherRoommate" value={filters.keepsKosherRoommate} onChange={handleChange}>
                         <option value="">Any</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
@@ -349,7 +368,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                 </div>
                 <div className="filter-group">
                     <label>Gender</label>
-                    <select name="gender" value={filters.gender} onChange={handleChange}>
+                    <select className='filter-box' name="gender" value={filters.gender} onChange={handleChange}>
                         <option value="">Any</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -362,6 +381,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         name="allergies"
                         value={filters.allergies}
                         onChange={handleChange}
+                        className='filter-box'
                     />
                 </div>
                 <div className="filter-group">
@@ -371,11 +391,12 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         name="hobbies"
                         value={filters.hobbies}
                         onChange={handleChange}
+                        className='filter-box'
                     />
                 </div>
                 <div className="filter-group">
                     <label>Relationship Status</label>
-                    <select name="relationshipStatus" value={filters.relationshipStatus} onChange={handleChange}>
+                    <select className='filter-box' name="relationshipStatus" value={filters.relationshipStatus} onChange={handleChange}>
                         <option value="">Any</option>
                         <option value="single">Single</option>
                         <option value="married">Married</option>

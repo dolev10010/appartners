@@ -82,7 +82,7 @@ function FindRoommatePage() {
                 </div>
               }
               sx={{
-                background: 'rgba(22, 42, 100, 0.7)',
+                background: 'rgba(0, 0, 15, 0.65)',
                 borderBottomLeftRadius: '8px',
                 borderBottomRightRadius: '8px',
                 padding: '0.5px 1px',
@@ -96,27 +96,27 @@ function FindRoommatePage() {
                 minHeight: '50px',
                 overflow: 'hidden',
               }}
-              titleTypographyProps={{ 
-                variant: 'h6', 
-                component: 'span', 
-                noWrap: false, 
-                style: { 
-                  whiteSpace: 'normal', 
+              titleTypographyProps={{
+                variant: 'h6',
+                component: 'span',
+                noWrap: false,
+                style: {
+                  whiteSpace: 'normal',
                   textAlign: 'right',
                   width: '100%',
                   lineHeight: '1.2',
-                } 
+                }
               }}
-              subtitleTypographyProps={{ 
-                variant: 'body2', 
-                component: 'span', 
-                noWrap: false, 
-                style: { 
-                  whiteSpace: 'normal', 
+              subtitleTypographyProps={{
+                variant: 'body2',
+                component: 'span',
+                noWrap: false,
+                style: {
+                  whiteSpace: 'normal',
                   textAlign: 'right',
                   width: '100%',
                   lineHeight: '1.2',
-                } 
+                }
               }}
             />
           </ImageListItem>

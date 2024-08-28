@@ -75,6 +75,7 @@ function DisplayProfile() {
             <div className="backgroundImageMobile"></div> {/* For smaller screens */}
             <div className="image-container">
                 <HeaderButtons badgeContent={4} />
+                <BackButton />
             </div>
             <div className="content">
                 <Logo />

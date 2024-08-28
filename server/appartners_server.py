@@ -349,6 +349,34 @@ def validate_emails():
         return jsonify({"errorMessage": str(e)}), 500
 
 
+def filter_roommates(roommates, filters):
+    for roommate in roommates:
+        if filters['ageMin'] and roommate[8] > int(filters['ageMin']):  # Assuming age is the 9th field
+            return True
+        if filters['ageMax'] and roommate[8] < int(filters['ageMax']):  # Assuming age is the 9th field
+            return True
+        if filters['profession'] and filters['profession'].lower() in roommate[13].lower():  # Assuming profession is the 14th field
+            return True
+        if filters['smoking'] and roommate[9] == filters['smoking']:  # Assuming smoking is the 10th field
+            return True
+        if filters['likeAnimals'] and roommate[10] == filters['likeAnimals']:  # Assuming like_animals is the 11th field
+            return True
+        if filters['hasAnimals'] and roommate[16] == filters['hasAnimals']:  # Assuming has_animals is the 17th field
+            return True
+        if filters['keepsKosherRoommate'] and roommate[11] == filters['keepsKosherRoommate']:  # Assuming keeps_kosher is the 12th field
+            return True
+        if filters['gender'] and roommate[6] == filters['gender']:  # Assuming gender is the 7th field
+            return True
+        if filters['allergies'] and filters['allergies'].lower() in roommate[17].lower():  # Assuming allergies is the 18th field
+            return True
+        if filters['hobbies'] and filters['hobbies'].lower() in roommate[15].lower():  # Assuming hobbies is the 16th field
+            return True
+        if filters['relationshipStatus'] and roommate[14] == filters['relationshipStatus']:  # Assuming relationship status is the 15th field
+            return True
+    return False
+
+
+
 @app.route('/find-apartments', methods=['GET'])
 def find_apartments():
     try:
@@ -371,8 +399,9 @@ def find_apartments():
             'keepKosher': request.args.get('keepKosher'),
             'status': request.args.get('status'),
             'entryDate': request.args.get('entryDate'),
+        }
 
-            # פילטרים לשותפים
+        roomate_filters = {
             'ageMin': request.args.get('ageMin'),
             'ageMax': request.args.get('ageMax'),
             'profession': request.args.get('profession'),
@@ -386,6 +415,7 @@ def find_apartments():
             'relationshipStatus': request.args.get('relationshipStatus'),
         }
 
+        # בניית בסיס השאילתה לדירות
         base_query = Queries.fetch_all_apartments_query('apartments_post')
 
         if filters['city']:
@@ -434,9 +464,6 @@ def find_apartments():
 
         apartments = postgres_client.read_from_db(query, single_match=False)
 
-        if not apartments:
-            return jsonify({"errorMessage": "No apartments found"}), 404
-
         mapped_apartments = []
 
         for apt in apartments:
@@ -474,51 +501,41 @@ def find_apartments():
             mapped_apartments.append(apartment_dict)
 
         filtered_apartments = []
-        for apartment in mapped_apartments:
-            roommate_emails = apartment['roommate_emails']
-            if roommate_emails:
-                # הנחה שיש המרה למחרוזת המתאימה לשאילתה ב-Queries
-                email_list_str = ','.join([f"'{email}'" for email in roommate_emails])
-                query = Queries.fetch_apartment_roomates_details('user_profile', email_list_str)
-                roommates = postgres_client.read_from_db(query, single_match=False)
-                if filter_roommates(roommates, filters):
-                    filtered_apartments.append(apartment)
-            else:
-                filtered_apartments.append(apartment)
+        if any(roomate_filters.values()):
+            for apartment in mapped_apartments:
+                roommate_emails = apartment['roommate_emails']
+                if roommate_emails:
+                    with app.test_request_context(json={"emails": roommate_emails}):
+                        response, status_code = validate_emails()
 
-        return jsonify(filtered_apartments), 200
+                        if status_code != 200:
+                            continue
+
+                        validate_data = response.get_json()  # קבלת המידע המוחזר
+                        valid_emails = validate_data.get('valid_emails', [])
+
+                        if not valid_emails:
+                            continue
+
+                    email_placeholders = ', '.join([f"'{email}'" for email in valid_emails])
+                    roomate_query = Queries.fetch_apartment_roommates_details('user_profile', email_placeholders)
+                    roommates = postgres_client.read_from_db(roomate_query, single_match=False)
+
+                    if filter_roommates(roommates, roomate_filters):
+                        filtered_apartments.append(apartment)
+            if filtered_apartments:
+                return jsonify(filtered_apartments), 200
+            else:
+                return jsonify({"errorMessage": "No apartments found"}), 404
+
+        else:
+            if mapped_apartments:
+                return jsonify(mapped_apartments), 200
 
     except Exception as e:
         logger.log_error(f"Fetching apartments list failed | reason: {e}")
+        print(f"Fetching apartments list failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
-
-def filter_roommates(roommates, filters):
-    for roommate in roommates:
-        if filters['ageMin'] and roommate['age'] < int(filters['ageMin']):
-            continue
-        if filters['ageMax'] and roommate['age'] > int(filters['ageMax']):
-            continue
-        if filters['profession'] and filters['profession'].lower() not in roommate['profession'].lower():
-            continue
-        if filters['smoking'] == 'true' and not roommate['smoking']:
-            continue
-        if filters['likeAnimals'] == 'true' and not roommate['like_animals']:
-            continue
-        if filters['hasAnimals'] == 'true' and not roommate['has_animals']:
-            continue
-        if filters['keepsKosherRoommate'] == 'true' and not roommate['keeps_kosher']:
-            continue
-        if filters['gender'] and filters['gender'] != roommate['sex']:
-            continue
-        if filters['allergies'] and filters['allergies'].lower() not in roommate['alergies'].lower():
-            continue
-        if filters['hobbies'] and filters['hobbies'].lower() not in roommate['hobbies'].lower():
-            continue
-        if filters['relationshipStatus'] and filters['relationshipStatus'] != roommate['status']:
-            continue
-
-        return True
-    return False
 
 
 @app.route('/apartments-by-city', methods=['GET'])
@@ -579,21 +596,23 @@ def get_roommate_details():
         if not emails:
             return jsonify({"errorMessage": "No emails provided"}), 400
 
-        # קריאה לפונקציה validate_emails
         with app.test_request_context(json={"emails": emails}):
-            response, status_code = validate_emails()  # קריאה ישירה לפונקציה
+            response, status_code = validate_emails()
 
             if status_code != 200:
                 return jsonify({"errorMessage": "Failed to validate emails"}), 500
 
-            validate_data = response.get_json()  # קבלת המידע המוחזר
+            validate_data = response.get_json()
             valid_emails = validate_data.get('valid_emails', [])
 
             if not valid_emails:
                 return jsonify({"errorMessage": "No valid emails provided"}), 400
 
         email_placeholders = ', '.join([f"'{email}'" for email in valid_emails])
-        query = Queries.fetch_apartment_roomates_details('user_profile', email_placeholders)
+        if not email_placeholders:
+            return jsonify({"errorMessage": "No valid emails provided after formatting"}), 400
+
+        query = Queries.fetch_apartment_roomates_details_for_popup('user_profile', email_placeholders)
         roommate_details = postgres_client.read_from_db(query, single_match=False)
 
         if not roommate_details:
@@ -603,7 +622,8 @@ def get_roommate_details():
             {
                 "full_name": detail[0],
                 "bio": detail[1],
-                "photo_url": detail[2]
+                "photo_url": detail[2],
+                "email": detail[3]
             }
             for detail in roommate_details
         ]
