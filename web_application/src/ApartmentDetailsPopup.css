@@ -1,0 +1,104 @@
+.apartment-details-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.apartment-details-popup {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%; /* Adjust width to 90% of the viewport */
+    max-width: 400px;
+    max-height: 70vh; /* Adjust max height to 70% of the viewport height */
+    overflow-y: auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding-top: 20px; /* Adjust padding to make room for the banner */
+}
+
+.popup-close-button {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: black;
+}
+
+.popup-title {
+    margin-top: 20px; /* Adjust margin to create space below the banner */
+    color: #162A2C;
+}
+
+.popup-text {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Style for the Details button */
+.details-button {
+    background-color: #162a2c;
+    color: #FEFCF6;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+    background-color: #133f4b;
+}
+
+/* Sublet banner styling */
+.sublet-banner {
+    background-color: #ff5733; /* A bright color to make it stand out */
+    color: white;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px 5px 0 0; /* Rounded corners at the top */
+    margin-bottom: 10px; /* Add margin to create space between the banner and the content */
+}
+
+.apartment-details-section {
+    margin-bottom: 20px;
+    position: relative;
+    padding-top: 10px; /* Add padding to ensure visibility */
+}
+
+.apartment-details-section hr {
+    margin: 10px 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+    .apartment-details-popup {
+        max-height: 60vh; /* Reduce max height on smaller screens */
+    }
+
+    .popup-title {
+        font-size: 16px; /* Adjust font size for smaller screens */
+    }
+
+    .details-button {
+        font-size: 14px; /* Adjust button size for smaller screens */
+        padding: 8px 15px; /* Adjust padding */
+    }
+}
