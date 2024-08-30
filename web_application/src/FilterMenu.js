@@ -1,13 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import './styles.css';
 
-const FilterMenu = ({ onFilter }) => {
+const FilterMenu = ({ onFilter, currentSortOrder }) => {
+  const [selectedOption, setSelectedOption] = useState(currentSortOrder || '');
+
+  const handleFilter = (option) => {
+    setSelectedOption(option);
+    onFilter(option);
+  };
+
+  useEffect(() => {
+    setSelectedOption(currentSortOrder);
+  }, [currentSortOrder]);
+
   return (
     <div className="filter-menu">
       <ul>
-        <li onClick={() => onFilter('priceHighToLow')}>Price - low to high</li>
-        <li onClick={() => onFilter('priceLowToHigh')}>Price - high to low</li>
-        <li onClick={() => onFilter('dateNewToOld')}>Entry Date - Soonest First</li>
-        <li onClick={() => onFilter('dateOldToNew')}>Entry Date - Farthest First</li>
+        <li
+          className={selectedOption === 'priceLowToHigh' ? 'selected' : ''}
+          onClick={() => handleFilter('priceLowToHigh')}
+        >
+          Price - low to high
+        </li>
+        <li
+          className={selectedOption === 'priceHighToLow' ? 'selected' : ''}
+          onClick={() => handleFilter('priceHighToLow')}
+        >
+          Price - high to low
+        </li>
+        <li
+          className={selectedOption === 'dateCloseToFar' ? 'selected' : ''}
+          onClick={() => handleFilter('dateCloseToFar')}
+        >
+          Entry Date - Soonest First
+        </li>
+        <li
+          className={selectedOption === 'dateFarToClose' ? 'selected' : ''}
+          onClick={() => handleFilter('dateFarToClose')}
+        >
+          Entry Date - Farthest First
+        </li>
       </ul>
     </div>
   );

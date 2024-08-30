@@ -14,6 +14,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
 }
 
 .pictureButtonContainer {
@@ -90,15 +91,18 @@ body {
   line-height: 0;
   color: #5e6c5b;
   font-family: 'Bitter', serif;
-  /* Set Bitter font for the logo */
+  max-width: 100%;
 }
 
 .logo-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-bottom: 5px;
-  margin-top: 35px;
+  margin-top: 45px;
+  width: 100%;
+  position: relative;
 }
 
 .logoImg {
@@ -171,10 +175,12 @@ body {
 }
 
 .middleBox {
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .middleFormBox {
@@ -489,7 +495,8 @@ body {
 }
 
 .MuiImageListItemBar-root {
-  background: rgba(22, 42, 44, 0.7); /*!!!!!*/
+  background: rgba(22, 42, 44, 0.7);
+  /*!!!!!*/
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   padding: 10px;
@@ -776,7 +783,13 @@ body {
 }
 
 .apartment-list {
-  gap: 100px;
+  gap: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
 }
 
 
@@ -919,7 +932,6 @@ body {
 .roommate-popup {
   position: absolute;
   top: -30px;
-  /* התאמה כדי שהפינה השמאלית העליונה של החלון תהיה במרכז העיגול */
   left: -10px;
   width: 310px;
   background-color: #f6eee0;
@@ -985,8 +997,20 @@ body {
   color: #686867;
   position: absolute;
   bottom: -8px;
-  /* מיקום מדויק כדי שיהיה צמוד לפינה */
-  right: -9px;
+  right: -16px;
+}
+
+.message-btn-popup
+{
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  color: #686867;
+  position: absolute;
+  bottom: -8px;
+  right: -4px;
 }
 
 .filter-menu {
@@ -1020,12 +1044,16 @@ body {
 
 .filter-menu ul li:last-child {
   border-bottom: none;
-  /* מסיר את הקו המפריד מהאופציה האחרונה */
 }
 
 .filter-menu ul li:hover {
   background-color: transparent;
   box-shadow: none
+}
+
+.filter-menu ul li.selected {
+  text-decoration: underline !important;
+  font-weight: bold !important;
 }
 
 .filter-sidebar {
@@ -1044,20 +1072,68 @@ body {
 
 .filter-sidebar-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   color: #162a2c;
   align-content: center;
+  font-size: 15px;
 }
 
 .filter-sidebar-content {
   flex: 1;
   color: #162a2c;
+  font-size: 13px;
   overflow-y: auto;
 }
 
+.filter-sidebar-content label {
+  display: block;
+  margin-bottom: 5px;
+  color: #162a2c;
+  font-size: 13px;
+}
+
+.filter-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #d6e0e2;
+  border-radius: 5px;
+  color: #686867;
+  padding: 4px;
+  margin-bottom: 3px;
+  border: 1px transparent;
+  /* הוספת מסגרת לכל תיבות הטקסט */
+  outline: none;
+  /* מסיר את ה-outline */
+  width: 90%;
+  box-sizing: border-box;
+}
+
+.filter-sidebar input[type="text"],
+.filter-sidebar input[type="number"],
+.filter-sidebar select,
+.filter-sidebar input[type="date"] {
+  width: 90%; /* להחיל את הרוחב על כל סוגי הקלט */
+  box-sizing: border-box;
+}
+
+.filter-checkBox {
+  color: #5E6C5B;
+  text-align: left;
+  border-color: #d6e0e2;
+}
+
+.filter-type-header {
+  margin-top: 7px;
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #162a2c;
+}
+
 .filter-group {
-  margin-bottom: 15px;
+  margin-bottom: 8px;
   gap: 5px;
 }
 
@@ -1151,14 +1227,19 @@ body {
   position: relative;
   display: flex;
   align-items: center;
+  color: #686867;
 }
 
 .input-with-clear input {
   width: 100%;
-  padding-right: 20px; /* מוסיף מקום לכפתור ה-X */
-  border: 1px solid #ccc; /* מסגרת ברירת מחדל */
-  border-radius: 4px; /* פינות מעוגלות */
-  outline: none; /* מסיר את ה-outline */
+  padding-right: 20px;
+  /* מוסיף מקום לכפתור ה-X */
+  border: 1px solid #ccc;
+  /* מסגרת ברירת מחדל */
+  border-radius: 4px;
+  /* פינות מעוגלות */
+  outline: none;
+  /* מסיר את ה-outline */
 }
 
 
@@ -1173,7 +1254,7 @@ body {
 }
 
 .clear-button:hover {
-  background-color:transparent;
+  background-color: transparent;
 }
 
 .profileInfo {
@@ -1193,14 +1274,18 @@ body {
 }
 
 .bioBox {
-  display: inline-block; /* Allow container to shrink to fit content */
+  display: inline-block;
+  /* Allow container to shrink to fit content */
   border: none;
   border-radius: 10px;
   background-color: #D6E0E2;
   color: #162a2c;
-  width: 345.5px; /* Fixed width */
-  max-width: 345.5px; /* Max width to keep it fixed */
-  word-wrap: break-word; /* Allow long words to wrap */
+  width: 345.5px;
+  /* Fixed width */
+  max-width: 345.5px;
+  /* Max width to keep it fixed */
+  word-wrap: break-word;
+  /* Allow long words to wrap */
   margin-top: 6px;
 }
 
@@ -1218,7 +1303,7 @@ body {
   margin-left: 2px;
   margin-top: 10px;
   margin-bottom: 6px;
-  text-decoration: underline;  
+  text-decoration: underline;
 }
 
 .profileContent {
@@ -1230,11 +1315,124 @@ body {
 }
 
 .profileImageProfile {
-  height: 110px;
-  width: 110px;
+  height: 180px;
+  width: 180px;
   border-radius: 50%;
   background-color: transparent;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 10px;
   padding: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
+
+  .apartment-card img {
+    width: 100%;
+    height: auto;
+  }
+
+  .profileInfo {
+    padding: 15px;
+  }
+
+  .roommates {
+    margin-top: 10px;
+  }
+
+  .logo-container {
+    margin-top: 30px;
+  }
+  
+  .apartment-card {
+    width: 95%;
+  }
+
+  .roommate-popup {
+    width: 90%;
+    left: 5%;
+    top: 20px;
+}
+
+.popup-avatar {
+    width: 20px;
+    height: 20px;
+}
+
+.popup-header h3 {
+    font-size: 18px;
+}
+
+.popup-content {
+    font-size: 16px;
+}
+
+.info-btn-popup {
+    font-size: 18px;
+}
+}
+
+.roommate-list-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f6eee0;
+  border-radius: 10px;
+  z-index: 1000;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  max-height: 90%;
+  width: 210px;
+}
+
+.roommate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.roommate-list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #d6e0e2;
+  cursor: pointer;
+}
+
+.roommate-list-item:last-child {
+  border-bottom: none;
+}
+
+.roommate-list-item:hover {
+  background-color: transparent;
+}
+
+.roommate-list-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.roommate-list-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #5E6C5B;
+  font-weight: bold;
+}
+
+@media (max-width: 400px) {
+  .roommate-list-popup {
+      width: 90%;
+  }
 }

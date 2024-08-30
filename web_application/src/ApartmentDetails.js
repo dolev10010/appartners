@@ -1,21 +1,30 @@
 import React, { useState, useRef } from 'react';
-import { FaBed, FaBath, FaHome, FaMoneyBillWave, FaDog, FaParking, FaWater, FaAccessibleIcon } from 'react-icons/fa';
-import { MdBalcony, MdDateRange, MdLocationCity } from 'react-icons/md';
+import { FaBed, FaBath, FaHome, FaMoneyBillWave, FaDog, FaParking, FaWater, FaAccessibleIcon, FaBars, FaSnowflake } from 'react-icons/fa';
+import { MdBalcony, MdDateRange, MdLocationCity, MdElevator, MdSecurity, MdBedroomParent } from 'react-icons/md';
+import { GiWindowBars } from "react-icons/gi";
+import { SiRenovatebot } from "react-icons/si";
 import './styles.css';
 import Logo from './Logo';
 import HeaderButtons from './HeaderButtons';
 import BackButton from './BackButton';
 import RoommatePopup from './RoommatePopup';
 import profileImagePlaceholder from './background-pictures/profilePicture.jpg';
+import apartmentPlaceholder from "./background-pictures/apartmentPlaceholder.jpg";
 import { useLocation, useNavigate } from 'react-router-dom';
+
+const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+};
 
 const ApartmentDetails = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
 
-    const apartment = state?.apartment || {}; // שימוש בערך ריק אם state או apartment לא מוגדרים
-    const photos = apartment.photos || []; // הגדרה כברירת מחדל לרשימה ריקה אם photos לא מוגדר
-    const roommates = apartment.roommates || []; // הגדרה כברירת מחדל לרשימה ריקה אם roommates לא מוגדרים
+    const apartment = state?.apartment || {};
+    const photos = apartment.photos || [];
+    const roommates = apartment.roommates || [];
 
     const [selectedRoommate, setSelectedRoommate] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -75,7 +84,7 @@ const ApartmentDetails = () => {
             <div className="backgroundImageMobile"></div>
             <div className="image-container">
                 <HeaderButtons badgeContent={4} />
-                <BackButton className="back-button" onClick={handleBackClick}/>
+                <BackButton className="back-button" onClick={handleBackClick} />
             </div>
             <div className="content">
                 <Logo />
@@ -91,25 +100,37 @@ const ApartmentDetails = () => {
                         >
                             <div className="clickable-area left" onClick={handlePrevImage}></div>
                             <div className="photo-slider-images">
-                                {photos.map((photo, index) => (
+                                {photos.length > 0 ? (
+                                    photos.map((photo, index) => (
+                                        <img
+                                            key={index}
+                                            src={photo}
+                                            alt={`Apartment ${index}`}
+                                            className={`slide ${currentImageIndex === index ? '' : 'slide-hidden'}`}
+                                        />
+                                    ))
+                                ) : (
                                     <img
-                                        key={index}
-                                        src={photo}
-                                        alt={`Apartment ${index}`}
-                                        className={`slide ${currentImageIndex === index ? '' : 'slide-hidden'}`}
+                                        src={apartmentPlaceholder}
+                                        alt="Apartment Placeholder"
+                                        className="slide"
                                     />
-                                ))}
+                                )}
                             </div>
                             <div className="clickable-area right" onClick={handleNextImage}></div>
                         </div>
                         <div className="progress-dots">
-                            {photos.map((_, index) => (
-                                <span
-                                    key={index}
-                                    className={`dot ${index === currentImageIndex ? 'active' : ''}`}
-                                    onClick={() => handleDotClick(index)}
-                                />
-                            ))}
+                            {photos.length > 0 ? (
+                                photos.map((_, index) => (
+                                    <span
+                                        key={index}
+                                        className={`dot ${index === currentImageIndex ? 'active' : ''}`}
+                                        onClick={() => handleDotClick(index)}
+                                    />
+                                ))
+                            ) : (
+                                <span className="dot active"></span>
+                            )}
                         </div>
                         <div className="roommates">
                             {roommates.slice(0, 3).map((roommate, index) => (
@@ -135,22 +156,32 @@ const ApartmentDetails = () => {
                             />}
                     </div>
                     <div className="profileInfo">
-                        <p className='profileFullName'>{apartment.city}, {apartment.street}</p>
+                        <p className='profileFullName'>{apartment.city}, {apartment.street} {apartment.number}</p>
                         <div className='bioBox'>
                             <p className='bioHeader'>Bio:</p>
-                            <p className='profileContent'>{apartment.bio}</p>
+                            <p className='profileContent'>{apartment.post_bio}</p>
                         </div>
-                        <div className="detail-item"><MdLocationCity /> <strong>Street:</strong> {apartment.street}</div>
+                        <div className="detail-item"><FaHome /> <strong>{apartment.is_sublet ? 'Sublet' : 'Long Term'}</strong></div>
+                        <div className="detail-item"><MdDateRange /> <strong>Entry Date:</strong> {formatDate(apartment.entry_date)}</div>
+                        {apartment.is_sublet && apartment.end_date && (
+                            <div className="detail-item"><MdDateRange /> <strong>End Date:</strong> {formatDate(apartment.end_date)}</div>
+                        )}
+                        <div className="detail-item"><FaMoneyBillWave /> <strong>Price -</strong> ${apartment.price}</div>
+                        <div className="detail-item"><MdLocationCity /> <strong>{apartment.floor}th Floor</strong> </div>
                         <div className="detail-item"><FaBed /> <strong>Total Rooms:</strong> {apartment.total_rooms}</div>
-                        <div className="detail-item"><FaBath /> <strong>Available Rooms:</strong> {apartment.available_rooms}</div>
+                        <div className="detail-item"><MdBedroomParent /> <strong>Available Rooms:</strong> {apartment.available_rooms}</div>
+                        <div className="detail-item"><FaBath /> <strong>Number of Bethrooms:</strong> {apartment.num_of_toilets}</div>
                         <div className="detail-item"><FaHome /> <strong>Apartment Size:</strong> {apartment.appartment_size} sqm</div>
-                        <div className="detail-item"><FaMoneyBillWave /> <strong>Price:</strong> ${apartment.price}</div>
-                        <div className="detail-item"><FaDog /> <strong>Allow Pets:</strong> {apartment.allow_pets ? 'Yes' : 'No'}</div>
-                        <div className="detail-item"><FaParking /> <strong>Has Parking:</strong> {apartment.has_parking ? 'Yes' : 'No'}</div>
-                        <div className="detail-item"><MdBalcony /> <strong>Has Balcony:</strong> {apartment.has_balcony ? 'Yes' : 'No'}</div>
-                        <div className="detail-item"><FaWater /> <strong>Has Sun Water Heater:</strong> {apartment.has_sun_water_heater ? 'Yes' : 'No'}</div>
-                        <div className="detail-item"><FaAccessibleIcon /> <strong>Accessible:</strong> {apartment.is_accessible_to_disabled ? 'Yes' : 'No'}</div>
-                        <div className="detail-item"><MdDateRange /> <strong>Entry Date:</strong> {apartment.entry_date}</div>
+                        <div className="detail-item"><FaDog /> <strong>{apartment.allow_pets ? '' : 'No '}Pets Allowed</strong></div>
+                        <div className="detail-item"><FaParking /> <strong>There is {apartment.has_parking ? '' : 'No'} Parking</strong></div>
+                        <div className="detail-item"><MdBalcony /> <strong>There is {apartment.has_balcony ? '' : 'No'} Balcony</strong> </div>
+                        <div className="detail-item"><MdElevator /> <strong>There is {apartment.has_elevator ? '' : 'No'} Elevator</strong></div>
+                        <div className="detail-item"><MdSecurity /> <strong>There is {apartment.has_mamad ? '' : 'No'} Mamad</strong></div>
+                        <div className="detail-item"><FaWater /> <strong>There is {apartment.has_sun_water_heater ? '' : 'No'} Sun Water Heater</strong></div>
+                        <div className="detail-item"><FaAccessibleIcon /> <strong>{apartment.is_accessible_to_disabled ? '' : 'Not'} Accessible</strong></div>
+                        <div className="detail-item"><FaSnowflake /> <strong>There is {apartment.has_air_conditioner ? '' : 'No'} Air Conditioner</strong></div>
+                        <div className="detail-item"><GiWindowBars /> <strong>There is {apartment.has_bars ? '' : 'No'} Bars</strong></div>
+                        <div className="detail-item"><SiRenovatebot /> <strong>Status:</strong> {apartment.status}</div>
                     </div>
                 </div>
             </div>

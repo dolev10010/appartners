@@ -84,25 +84,26 @@ class Queries:
         return f"SELECT * FROM {table_name} WHERE 1=1"
 
     @staticmethod
-    def fetch_apartment_roomates_details(table_name, emails):
-        return f"SELECT CONCAT(first_name, ' ', last_name) as full_name, profile_bio, photo_url " \
-               f"FROM {table_name} WHERE email IN ({emails})"
+    def fetch_apartment_roommates_details(table_name, emails):
+        return f""" SELECT * FROM {table_name} WHERE email IN ({emails})"""
+        #  return f"""SELECT CONCAT(first_name, ' ', last_name) AS full_name,profile_bio,
+        #            photo_url,
+        #            age,
+        #            profession,
+        #            smoking,
+        #            like_animals,
+        #            has_animals,
+        #            keeps_kosher,
+        #            sex,
+        #            allergies,
+        #            hobbies,
+        #            status
+        #     FROM {table_name}
+        #     WHERE email IN ({emails})
+        # """
 
     @staticmethod
-    def fetch_base_apartments_query(table_name):
-        query = f"""
-            SELECT DISTINCT a.*, COUNT(r.email) AS matching_roommates_count
-            FROM {table_name} a
-            LEFT JOIN LATERAL (
-                SELECT json_array_elements(a.roommate_emails)::text AS email
-            ) AS email_list ON TRUE
-            LEFT JOIN user_profile r ON r.email = TRIM(email_list.email)
-            WHERE 1=1
-            GROUP BY a.post_id, a.email, a.city, a.street, a.number, a.floor, a.total_rooms, 
-                     a.appartment_size, a.available_rooms, a.num_of_toilets, a.price, a.post_bio, 
-                     a.has_parking, a.has_elevator, a.has_mamad, a.num_of_roommates, a.allow_pets, 
-                     a.has_balcony, a.status, a.has_sun_water_heater, a.is_accessible_to_disabled, 
-                     a.has_air_conditioner, a.has_bars, a.entry_date, a.is_sublet, a.end_date, 
-                     a.photos_url, a.roommate_emails, a.creation_timestamp
-        """
-        return query
+    def fetch_apartment_roomates_details_for_popup(table_name, emails):
+        return f"SELECT CONCAT(first_name, ' ', last_name) as full_name, profile_bio, photo_url, email " \
+               f"FROM {table_name} WHERE email IN ({emails})"
+

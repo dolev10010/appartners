@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import RoommatePopup from './RoommatePopup';
+import RoommateListPopup from './RoommateListPopup'; // הוסף את השורה הזו
 import apartmentPlaceholder from "./background-pictures/apartmentPlaceholder.jpg";
 import profileImagePlaceholder from './background-pictures/profilePicture.jpg';
 import { RiInfoI } from "react-icons/ri";
@@ -32,7 +33,7 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
   const [selectedRoommate, setSelectedRoommate] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [showDetails, setShowDetails] = useState(false); // מצב לתצוגת פרטי הדירה
+  const [showRoommateList, setShowRoommateList] = useState(false); // הוסף את השורה הזו
   const touchStartRef = useRef(0);
 
   useEffect(() => {
@@ -55,43 +56,18 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
         entry_date: apartment.entry_date,
       });
 
-      validateEmails(apartment.roommate_emails || []);
+      fetchRoommateDetails(apartment.roommate_emails || []);
     }
   }, [apartment]);
 
-  const validateEmails = async (emails) => {
-    try {
-      const response = await fetch(`http://${config.serverPublicIP}:5433/validate-emails`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ emails }),
-      });
-
-      if (response.ok) {
-        const { valid_emails } = await response.json();
-        if (valid_emails.length > 0) {
-          fetchRoommateDetails(valid_emails);
-        } else {
-          console.error('No valid emails found');
-        }
-      } else {
-        console.error('Failed to validate emails');
-      }
-    } catch (error) {
-      console.error('Error validating emails:', error);
-    }
-  };
-
-  const fetchRoommateDetails = async (validEmails) => {
+  const fetchRoommateDetails = async (emails) => {
     try {
       const response = await fetch(`http://${config.serverPublicIP}:5433/get-roommate-details`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ emails: validEmails }),
+        body: JSON.stringify({ emails }),
       });
 
       if (response.ok) {
@@ -119,16 +95,20 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
     setSelectedRoommate(null);
   };
 
+  const handleCloseRoommateListPopup = () => {
+    setShowRoommateList(false);
+  };
+
   const handleInfoClick = () => {
-    navigate(`/apartment-details/${apartment.post_id}`, { state: { apartment, filters, sortOrder } });
+    const apartmentWithRoommates = {
+      ...apartment,
+      roommates: apartmentData.roommates
+    };
+    navigate(`/apartment-details/${apartment.post_id}`, { state: { apartment: apartmentWithRoommates, filters, sortOrder } });
   };
 
-  const handleCloseApartmentPopup = () => {
-    setShowDetails(false);
-  };
-
-  const handleViewProfile = (email) => {
-    window.location.href = `/display-profile?email=${email}`;
+  const handleNavigateToChat = (email) => {
+    navigate(`/chat?email=${email}`);
   };
 
   const handleNextImage = () => {
@@ -160,6 +140,16 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
     } else if (touchStartRef.current - touchEnd < -50) {
       handlePrevImage();
       touchStartRef.current = 0;
+    }
+  };
+
+  const handleMessageClick = () => {
+    if (apartmentData.roommates.length > 1) {
+      setShowRoommateList(true); // הצגת הפופ-אפ עם רשימת השותפים
+    } else if (apartmentData.roommates.length === 1) {
+      handleNavigateToChat(apartmentData.roommates[0].email);
+    } else {
+      handleNavigateToChat(apartment.email);
     }
   };
 
@@ -217,14 +207,20 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
           <RoommatePopup
             roommate={selectedRoommate}
             onClose={handleClosePopup}
-            onViewProfile={handleViewProfile}
+            onViewProfile={handleNavigateToChat} // נווט לשיחה במקום לפרופיל
+          />}
+        {showRoommateList && // הצגת הפופ-אפ אם יש שני שותפים או יותר
+          <RoommateListPopup
+            roommates={apartmentData.roommates}
+            onClose={handleCloseRoommateListPopup}
+            onSelectRoommate={handleNavigateToChat} // נווט לשיחה עם השותף הנבחר
           />}
       </div>
       <div className="card-actions">
         <button className="info-btn" onClick={handleInfoClick}>
           <RiInfoI />
         </button>
-        <button className="message-btn" onClick={() => window.location.href = `/chat?email=${apartment.email}`}>
+        <button className="message-btn" onClick={handleMessageClick}>
           <CiLocationArrow1 />
         </button>
       </div>
