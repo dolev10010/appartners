@@ -1,48 +1,48 @@
 .custom-map-control-button {
-    background-color: #fff;
-    border: 2px solid #fff;
-    border-radius: 3px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    margin: 0px; /* No margin to align the button to the left side */
-    padding: 0 8px;
-    height: 30px;
-    line-height: 30px;
-    font-size: 12px;
-    text-align: center;
-    color: #000;
-    top: 10px;
-  }
-  
-  .custom-map-control-button:hover {
-    background-color: #ebebeb;
-  }
-  
-  .apartments-container {
-    width: 70%; /* Make the page wider */
-    margin: 0 auto; /* Center the page */
-  }
-  
-  .apartments-content {
-    padding: 20px;
-  }
-  
-  .apartments-searchBox {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .apartments-buttons {
-    padding: 5px 10px;
-    font-size: 14px;
-    height: 32px;
-  }
-  
-  .apartments-searchInput {
-    flex: 1;
-    margin-right: 10px;
-    padding: 5px;
-    font-size: 14px;
-  }
-  
+  background-color: #fff;
+  border: 2px solid #fff;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  margin-left: 10px; /* Adjusted margin to position the button */
+  padding: 0 8px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+  text-align: center;
+  color: #000;
+  top: 10px;
+}
+
+.custom-map-control-button:hover {
+  background-color: #ebebeb;
+}
+
+.apartments-container {
+  width: 70%; /* Make the page wider */
+  margin: 0 auto; /* Center the page */
+}
+
+.apartments-content {
+  padding: 20px;
+}
+
+.apartments-searchBox {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center; /* Align the button and input box vertically */
+  gap: 5px; /* Control the space between input and button */
+}
+
+.apartments-buttons {
+  padding: 5px 10px;
+  font-size: 14px;
+  height: 32px;
+}
+
+.apartments-searchInput {
+  width: 200px; /* Set a fixed width for the input box */
+  max-width: 100%;
+  padding: 5px;
+  font-size: 14px;
+}

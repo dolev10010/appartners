@@ -17,7 +17,7 @@ def get_current_timestamp():
 
 
 def is_email_already_exists(email):
-    query = Queries.fetch_user_email_query("register_info", email)
+    query = Queries.fetch_user_email_query("user_profile", email)
     matching_email = postgres_client.read_from_db(query)
     return bool(matching_email)
 
@@ -47,6 +47,7 @@ def create_profile():
             logger.log_error(f"Profile creation failed | reason: Email already exists: {email}")
             return jsonify({"errorMessage": "Email already exists"}), 400
         new_user_query = Queries.insert_new_user_profile_query(table_name='user_profile')
+        creation_timestamp = get_current_timestamp().strftime('%Y-%m-%d %H:%M:%S')
         postgres_client.write_to_db(new_user_query, values=[email, creation_timestamp])
         logger.log_info(f"successful profile creation, email: {email}")
         return jsonify({"message": "successful profile creation"}), 200
@@ -530,11 +531,49 @@ def apartments_by_city():
 
         query = Queries.fetch_apartments_by_city_query("apartments_post", city)
         apartments = postgres_client.read_from_db(query, single_match=False)
-        print(apartments)
-        return jsonify(apartments), 200
+
+        mapped_apartments = []
+        for apt in apartments:
+            apartment_dict = {
+                "post_id": apt[0],
+                "email": apt[1],
+                "city": apt[2],
+                "street": apt[3],
+                "number": apt[4],
+                "floor": apt[5],
+                "total_rooms": apt[6],
+                "appartment_size": apt[7],
+                "available_rooms": apt[8],
+                "num_of_toilets": apt[9],
+                "price": apt[10],
+                "post_bio": apt[11],
+                "has_parking": apt[12],
+                "has_elevator": apt[13],
+                "has_mamad": apt[14],
+                "num_of_roommates": apt[15],
+                "allow_pets": apt[16],
+                "has_balcony": apt[17],
+                "status": apt[18],
+                "has_sun_water_heater": apt[19],
+                "is_accessible_to_disabled": apt[20],
+                "has_air_conditioner": apt[21],
+                "has_bars": apt[22],
+                "entry_date": apt[23].isoformat() if apt[23] else None,
+                "is_sublet": apt[24],
+                "end_date": apt[25].isoformat() if apt[25] else None,
+                "photos": apt[26],
+                "roommate_emails": apt[27],
+                "creation_timestamp": apt[28].isoformat() if apt[28] else None,
+                "latitude": apt[29],
+                "longitude": apt[30]
+            }
+            mapped_apartments.append(apartment_dict)
+
+        return jsonify(mapped_apartments), 200
     except Exception as e:
         logger.log_error(f"Fetching apartments by city failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
+
 
 
 @app.route('/get-roommate-profiles', methods=['GET'])

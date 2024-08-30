@@ -2,7 +2,7 @@ class Queries:
 
     @staticmethod
     def insert_new_user_profile_query(table_name):
-        return f"INSERT INTO {table_name} (email, creation_time) VALUES(%s, to_timestamp(%s))"
+        return f"INSERT INTO {table_name} (email, creation_time) VALUES(%s, %s)"
 
     @staticmethod
     def update_user_profile_query(table_name, email):

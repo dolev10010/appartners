@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './ApartmentsInMyAreaPage.css';
+import ApartmentDetailsPopup from './ApartmentDetailsPopUp';
 import config from './config.json';
 
 function ApartmentsInMyAreaPage() {
   const [city, setCity] = useState('');
   const [citySelected, setCitySelected] = useState(false);
+  const [selectedApartments, setSelectedApartments] = useState([]); // State to track selected apartments at the same location
   const mapRef = useRef(null); // Use ref to hold the map instance
   const markersRef = useRef([]); // Use ref to hold the markers
   const userMarkerRef = useRef(null); // Use ref to hold the user location marker
@@ -27,37 +29,44 @@ function ApartmentsInMyAreaPage() {
       markersRef.current.forEach(marker => marker.setMap(null));
       markersRef.current = []; // Clear marker state
 
+      // Group apartments by their latitude and longitude
+      const apartmentsByLocation = data.reduce((acc, apartment) => {
+        const key = `${apartment.latitude}-${apartment.longitude}`;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(apartment);
+        return acc;
+      }, {});
+
       // Place new markers
-      const newMarkers = data.map(apartment => {
-        const lat = parseFloat(apartment[29]);
-        const lng = parseFloat(apartment[30]);
+      const newMarkers = Object.keys(apartmentsByLocation).map((key) => {
+        const [lat, lng] = key.split('-').map(parseFloat);
+        const apartmentsAtLocation = apartmentsByLocation[key];
 
         if (!isNaN(lat) && !isNaN(lng)) {
           const marker = new window.google.maps.Marker({
             position: { lat, lng },
             map: mapRef.current,
-            title: apartment[3], // Assuming address/street is in index 3
+            title: apartmentsAtLocation[0].street, // Assuming street is stored in the apartment object
           });
 
           marker.addListener('click', () => {
-            const infoWindow = new window.google.maps.InfoWindow({
-              content: `<div>
-                        <h3>${apartment[3]}</h3>
-                        <p>Price: ${apartment[10]}</p>
-                        <p>Rooms: ${apartment[6]}</p>
-                        </div>`,
-            });
-            infoWindow.open(mapRef.current, marker);
+            setSelectedApartments(apartmentsAtLocation); // Set the selected apartments for the popup
+            sessionStorage.setItem('selectedApartments', JSON.stringify(apartmentsAtLocation)); // Save selected apartments in sessionStorage
           });
 
           return marker;
         } else {
-          console.error('Invalid latitude or longitude for apartment:', apartment);
+          console.error('Invalid latitude or longitude for apartments:', apartmentsAtLocation);
           return null;
         }
       }).filter(marker => marker !== null);
 
       markersRef.current = newMarkers;
+
+      // Store markers in sessionStorage
+      sessionStorage.setItem('markers', JSON.stringify(data));
     } catch (error) {
       console.error('Error fetching apartments by city:', error);
     }
@@ -88,53 +97,8 @@ function ApartmentsInMyAreaPage() {
     }
   }, []);
 
-  const handleSearchByCity = () => {
-    if (citySelected) {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ address: city }, (results, status) => {
-        if (status === 'OK' && results[0].geometry) {
-          const cityLocation = {
-            lat: results[0].geometry.location.lat(),
-            lng: results[0].geometry.location.lng(),
-          };
-          updateMapCenter(cityLocation); // Update map center to the searched city
-          fetchApartmentsByCity(); // Fetch apartments by city and place markers
-        }
-      });
-    } else {
-      console.warn('City not selected from the list');
-    }
-  };
-
-  // Get user's current location and display their city on the map when the page loads
+  // Initialize the map when the component mounts
   useEffect(() => {
-    const loadUserLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          setMapCenterToUserCity(userLocation);
-        });
-      } else {
-        console.error('Geolocation is not supported by this browser.');
-      }
-    };
-
-    const setMapCenterToUserCity = (location) => {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: location }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          const cityResult = results.find(result => result.types.includes('locality'));
-          if (cityResult) {
-            setCity(cityResult.formatted_address.split(',')[0]);
-            updateMapCenter(location);
-          }
-        }
-      });
-    };
-
     const initMap = () => {
       if (!mapRef.current) {
         mapRef.current = new window.google.maps.Map(document.getElementById('map'), {
@@ -173,6 +137,9 @@ function ApartmentsInMyAreaPage() {
                   position: userLocation,
                   map: mapRef.current,
                   title: 'Your Location',
+                  icon: {
+                    url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" // Blue marker icon for user's location
+                  }
                 });
               }
             });
@@ -180,15 +147,90 @@ function ApartmentsInMyAreaPage() {
             console.error('Geolocation is not supported by this browser.');
           }
         });
-
-        loadUserLocation(); // Load user location after map is initialized
       }
     };
 
     if (window.google && window.google.maps) {
       initMap();
+
+      // Restore markers from sessionStorage
+      const storedMarkers = JSON.parse(sessionStorage.getItem('markers'));
+      if (storedMarkers) {
+        storedMarkers.forEach(apartment => {
+          const lat = parseFloat(apartment.latitude);
+          const lng = parseFloat(apartment.longitude);
+
+          if (!isNaN(lat) && !isNaN(lng)) {
+            const marker = new window.google.maps.Marker({
+              position: { lat, lng },
+              map: mapRef.current,
+              title: apartment.street, // Assuming street is stored in the apartment object
+            });
+
+            marker.addListener('click', () => {
+              const apartmentsAtLocation = storedMarkers.filter(
+                apt => apt.latitude === apartment.latitude && apt.longitude === apartment.longitude
+              );
+              setSelectedApartments(apartmentsAtLocation); // Set the selected apartments for the popup
+              sessionStorage.setItem('selectedApartments', JSON.stringify(apartmentsAtLocation)); // Save selected apartments in sessionStorage
+            });
+
+            markersRef.current.push(marker);
+          }
+        });
+      }
+
+      // Restore selected apartments for the popup
+      const storedSelectedApartments = JSON.parse(sessionStorage.getItem('selectedApartments'));
+      if (storedSelectedApartments) {
+        setSelectedApartments(storedSelectedApartments);
+      }
     }
   }, [updateMapCenter]);
+
+  // Restore map state when the component mounts
+  useEffect(() => {
+    const storedCity = sessionStorage.getItem('city');
+    const storedCitySelected = sessionStorage.getItem('citySelected') === 'true';
+    const storedMapCenter = JSON.parse(sessionStorage.getItem('mapCenter'));
+    const storedMapZoom = sessionStorage.getItem('mapZoom');
+
+    if (storedCity && storedCitySelected && storedMapCenter && storedMapZoom) {
+      setCity(storedCity);
+      setCitySelected(storedCitySelected);
+      if (mapRef.current) {
+        mapRef.current.setCenter(storedMapCenter);
+        mapRef.current.setZoom(parseInt(storedMapZoom, 10));
+      }
+      fetchApartmentsByCity(); // Fetch apartments based on the stored city
+    }
+  }, [fetchApartmentsByCity]);
+
+  const handleSearchByCity = () => {
+    // Clear previous state from sessionStorage
+    sessionStorage.removeItem('city');
+    sessionStorage.removeItem('citySelected');
+    sessionStorage.removeItem('mapCenter');
+    sessionStorage.removeItem('mapZoom');
+    sessionStorage.removeItem('markers');
+    sessionStorage.removeItem('selectedApartments');
+
+    if (citySelected) {
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ address: city }, (results, status) => {
+        if (status === 'OK' && results[0].geometry) {
+          const cityLocation = {
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+          };
+          updateMapCenter(cityLocation); // Update map center to the searched city
+          fetchApartmentsByCity(); // Fetch apartments by city and place markers
+        }
+      });
+    } else {
+      console.warn('City not selected from the list');
+    }
+  };
 
   return (
     <div className="apartments-container">
@@ -215,6 +257,16 @@ function ApartmentsInMyAreaPage() {
         </div>
         <div id="map" style={{ height: '500px', width: '100%' }}></div>
       </div>
+
+      {selectedApartments.length > 0 && (
+        <ApartmentDetailsPopup 
+          apartments={selectedApartments} // Pass all apartments at the same location
+          onClose={() => {
+            setSelectedApartments([]); // Clear selected apartments when the popup is closed
+            sessionStorage.removeItem('selectedApartments'); // Remove from sessionStorage
+          }} 
+        />
+      )}
     </div>
   );
 }
