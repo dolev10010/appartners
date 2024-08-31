@@ -45,6 +45,7 @@ function ShowApartments() {
       } else {
         const data = await response.json();
         setApartments(Array.isArray(data) && data.length > 0 ? data : []);
+        console.log(data);
         setErrorMessage(''); // Clear error message if results found
       }
     } catch (error) {

@@ -49,6 +49,14 @@ function HomePage() {
   }
 
   const handleApartmentsInMyAreaClick = () => {
+    // Clear session storage to reset the map page state
+    sessionStorage.removeItem('city');
+    sessionStorage.removeItem('citySelected');
+    sessionStorage.removeItem('mapCenter');
+    sessionStorage.removeItem('mapZoom');
+    sessionStorage.removeItem('markers');
+    sessionStorage.removeItem('selectedApartments');
+    
     navigate('/apartments-in-my-area');
   }
 
@@ -62,15 +70,15 @@ function HomePage() {
       </div>
       <div className="content">
         <Logo />
-        <h3 className="welcome">welcome {userEmail}</h3>
+        <h3 className="welcome">Welcome {userEmail}</h3>
         <div className="middleFormBox">
           <div className="wrapper">
             <button className="findRoomate" onClick={handleFindRoomateClick}>
-              <label className="label">Find Roomate</label>
+              <label className="label">Find Roommate</label>
               <img
                 src={findRoomate}
                 className="findRoomateImg"
-                alt="Find Roomate"
+                alt="Find Roommate"
                 loading="lazy"
               />
             </button>
@@ -93,11 +101,11 @@ function HomePage() {
               />
             </button>
             <button className="apartmentInMyArea" onClick={handleApartmentsInMyAreaClick}>
-              <p className="label">Apartments in my area</p>
+              <p className="label">Apartments in My Area</p>
               <img
                 src={apartmentsInMyArea}
                 className="apartmentInMyAreaImg"
-                alt="Apartments in my area"
+                alt="Apartments in My Area"
                 loading="lazy"
               />
             </button>

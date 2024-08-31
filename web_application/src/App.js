@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from "./HomePage";
 import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
@@ -32,7 +32,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<EntryPage />} />
+        <Route path="/" element={<EntryPage />} />
         <Route path="/signup" element={<CreateAccountPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/homepage" element={<HomePage />} />
@@ -43,6 +43,9 @@ function App() {
         <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
         <Route path="/apartment-details/:id" element={<ApartmentDetails />} />
         <Route path="/profile/:email" element={<DisplayProfile />} />
+        
+        {/* Catch-all route for undefined routes */}
+        <Route path="*" element={<Navigate to="/homepage" />} />
       </Routes>
     </Router>
   );

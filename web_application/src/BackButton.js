@@ -6,10 +6,15 @@ const BackButton = ({ onClick }) => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    if (onClick) {
-      onClick(); // השתמש בפונקציה המותאמת אישית אם הועברה
+    const fromPopup = sessionStorage.getItem('fromPopup'); // Check if user came from the popup
+
+    if (fromPopup === 'true') {
+      sessionStorage.removeItem('fromPopup'); // Clear the flag
+      navigate(-1); // Return to map (previous page)
+    } else if (onClick) {
+      onClick(); // Use custom function if passed
     } else {
-      navigate(-1); // חזרה לדף הקודם כברירת מחדל
+      navigate('/find-apartment', { replace: true }); // Default behavior
     }
   };
 
