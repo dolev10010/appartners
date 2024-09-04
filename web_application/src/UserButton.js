@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import UserContext from './UserContext';
 import profileImagePlaceholder from './background-pictures/profilePicture.jpg';
 import config from './config.json';
-import AWS from 'aws-sdk';
 
 const UserButton = () => {
   const navigate = useNavigate();
@@ -13,20 +12,23 @@ const UserButton = () => {
   useEffect(() => {
     const fetchProfileImage = async () => {
       if (userEmail) {
-        try {
-          const response = await fetch(`http://${config.serverPublicIP}:5433/get-profile?email=${userEmail}`);
-          if (response.ok) {
-            const data = await response.json();
-            if (data && data.photo_url) {
-              setProfileImage(data.photo_url);
+        const cachedImage = localStorage.getItem('profileImage'); // Check if image is in localStorage
+        if (cachedImage) {
+          setProfileImage(cachedImage); // Use cached image
+        } else {
+          try {
+            const response = await fetch(`http://${config.serverPublicIP}:5433/get-profile?email=${userEmail}`);
+            if (response.ok) {
+              const data = await response.json();
+              const imageUrl = data && data.photo_url ? data.photo_url : profileImagePlaceholder;
+              setProfileImage(imageUrl); // Set profile image
+              localStorage.setItem('profileImage', imageUrl); // Save image in localStorage
             } else {
-              setProfileImage(profileImagePlaceholder);
+              setProfileImage(profileImagePlaceholder); // Fallback to placeholder if error
             }
-          } else {
-            console.error('Failed to fetch profile image');
+          } catch (error) {
+            console.error('Error fetching profile image:', error);
           }
-        } catch (error) {
-          console.error('Error fetching profile image:', error);
         }
       }
     };

@@ -32,20 +32,27 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<EntryPage />} />
+        <Route path="*" element={<EntryPage />} />
         <Route path="/signup" element={<CreateAccountPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/homepage" element={<HomePage />} />
-        {isLoggedIn ? <Route path="/profile" element={<CreateProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
+        {/* Conditional Routes */}
+        {isLoggedIn ? (
+          <>
+            <Route path="/post-apartment" element={<PostApartmentPage />} />
+            <Route path="/profile" element={<CreateProfilePage />} />
+          </>
+        ) : (
+          <>
+            <Route path="/post-apartment" element={<Navigate to="/homepage" />} />
+            <Route path="/profile" element={<Navigate to="/login" />} />
+          </>
+        )}
         <Route path="/find-roomate" element={<FindRoommatePage />} />
-        <Route path="/post-apartment" element={<PostApartmentPage />} />
         <Route path="/find-apartment" element={<ShowApartments />} />
         <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
         <Route path="/apartment-details/:id" element={<ApartmentDetails />} />
         <Route path="/profile/:email" element={<DisplayProfile />} />
-        
-        {/* Catch-all route for undefined routes */}
-        <Route path="*" element={<Navigate to="/homepage" />} />
       </Routes>
     </Router>
   );

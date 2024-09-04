@@ -48,7 +48,7 @@ function ProfilePage() {
                 if (response.ok) {
                     const data = await response.json();
                     if (data) {
-                        setFullName(`${data.first_name} ${data.last_name}`);
+                        setFullName(`${data.first_name || ''} ${data.last_name || ''}`.trim());
                         setGender(data.sex);
                         setBirthDate(formatDate(data.birthday));
                         setSmoker(data.smoking);
@@ -247,12 +247,14 @@ function ProfilePage() {
             console.error("Error:", error);
         }
     };
+    
 
     const handleLogout = () => {
         const cognitoUser = userPool.getCurrentUser();
         if (cognitoUser) {
             cognitoUser.signOut();
             clearUserEmail();
+            localStorage.removeItem('profileImage');
             navigate('/login');
         }
     };

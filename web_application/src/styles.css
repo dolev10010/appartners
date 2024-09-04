@@ -66,6 +66,7 @@ body {
   margin-right: 15px;
   justify-content: center;
   align-items: center;
+  
 }
 
 .backgroundImage {
@@ -81,6 +82,21 @@ body {
   border-radius: 10px;
   text-align: center;
   color: #5E6C5B;
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+  /* For tablets and small devices */
+  .content {
+    margin-top: 20px; /* Adjust this value as needed */
+  }
+}
+
+@media (max-width: 480px) {
+  /* For phones */
+  .content {
+    margin-top: 40px; /* Increase margin-top for phones */
+  }
 }
 
 .logo {

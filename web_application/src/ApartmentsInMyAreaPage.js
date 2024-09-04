@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import './ApartmentsInMyAreaPage.css';
 import ApartmentDetailsPopup from './ApartmentDetailsPopUp';
 import config from './config.json';
+import Logo from "./Logo";
+import HeaderButtons from "./HeaderButtons";
 
 function ApartmentsInMyAreaPage() {
   const [city, setCity] = useState('');
@@ -236,8 +238,11 @@ function ApartmentsInMyAreaPage() {
     <div className="apartments-container">
       <div className="backgroundImage"></div>
       <div className="backgroundImageMobile"></div>
+      <div className="image-container">
+        <HeaderButtons badgeContent={4} />
+      </div>
+      <div className="content"><Logo /></div>
       <div className="apartments-content">
-        <h1 className="logo">Appartners</h1>
         <h2 className="pageName">Apartments in My Area</h2>
         <div className="apartments-searchBox">
           <input
@@ -255,7 +260,7 @@ function ApartmentsInMyAreaPage() {
             Search by City
           </button>
         </div>
-        <div id="map" style={{ height: '500px', width: '100%' }}></div>
+        <div id="map"></div>
       </div>
 
       {selectedApartments.length > 0 && (

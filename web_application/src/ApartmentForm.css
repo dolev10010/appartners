@@ -1,3 +1,12 @@
+@media (max-width: 767px) {
+  input[name="price"],
+  input[name="total_rooms"],
+  input[name="is_furnished"],
+  input[name="allow_pets"] {
+      margin-top: 18px; /* Adjust the value as needed */
+  }
+}
+
 .post-apartment-apartmentForm {
     padding: 20px;
     margin-top: 20px;
@@ -9,6 +18,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    gap: 10px;
     margin-bottom: 20px;
   }
   
@@ -124,3 +134,20 @@
     height: 35px; /* Adjust the height as per your requirement */
   }
   
+  .post-apartment-formGroup {
+    display: flex;
+    flex-direction: column; /* Arrange the label and checkbox vertically */
+    align-items: center; /* Center-align the label and checkbox */
+  }
+
+  /* Specific styling for small screens */
+  @media (max-width: 767px) {
+  .post-apartment-formGroup {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .post-apartment-input {
+    height: 50px; /* Adjust height for better look on small screens */
+  }
+}

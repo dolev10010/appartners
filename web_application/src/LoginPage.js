@@ -104,13 +104,6 @@ function LoginPage() {
               className="input"
             />
           </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "15px"}}>
-            <label htmlFor="staySignedInCheckbox" style={{ display: "flex", alignItems: "center", marginRight: "10px" }}>
-              <input type="checkbox" id="staySignedInCheckbox" />
-              Stay signed in
-            </label>
-            <button className="inlineButton" onClick={handleForgetPasswordClick}>Forgot Password</button>
-          </div>
           <button className="buttons" onClick={handleSignin}>Sign in</button>
           <p className="smallText"> Don't have an account yet?&nbsp;&nbsp;  
             <button className="inlineButton" onClick={handleDontHaveUserClick}> Sign up</button>

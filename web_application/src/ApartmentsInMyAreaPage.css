@@ -24,7 +24,7 @@
 }
 
 .apartments-content {
-  padding: 20px;
+  padding: 10px;
 }
 
 .apartments-searchBox {
@@ -45,4 +45,56 @@
   max-width: 100%;
   padding: 5px;
   font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* For tablets and small devices */
+  .apartments-container {
+    width: 90%; /* Make the container full width */
+    padding: 0px;
+  }
+
+  .apartments-searchInput {
+    width: 100%; /* Make the search input take full width */
+    font-size: 12px; /* Smaller font size for smaller screens */
+  }
+
+  .apartments-buttons {
+    font-size: 12px; /* Reduce font size of the button */
+    padding: 5px 8px;
+    height: 28px; /* Reduce button height */
+  }
+}
+
+@media (max-width: 480px) {
+  /* For phones */
+  .apartments-searchBox {
+    flex-direction: column; /* Stack the input and button vertically */
+    gap: 8px;
+  }
+
+  .apartments-searchInput {
+    width: 100%; /* Make the search input take full width */
+    font-size: 12px; /* Smaller font size for phones */
+  }
+
+  .apartments-buttons {
+    width: 100%; /* Make the button take full width */
+    font-size: 12px; /* Reduce font size for smaller screens */
+    padding: 5px 8px; /* Adjust padding */
+    height: 32px; /* Adjust height */
+  }
+}
+
+#map {
+  width: 100%;
+  height: 70vh; /* Default height for larger screens */
+}
+
+/* Media query for small screens */
+@media (max-width: 767px) {
+  #map {
+    height: 50vh; /* Set height to 50vh for smaller screens */
+  }
 }

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
+import Logo from "./Logo";
 import UserContext from './UserContext';
-import logo from './background-pictures/Logo.jpg';
 import config from './config.json';
 import AWS from 'aws-sdk';
 import ApartmentForm from './ApartmentForm';
+import HeaderButtons from "./HeaderButtons";
 import PostView from './PostView';
 import './PostApartmentPage.css';
 import './ApartmentForm.css';
@@ -520,11 +521,11 @@ function PostApartmentPage() {
       <AlertHandler isOpen={alertHandlerOpen} message={alertHandlerMessage} onClose={() => setAlertHandlerOpen(false)} />
       <ConfirmDialog isOpen={confirmDialogOpen} onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
       <div className="post-apartment-container">
+        <div className="image-container">
+        <HeaderButtons badgeContent={4} />
+        </div>
+        <div className="content"><Logo /></div>
         <div className="post-apartment-content">
-          <div className="logo-container">
-            <img src={logo} className="logoImg" alt="Logo" loading="lazy" />
-            <h1 className="post-apartment-logo">Appartners</h1>
-          </div>
           <div className="post-apartment-buttonContainer">
             {!showForm && (
               <>
