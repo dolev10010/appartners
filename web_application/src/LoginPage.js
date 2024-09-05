@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import "./styles.css";
+import Logo from "./Logo";
 import AlertHandler from './AlertHandler';
 import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 import userPool from './UserPool';
@@ -77,7 +78,7 @@ function LoginPage() {
       <div className="backgroundImage"></div> {/* For larger screens */}
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       <div className="content">
-        <h1 className="logo">Appartners</h1>
+        <Logo />
         <h2 className="pageName">Login</h2>
         <div className="middleFormBox">
           <p className="boxTitle">EMAIL</p>

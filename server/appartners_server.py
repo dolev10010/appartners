@@ -377,7 +377,6 @@ def filter_roommates(roommates, filters):
     return False
 
 
-
 @app.route('/find-apartments', methods=['GET'])
 def find_apartments():
     try:
@@ -385,6 +384,7 @@ def find_apartments():
 
         filters = {
             'city': request.args.get('city'),
+            'street': request.args.get('street'),
             'priceMin': request.args.get('priceMin'),
             'priceMax': request.args.get('priceMax'),
             'hasParking': request.args.get('hasParking'),
@@ -400,6 +400,7 @@ def find_apartments():
             'keepKosher': request.args.get('keepKosher'),
             'status': request.args.get('status'),
             'entryDate': request.args.get('entryDate'),
+            'available_rooms': request.args.get('available_rooms')
         }
 
         roomate_filters = {
@@ -416,11 +417,12 @@ def find_apartments():
             'relationshipStatus': request.args.get('relationshipStatus'),
         }
 
-        # בניית בסיס השאילתה לדירות
         base_query = Queries.fetch_all_apartments_query('apartments_post')
 
         if filters['city']:
             base_query += f" AND city ILIKE '%{filters['city']}%'"
+        if filters['street']:
+            base_query += f" AND street ILIKE '%{filters['street']}%'"
         if filters['priceMin']:
             base_query += f" AND price >= {filters['priceMin']}"
         if filters['priceMax']:
@@ -451,6 +453,8 @@ def find_apartments():
             base_query += f" AND status = '{filters['status']}'"
         if filters['entryDate']:
             base_query += f" AND entry_date >= '{filters['entryDate']}'"
+        if filters['available_rooms']:
+            base_query += f" AND available_rooms>= '{filters['available_rooms']}'"
 
         if sort_order == 'priceHighToLow':
             query = base_query + " ORDER BY price DESC"
@@ -592,12 +596,49 @@ def apartments_by_city():
         return jsonify({"errorMessage": str(e)}), 500
 
 
-
 @app.route('/get-roommate-profiles', methods=['GET'])
 def get_roommate_profiles():
     try:
-        query = Queries.fetch_all_user_profiles('user_profile')
-        profiles = postgres_client.read_from_db(query, single_match=False)
+        filters = {
+            'ageMin': request.args.get('ageMin'),
+            'ageMax': request.args.get('ageMax'),
+            'profession': request.args.get('profession'),
+            'smoking': request.args.get('smoking'),
+            'likeAnimals': request.args.get('likeAnimals'),
+            'hasAnimals': request.args.get('hasAnimals'),
+            'keepsKosherRoommate': request.args.get('keepsKosherRoommate'),
+            'gender': request.args.get('gender'),
+            'allergies': request.args.get('allergies'),
+            'hobbies': request.args.get('hobbies'),
+            'relationshipStatus': request.args.get('relationshipStatus')
+        }
+
+        base_query = Queries.fetch_all_user_profiles('user_profile')
+
+        if filters['ageMin']:
+            base_query += f" AND age >= {filters['ageMin']}"
+        if filters['ageMax']:
+            base_query += f" AND age <= {filters['ageMax']}"
+        if filters['profession']:
+            base_query += f" AND profession ILIKE '%{filters['profession']}%'"
+        if filters['smoking']:
+            base_query += f" AND smoking = {filters['smoking']}"
+        if filters['likeAnimals']:
+            base_query += f" AND like_animals = {filters['likeAnimals']}"
+        if filters['hasAnimals']:
+            base_query += f" AND has_animals = {filters['hasAnimals']}"
+        if filters['keepsKosherRoommate']:
+            base_query += f" AND keeps_kosher = {filters['keepsKosherRoommate']}"
+        if filters['gender']:
+            base_query += f" AND sex = '{filters['gender']}'"
+        if filters['allergies']:
+            base_query += f" AND allergies ILIKE '%{filters['allergies']}%'"
+        if filters['hobbies']:
+            base_query += f" AND hobbies ILIKE '%{filters['hobbies']}%'"
+        if filters['relationshipStatus']:
+            base_query += f" AND status = '{filters['relationshipStatus']}'"
+
+        profiles = postgres_client.read_from_db(base_query, single_match=False)
         if not profiles:
             return jsonify({"errorMessage": "No profiles found"}), 404
 

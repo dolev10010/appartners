@@ -4,6 +4,7 @@ import ApartmentDetailsPopup from './ApartmentDetailsPopUp';
 import config from './config.json';
 import Logo from "./Logo";
 import HeaderButtons from "./HeaderButtons";
+import "./styles.css";
 
 function ApartmentsInMyAreaPage() {
   const [city, setCity] = useState('');
@@ -241,6 +242,7 @@ function ApartmentsInMyAreaPage() {
       <div className="image-container">
         <HeaderButtons badgeContent={4} />
       </div>
+      <div className='space'></div>
       <div className="content"><Logo /></div>
       <div className="apartments-content">
         <h2 className="pageName">Apartments in My Area</h2>

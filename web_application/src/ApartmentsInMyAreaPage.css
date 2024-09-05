@@ -1,6 +1,6 @@
 .custom-map-control-button {
-  background-color: #fff;
-  border: 2px solid #fff;
+  background-color: #fefcf6;
+  border: 2px solid #fefcf6;
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
@@ -10,12 +10,12 @@
   line-height: 30px;
   font-size: 12px;
   text-align: center;
-  color: #000;
+  color: #5e6c5b;
   top: 10px;
 }
 
 .custom-map-control-button:hover {
-  background-color: #ebebeb;
+  background-color: #fefcf6;
 }
 
 .apartments-container {
@@ -38,6 +38,8 @@
   padding: 5px 10px;
   font-size: 14px;
   height: 32px;
+  background-color: #162a2c;
+  color: #fefcf6;
 }
 
 .apartments-searchInput {

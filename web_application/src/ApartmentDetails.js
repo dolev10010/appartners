@@ -3,10 +3,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './styles.css';
 import Logo from './Logo';
 import HeaderButtons from './HeaderButtons';
+import BackButton from './BackButton';
 import RoommatePopup from './RoommatePopup';
 import profileImagePlaceholder from './background-pictures/profilePicture.jpg';
 import apartmentPlaceholder from './background-pictures/apartmentPlaceholder.jpg';
-import BackButton from './BackButton'; // Import BackButton component
+import { FaBed, FaBath, FaHome, FaMoneyBillWave, FaDog, FaParking, FaWater, FaAccessibleIcon, FaBars, FaSnowflake } from 'react-icons/fa';
+import { MdBalcony, MdDateRange, MdLocationCity, MdElevator, MdSecurity, MdBedroomParent } from 'react-icons/md';
+import { GiWindowBars } from "react-icons/gi";
+import { SiRenovatebot } from "react-icons/si";
+
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -19,6 +24,8 @@ const ApartmentDetails = () => {
   const navigate = useNavigate();
 
   const apartment = state?.apartment || {};
+  const photos = apartment.photos || [];
+  const roommates = apartment.roommates || [];
 
   useEffect(() => {
     // Redirect to homepage if apartment data is missing
@@ -27,9 +34,6 @@ const ApartmentDetails = () => {
     }
   }, [state, navigate]);
 
-  const photos = apartment.photos || [];
-  const roommates = apartment.roommates || [];
-
   const [selectedRoommate, setSelectedRoommate] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const touchStartRef = useRef(0);
@@ -37,6 +41,11 @@ const ApartmentDetails = () => {
   const handleClosePopup = () => {
     setSelectedRoommate(null);
   };
+
+  const handleBackClick = () => {
+    navigate('/find-apartment', { state: { filters: state.filters, sortOrder: state.sortOrder } });
+  };
+
 
   const handleViewProfile = (email) => {
     window.location.href = `/display-profile?email=${email}`;
@@ -84,8 +93,9 @@ const ApartmentDetails = () => {
       <div className="backgroundImageMobile"></div>
       <div className="image-container">
         <HeaderButtons badgeContent={4} />
-        <BackButton /> {/* Use BackButton here */}
+        <BackButton className="back-button" onClick={handleBackClick}/>
       </div>
+      <div className="space"></div>
       <div className="content">
         <Logo />
         <div className="formRowEdit">
@@ -161,27 +171,27 @@ const ApartmentDetails = () => {
               <p className='bioHeader'>Bio:</p>
               <p className='profileContent'>{apartment.post_bio}</p>
             </div>
-            <div className="detail-item"><strong>{apartment.is_sublet ? 'Sublet' : 'Long Term'}</strong></div>
-            <div className="detail-item"><strong>Entry Date:</strong> {formatDate(apartment.entry_date)}</div>
+            <div className="detail-item"><FaHome /> <strong>{apartment.is_sublet ? 'Sublet' : 'Long Term'}</strong></div>
+            <div className="detail-item"><MdDateRange />  <strong>Entry Date:</strong> {formatDate(apartment.entry_date)}</div>
             {apartment.is_sublet && apartment.end_date && (
-              <div className="detail-item"><strong>End Date:</strong> {formatDate(apartment.end_date)}</div>
+              <div className="detail-item"><MdDateRange /> <strong>End Date:</strong> {formatDate(apartment.end_date)}</div>
             )}
-            <div className="detail-item"><strong>Price:</strong> ${apartment.price}</div>
-            <div className="detail-item"><strong>{apartment.floor}th Floor</strong> </div>
-            <div className="detail-item"><strong>Total Rooms:</strong> {apartment.total_rooms}</div>
-            <div className="detail-item"><strong>Available Rooms:</strong> {apartment.available_rooms}</div>
-            <div className="detail-item"><strong>Number of Bathrooms:</strong> {apartment.num_of_toilets}</div>
-            <div className="detail-item"><strong>Apartment Size:</strong> {apartment.appartment_size} sqm</div>
-            <div className="detail-item"><strong>{apartment.allow_pets ? 'Pets Allowed' : 'No Pets Allowed'}</strong></div>
-            <div className="detail-item"><strong>{apartment.has_parking ? 'Parking Available' : 'No Parking Available'}</strong></div>
-            <div className="detail-item"><strong>{apartment.has_balcony ? 'Balcony Available' : 'No Balcony Available'}</strong></div>
-            <div className="detail-item"><strong>{apartment.has_elevator ? 'Elevator Available' : 'No Elevator Available'}</strong></div>
-            <div className="detail-item"><strong>{apartment.has_mamad ? 'Mamad Available' : 'No Mamad Available'}</strong></div>
-            <div className="detail-item"><strong>{apartment.has_sun_water_heater ? 'Sun Water Heater Available' : 'No Sun Water Heater Available'}</strong></div>
-            <div className="detail-item"><strong>{apartment.is_accessible_to_disabled ? 'Accessible' : 'Not Accessible'}</strong></div>
-            <div className="detail-item"><strong>{apartment.has_air_conditioner ? 'Air Conditioner Available' : 'No Air Conditioner Available'}</strong></div>
-            <div className="detail-item"><strong>{apartment.has_bars ? 'Bars Available' : 'No Bars Available'}</strong></div>
-            <div className="detail-item"><strong>Status:</strong> {apartment.status}</div>
+            <div className="detail-item"><FaMoneyBillWave /> <strong>Price:</strong> {apartment.price} ILS</div>
+            <div className="detail-item"><MdLocationCity /> <strong>{apartment.floor}th Floor</strong> </div>
+            <div className="detail-item"><FaBed /> <strong>Total Rooms:</strong> {apartment.total_rooms}</div>
+            <div className="detail-item"><MdBedroomParent /> <strong>Available Rooms:</strong> {apartment.available_rooms}</div>
+            <div className="detail-item"><FaBath /> <strong>Number of Bathrooms:</strong> {apartment.num_of_toilets}</div>
+            <div className="detail-item"><FaHome /> <strong>Apartment Size:</strong> {apartment.appartment_size} sqm</div>
+            <div className="detail-item"><FaDog /> <strong>{apartment.allow_pets ? 'Pets Allowed' : 'No Pets Allowed'}</strong></div>
+            <div className="detail-item"><FaParking /> <strong>{apartment.has_parking ? 'Parking Available' : 'No Parking Available'}</strong></div>
+            <div className="detail-item"><MdBalcony /> <strong>{apartment.has_balcony ? 'Balcony Available' : 'No Balcony Available'}</strong></div>
+            <div className="detail-item"><MdElevator /> <strong>{apartment.has_elevator ? 'Elevator Available' : 'No Elevator Available'}</strong></div>
+            <div className="detail-item"><MdSecurity /> <strong>{apartment.has_mamad ? 'Mamad Available' : 'No Mamad Available'}</strong></div>
+            <div className="detail-item"><FaWater /> <strong>{apartment.has_sun_water_heater ? 'Sun Water Heater Available' : 'No Sun Water Heater Available'}</strong></div>
+            <div className="detail-item"><FaAccessibleIcon /> <strong>{apartment.is_accessible_to_disabled ? 'Accessible' : 'Not Accessible'}</strong></div>
+            <div className="detail-item"><FaSnowflake /> <strong>{apartment.has_air_conditioner ? 'Air Conditioner Available' : 'No Air Conditioner Available'}</strong></div>
+            <div className="detail-item"><GiWindowBars /> <strong>{apartment.has_bars ? 'Bars Available' : 'No Bars Available'}</strong></div>
+            <div className="detail-item"><SiRenovatebot /> <strong>Status:</strong> {apartment.status}</div>
           </div>
         </div>
       </div>

@@ -9,12 +9,21 @@ body {
   /* Set Montserrat as the default font for all text */
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
+  flex-direction: column;
 }
 
 .pictureButtonContainer {
@@ -61,12 +70,11 @@ body {
 .labelAndBoxContainer {
   display: flex;
   flex-direction: column;
-  align-items: left;
-  justify-content: space-between;
   margin-right: 15px;
   justify-content: center;
   align-items: center;
-  
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .backgroundImage {
@@ -82,20 +90,20 @@ body {
   border-radius: 10px;
   text-align: center;
   color: #5E6C5B;
+  margin-top: 15px;
 }
 
-/* Media query for small screens */
 @media (max-width: 768px) {
-  /* For tablets and small devices */
   .content {
-    margin-top: 20px; /* Adjust this value as needed */
+    margin-top: 20px;
+    /* Adjust this value as needed */
   }
 }
 
 @media (max-width: 480px) {
-  /* For phones */
   .content {
-    margin-top: 40px; /* Increase margin-top for phones */
+    margin-top: 40px;
+    /* Increase margin-top for phones */
   }
 }
 
@@ -170,6 +178,7 @@ body {
   padding: 0;
   gap: 5px !important;
   flex-direction: row;
+  z-index: 100;
 }
 
 .welcome {
@@ -181,6 +190,7 @@ body {
   font-size: 24px;
   margin-top: 20px;
   text-align: left;
+  color: #5E6C5B;
 }
 
 .boxTitle {
@@ -455,10 +465,10 @@ body {
   top: 50px;
   left: 300px;
   padding: 5px 10px;
-  background-color: #133f4b;
+  background-color: #162a2c;
   border: none;
   border-radius: 5px;
-  color: white;
+  color: #d6e0e2;
   font-size: 14px;
   cursor: pointer;
   margin-top: 20px;
@@ -491,7 +501,6 @@ body {
 }
 
 
-/* Styling for the ImageListItem and ImageListItemBar */
 .MuiImageList-root {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -512,7 +521,6 @@ body {
 
 .MuiImageListItemBar-root {
   background: rgba(22, 42, 44, 0.7);
-  /*!!!!!*/
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   padding: 10px;
@@ -552,16 +560,13 @@ body {
 .mail-button:hover,
 .back-button:hover {
   background-color: transparent !important;
-  /* Ensure the background is fully transparent */
   box-shadow: none !important;
-  /* Remove any shadow on hover */
 }
 
 .home-button .MuiTouchRipple-root,
 .mail-button .MuiTouchRipple-root,
 .back-button .MuiTouchRipple-root {
   display: none;
-  /* This removes the ripple effect */
 }
 
 .custom-badge .MuiBadge-badge {
@@ -588,7 +593,8 @@ body {
   width: 340px;
   height: 340px;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
+  max-width: 100%;
 }
 
 .apartment-card-container {
@@ -952,7 +958,7 @@ body {
   width: 310px;
   background-color: #f6eee0;
   border-radius: 10px;
-  z-index: 20;
+  z-index: 30;
 }
 
 .popup-header {
@@ -973,6 +979,8 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
+  display: block;
   margin-left: 10px;
   margin-top: 10px;
   margin-right: 0px;
@@ -1012,12 +1020,13 @@ body {
   font-weight: bold;
   color: #686867;
   position: absolute;
-  bottom: -8px;
-  right: -16px;
+  bottom: -2px;
+  right: -2px;
+  padding: 0;
+  margin: 0;
 }
 
-.message-btn-popup
-{
+.message-btn-popup {
   background: none;
   border: none;
   cursor: pointer;
@@ -1025,8 +1034,10 @@ body {
   font-weight: bold;
   color: #686867;
   position: absolute;
-  bottom: -8px;
-  right: -4px;
+  bottom: -2px;
+  right: 16px;
+  padding: 0;
+  margin: 0;
 }
 
 .filter-menu {
@@ -1116,7 +1127,7 @@ body {
   gap: 5px;
   background-color: #d6e0e2;
   border-radius: 5px;
-  color: #686867;
+  color: #162a2c;
   padding: 4px;
   margin-bottom: 3px;
   border: 1px transparent;
@@ -1127,11 +1138,19 @@ body {
   box-sizing: border-box;
 }
 
+
+.filter-box::placeholder {
+  color: #686867;
+  /* צבע אפור כפי שכבר מוגדר */
+}
+
+
 .filter-sidebar input[type="text"],
 .filter-sidebar input[type="number"],
 .filter-sidebar select,
 .filter-sidebar input[type="date"] {
-  width: 90%; /* להחיל את הרוחב על כל סוגי הקלט */
+  width: 90%;
+  /* להחיל את הרוחב על כל סוגי הקלט */
   box-sizing: border-box;
 }
 
@@ -1199,6 +1218,12 @@ body {
   flex-direction: column;
 }
 
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  margin-bottom: 3px;
+}
 
 .apartment-popup-header {
   display: flex;
@@ -1311,6 +1336,12 @@ body {
   margin-left: 2px;
   margin-top: 0;
   margin-bottom: 0;
+  text-decoration: bold;
+}
+
+.space {
+  margin: 10px;
+  padding: 10px;
 }
 
 .profileDetails {
@@ -1338,56 +1369,6 @@ body {
   margin-top: 0px;
   margin-bottom: 10px;
   padding: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  .container {
-    padding: 10px;
-  }
-
-  .apartment-card img {
-    width: 100%;
-    height: auto;
-  }
-
-  .profileInfo {
-    padding: 15px;
-  }
-
-  .roommates {
-    margin-top: 10px;
-  }
-
-  .logo-container {
-    margin-top: 30px;
-  }
-  
-  .apartment-card {
-    width: 95%;
-  }
-
-  .roommate-popup {
-    width: 90%;
-    left: 5%;
-    top: 20px;
-}
-
-.popup-avatar {
-    width: 20px;
-    height: 20px;
-}
-
-.popup-header h3 {
-    font-size: 18px;
-}
-
-.popup-content {
-    font-size: 16px;
-}
-
-.info-btn-popup {
-    font-size: 18px;
-}
 }
 
 .roommate-list-popup {
@@ -1447,8 +1428,161 @@ body {
   font-weight: bold;
 }
 
-@media (max-width: 400px) {
-  .roommate-list-popup {
-      width: 90%;
+@media (max-width: 767px) {
+  .container {
+    padding: 20px;
+    /* Adds padding to ensure content doesn't stick to edges */
+    max-width: 100%;
+    /* Limits the width on larger screens */
+    max-height: 100%;
+  }
+
+  .content {
+    padding: 0px;
+    /* Adds padding to ensure content doesn't stick to edges */
+    margin-top: 20px;
+  }
+
+  .apartment-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 0px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 5px;
+  }
+
+  .card-actions,
+  .apartment-card_data {
+    margin-left: 10px;
+    margin-top: 0px;
+  }
+
+  .roommates {
+    position: absolute;
+    top: -40px;
+    left: -15px;
+    display: flex;
+    gap: 1px;
+    z-index: 20;
+  }
+
+  .welcome {
+    font-size: 30px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  .middleFormBox {
+    margin-top: 10px;
+    padding: 0px;
+  }
+
+  .pageName {
+    font-size: 24px;
+    margin-top: 20px;
+    text-align: left;
+    margin-left: 25px;
+  }
+
+  .popup-header h3 {
+    margin-top: 24px;
+    margin-left: 4px;
+    padding: 0;
+    font-size: 16px;
+    color: #162a2c;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 100%;
+    /* Limits the width on larger screens */
+    margin: 0 auto;
+    /* Centers the content */
+  }
+}
+
+@media (max-width: 360px) {
+  .apartment-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 0px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 0px;
+  }
+
+  .card-actions,
+  .apartment-card_data {
+    margin-left: 13px;
+    margin-top: 0px;
+  }
+
+  .roommates {
+    position: absolute;
+    top: -45px;
+    left: -5px;
+    display: flex;
+    gap: 1px;
+    z-index: 20;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
+
+  .apartment-card img {
+    width: 100%;
+    height: auto;
+  }
+
+  .profileInfo {
+    padding: 15px;
+  }
+
+  .roommates {
+    margin-top: 10px;
+  }
+
+  .logo-container {
+    margin-top: 30px;
+  }
+
+  .apartment-card {
+    width: 90%;
+  }
+
+  .roommate-popup {
+    width: 310px;
+    /* Fixed width like on desktop */
+    left: 0;
+    top: 15%;
+    transform: translateY(-50%);
+    max-width: none;
+  }
+
+  .popup-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 50%;
+  }
+
+  .popup-header h3 {
+    font-size: 18px;
+  }
+
+  .popup-content {
+    font-size: 16px;
+  }
+
+  .info-btn-popup {
+    font-size: 18px;
   }
 }
