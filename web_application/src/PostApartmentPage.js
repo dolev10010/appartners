@@ -11,6 +11,7 @@ import './ApartmentForm.css';
 import './PostView.css';
 import AlertHandler from './AlertHandler';
 import ConfirmDialog from './ConfirmDialog';
+import "./styles.css";
 
 const labCredentials = config.labCredentials;
 const accessKeyId = labCredentials.accessKeyId;
@@ -524,6 +525,7 @@ function PostApartmentPage() {
         <div className="image-container">
         <HeaderButtons badgeContent={4} />
         </div>
+        <div className='space'></div>
         <div className="content"><Logo /></div>
         <div className="post-apartment-content">
           <div className="post-apartment-buttonContainer">

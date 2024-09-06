@@ -14,7 +14,7 @@ const BackButton = ({ onClick }) => {
     } else if (onClick) {
       onClick(); // Use custom function if passed
     } else {
-      navigate('/find-apartment', { replace: true }); // Default behavior
+      navigate(-1); // Default behavior
     }
   };
 

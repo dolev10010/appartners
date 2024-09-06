@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import RoommatePopup from './RoommatePopup';
@@ -8,9 +8,11 @@ import profileImagePlaceholder from './background-pictures/profilePicture.jpg';
 import { RiInfoI } from "react-icons/ri";
 import { CiLocationArrow1 } from "react-icons/ci";
 import config from './config.json';
+import  UserContext from './UserContext';
 
 const ApartmentCard = ({ apartment, filters, sortOrder }) => {
   const navigate = useNavigate();
+  const { userEmail } = useContext(UserContext);
 
   const [apartmentData, setApartmentData] = useState({
     city: '',
@@ -111,6 +113,10 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
     navigate(`/chat?email=${email}`);
   };
 
+  const handleNavigateToProfile = (email) => {
+    navigate(`/profile/${email}`);
+    };
+
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === apartmentData.photos.length - 1 ? 0 : prevIndex + 1
@@ -144,12 +150,16 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
   };
 
   const handleMessageClick = () => {
-    if (apartmentData.roommates.length > 1) {
-      setShowRoommateList(true); // הצגת הפופ-אפ עם רשימת השותפים
-    } else if (apartmentData.roommates.length === 1) {
-      handleNavigateToChat(apartmentData.roommates[0].email);
+    if (userEmail) {
+      if (apartmentData.roommates.length > 1) {
+        setShowRoommateList(true); // הצגת הפופ-אפ עם רשימת השותפים    
+      } else if (apartmentData.roommates.length === 1) {
+        handleNavigateToChat(apartmentData.roommates[0].email);
+      } else {
+        handleNavigateToChat(apartment.email);
+      }
     } else {
-      handleNavigateToChat(apartment.email);
+      navigate('/login');
     }
   };
 
@@ -207,7 +217,7 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
           <RoommatePopup
             roommate={selectedRoommate}
             onClose={handleClosePopup}
-            onViewProfile={handleNavigateToChat} // נווט לשיחה במקום לפרופיל
+            onViewProfile={handleNavigateToProfile} 
           />}
         {showRoommateList && // הצגת הפופ-אפ אם יש שני שותפים או יותר
           <RoommateListPopup

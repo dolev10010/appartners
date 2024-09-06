@@ -205,7 +205,7 @@ function ProfilePage() {
     const handleSaveProfile = async () => {
         console.log("Save button clicked");
         const [firstName, lastName] = fullName.split(" ");
-        
+
         try {
             const imageUrl = uploadedImage ? await uploadToS3(uploadedImage) : presentedImage;
 
@@ -247,7 +247,7 @@ function ProfilePage() {
             console.error("Error:", error);
         }
     };
-    
+
 
     const handleLogout = () => {
         const cognitoUser = userPool.getCurrentUser();
@@ -287,16 +287,18 @@ function ProfilePage() {
                             />
                         </label>
                     </div>
-                    <text className="boxTitle">FULL NAME</text>
-                    <div className="formBoxes">
-                        <input
-                            type="text"
-                            id="Full Name"
-                            value={fullName}
-                            onChange={handleFullNameChange}
-                            placeholder="Please enter your full name"
-                            className="input"
-                        />
+                    <div className="labelAndBoxContainer">
+                        <text className="boxTitle">FULL NAME</text>
+                        <div className="formBoxes">
+                            <input
+                                type="text"
+                                id="Full Name"
+                                value={fullName}
+                                onChange={handleFullNameChange}
+                                placeholder="Please enter your full name"
+                                className="input"
+                            />
+                        </div>
                     </div>
                     <div className="rowBoxesContainer">
                         <div className="labelAndBoxContainer">
@@ -379,49 +381,67 @@ function ProfilePage() {
                             </div>
                         </div>
                     </div>
-                    <text className="boxTitle">ANIMAL OWNERSHIP</text>
-                    <div className="formBoxes">
-                        <input
-                            type="text"
-                            id="animalOwnership"
-                            value={animalOwnership}
-                            onChange={handleAnimalOwnershipChange}
-                            placeholder="Animal type and quantity"
-                            className="input"
-                        />
+                    <div className="rowBoxesContainer">
+                        <div className="labelAndBoxContainer">
+                            <text className="boxTitle">ANIMAL OWNERSHIP</text>
+                            <div className="formBoxes">
+                                <input
+                                    type="text"
+                                    id="animalOwnership"
+                                    value={animalOwnership}
+                                    onChange={handleAnimalOwnershipChange}
+                                    placeholder="Animal type and quantity"
+                                    className="input"
+                                />
+                            </div>
+                        </div>
+
                     </div>
-                    <text className="boxTitle">ALLERGIES</text>
-                    <div className="formBoxes">
-                        <input
-                            type="text"
-                            id="allergies"
-                            value={allergies}
-                            onChange={handleAllergiesChange}
-                            placeholder="Please enter your allergies"
-                            className="input"
-                        />
+                    <div className="rowBoxesContainer">
+                        <div className="labelAndBoxContainer">
+                            <text className="boxTitle">ALLERGIES</text>
+                            <div className="formBoxes">
+                                <input
+                                    type="text"
+                                    id="allergies"
+                                    value={allergies}
+                                    onChange={handleAllergiesChange}
+                                    placeholder="Please enter your allergies"
+                                    className="input"
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <text className="boxTitle">HOBBIES</text>
-                    <div className="formBoxes">
-                        <input
-                            type="text"
-                            id="hobbies"
-                            value={hobbies}
-                            onChange={handleHobbiesChange}
-                            placeholder="Please enter your hobbies"
-                            className="input"
-                        />
+                    <div className="rowBoxesContainer">
+                        <div className="labelAndBoxContainer">
+                            <text className="boxTitle">HOBBIES</text>
+                            <div className="formBoxes">
+                                <input
+                                    type="text"
+                                    id="hobbies"
+                                    value={hobbies}
+                                    onChange={handleHobbiesChange}
+                                    placeholder="Please enter your hobbies"
+                                    className="input"
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <text className="boxTitle">BIO</text>
-                    <div className="bigBox">
-                        <input
-                            type="text"
-                            id="bio"
-                            value={bio}
-                            onChange={handleBioChange}
-                            placeholder="Please enter short BIO"
-                            className="input"
-                        />
+                    <div className="rowBoxesContainer">
+                        <div className="labelAndBoxContainer">
+                            <text className="boxTitle">BIO</text>
+                            <div className="bigBox">
+                                <input
+                                    type="text"
+                                    id="bio"
+                                    value={bio}
+                                    onChange={handleBioChange}
+                                    placeholder="Please enter short BIO"
+                                    className="input"
+                                />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <button className="buttons" onClick={handleSaveProfile}>Save Profile</button>

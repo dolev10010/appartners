@@ -67,7 +67,7 @@
 }
 
 .post-apartment-button:hover {
-  background-color: #133f4b;
+  background-color: #162A2C;
 }
 
 .post-apartment-apartmentForm {
@@ -109,7 +109,7 @@
 }
 
 .post-apartment-input::placeholder {
-  color: #a0a0a0;
+  color: #686868;
 }
 
 .post-apartment-fileInput {
@@ -156,7 +156,7 @@
   top: -5px;
   right: -10px;
   background: none;
-  color: black;
+  color: #686868;
   border: none;
   font-size: 16px;
   cursor: pointer;
@@ -177,7 +177,7 @@
 }
 
 .post-apartment-apartmentItem {
-  background-color: #fff;
+  background-color: white;
   border-radius: 10px;
   padding: 20px;
   margin: 10px;
@@ -186,7 +186,7 @@
   text-align: left;
   cursor: pointer;
   position: relative;
-  border: 1px solid #ccc;
+  border: 1.5px solid #d6e0e2;
 }
 
 .post-apartment-backgroundImageMobile {
@@ -288,7 +288,7 @@
   right: -12px;
   background: none;
   border: none;
-  color: black;
+  color: #686868;
   font-size: 18px;
   cursor: pointer;
   outline: none;

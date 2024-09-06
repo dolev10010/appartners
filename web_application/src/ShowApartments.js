@@ -50,7 +50,7 @@ function ShowApartments() {
     } catch (error) {
       console.error("Failed to fetch apartments:", error);
       setApartments([]);
-      setErrorMessage('Failed to load apartments'); // General error message if fetch fails
+      setErrorMessage('There are no apartments to display that fits the filter');
     } finally {
       setLoading(false);
     }

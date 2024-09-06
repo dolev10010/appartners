@@ -49,7 +49,7 @@ class Queries:
 
     @staticmethod
     def fetch_all_user_profiles(table_name):
-        return f"SELECT * FROM {table_name}"
+        return f"SELECT * FROM {table_name} WHERE 1=1"
 
     @staticmethod
     def fetch_apartment_query(table_name, email, post_id):

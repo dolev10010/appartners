@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import { FaTimes } from 'react-icons/fa';
 import { RiInfoI } from "react-icons/ri";
 import { CiLocationArrow1 } from "react-icons/ci";
+import UserContext from './UserContext';
+
 
 const RoommatePopup = ({ roommate, onClose, onViewProfile }) => {
     const navigate = useNavigate();
-    
+    const { userEmail } = useContext(UserContext);
+
     const handleViewProfileClick = () => {
         if (roommate && roommate.email) {
             onViewProfile(roommate.email);
@@ -17,7 +20,11 @@ const RoommatePopup = ({ roommate, onClose, onViewProfile }) => {
     };
 
     const handleNavigateToChat = (email) => {
-        navigate(`/chat?email=${email}`);
+        if (userEmail) {
+            navigate(`/chat?email=${email}`);
+        } else {
+            navigate('/login');
+        }
     };
 
     return (
