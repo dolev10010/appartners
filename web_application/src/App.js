@@ -29,12 +29,17 @@ function App() {
     checkUser();
   }, []);
 
+  const handleContinueAsGuest = () => {
+    localStorage.removeItem('profileImage'); // Remove cached profile image
+    setIsLoggedIn(false); // Set guest mode
+  };
+
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<EntryPage />} />
+        <Route path="*" element={<EntryPage onContinueAsGuest={handleContinueAsGuest} />} />
         <Route path="/signup" element={<CreateAccountPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/homepage" element={<HomePage />} />
         {/* Conditional Routes */}
         {isLoggedIn ? (

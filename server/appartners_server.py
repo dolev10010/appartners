@@ -162,7 +162,6 @@ def post_apartment():
         if request.method == 'OPTIONS':
             return {}, 200
         apartment_data = request.get_json()
-        print(apartment_data)
         email = apartment_data.get('email')
         city = apartment_data.get('city')
         street = apartment_data.get('street')
@@ -237,6 +236,7 @@ def user_apartments():
         logger.log_error(f"Fetching user apartments failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
+
 @app.route('/update-apartment', methods=['POST', 'OPTIONS'])
 def update_apartment():
     try:
@@ -257,10 +257,18 @@ def update_apartment():
                    'available_rooms', 'num_of_toilets', 'price', 'post_bio', 'has_parking', 'has_elevator', 'has_mamad',
                    'num_of_roommates', 'allow_pets', 'has_balcony', 'status', 'has_sun_water_heater',
                    'is_accessible_to_disabled', 'has_air_conditioner', 'has_bars', 'entry_date', 'is_sublet',
-                   'end_date', 'photos_url', 'roommate_emails', 'creation_timestamp']
+                   'end_date', 'photos_url', 'roommate_emails', 'creation_timestamp', 'latitude', 'longitude']
 
         existing_apartment_dict = {columns[i]: existing_apartment_list[0][i] for i in range(len(columns))}
 
+        # Get latitude and longitude from apartment_data or keep the original ones if null
+        latitude = apartment_data.get('coordinates', {}).get('lat')
+        if latitude is None:
+            latitude = existing_apartment_dict['latitude']
+        longitude = apartment_data.get('coordinates', {}).get('lng')
+        if longitude is None:
+            longitude = existing_apartment_dict['longitude']
+        # Updated apartment object with latitude and longitude
         updated_apartment = {
             'city': apartment_data.get('city'),
             'street': apartment_data.get('street'),
@@ -288,8 +296,12 @@ def update_apartment():
             'end_date': apartment_data.get('end_date') if apartment_data.get('is_sublet') else None,
             'photos_url': json.dumps(apartment_data.get('photos_url') if apartment_data.get('photos_url') else []),
             'roommate_emails': apartment_data.get('roommate_emails') if apartment_data.get('roommate_emails') else [],
-            'creation_timestamp': existing_apartment_dict['creation_timestamp']}
+            'creation_timestamp': existing_apartment_dict['creation_timestamp'],
+            'latitude': latitude,  # Use updated or original latitude
+            'longitude': longitude  # Use updated or original longitude
+        }
 
+        # Update query with latitude and longitude included
         update_apartment_query = Queries.update_apartment_post_query('apartments_post')
         postgres_client.write_to_db(update_apartment_query, list(updated_apartment.values()) + [email, post_id])
         logger.log_info(f"Apartment updated successfully for post_id: {post_id}")
@@ -297,6 +309,8 @@ def update_apartment():
     except Exception as e:
         logger.log_error(f"Apartment updating failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
+
+
 
 @app.route('/get-roommate-photos', methods=['POST', 'OPTIONS'])
 def get_roommate_photos():
