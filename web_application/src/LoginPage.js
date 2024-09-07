@@ -6,6 +6,8 @@ import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 import userPool from './UserPool';
 import { useNavigate } from 'react-router-dom';
 import UserContext from './UserContext';
+import config from './config.json';
+import profileImagePlaceholder from './background-pictures/profilePicture.jpg';
 
 function LoginPage({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
@@ -21,6 +23,24 @@ function LoginPage({ setIsLoggedIn }) {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+
+  const fetchAndUpdateProfileImage = async (email) => {
+    try {
+      const response = await fetch(`http://${config.serverPublicIP}:5433/get-profile?email=${email}`);
+      if (response.ok) {
+        const data = await response.json();
+        const imageUrl = data && data.photo_url ? data.photo_url : profileImagePlaceholder;
+        localStorage.setItem('profileImage', imageUrl); // Update local storage with profile image
+        console.log("Profile image updated in local storage:", imageUrl);
+      } else {
+        console.error("Failed to fetch profile image, using placeholder.");
+        localStorage.setItem('profileImage', profileImagePlaceholder);
+      }
+    } catch (error) {
+      console.error("Error fetching profile image:", error);
+      localStorage.setItem('profileImage', profileImagePlaceholder); // Fallback to placeholder on error
+    }
   };
 
   const handleSignin = () => {
@@ -41,9 +61,10 @@ function LoginPage({ setIsLoggedIn }) {
     });
 
     cognitoUser.authenticateUser(authDetails, {
-      onSuccess: (result) => {
+      onSuccess: async (result) => {
         setUserEmail(email);
         setIsLoggedIn(true);
+        await fetchAndUpdateProfileImage(email); // Fetch and update the profile image in local storage
         navigate("/homepage");
       },
       onFailure: (err) => {

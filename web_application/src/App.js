@@ -30,6 +30,15 @@ function App() {
   }, []);
 
   const handleContinueAsGuest = () => {
+    // Check if there is a current user logged in
+    let user = userpool.getCurrentUser();
+    if (user) {
+      console.log("User is logged in, not switching to guest mode.");
+      return; // If user is logged in, don't continue as guest
+    }
+    
+    // If no user is logged in, proceed to guest mode
+    console.log("No user found, proceeding as guest.");
     localStorage.removeItem('profileImage'); // Remove cached profile image
     setIsLoggedIn(false); // Set guest mode
   };
