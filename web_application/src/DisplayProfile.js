@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Logo from './Logo';
 import HeaderButtons from './HeaderButtons';
+import BackButton from './BackButton';
 import profileImagePlaceholder from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
 
