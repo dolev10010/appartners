@@ -5,7 +5,16 @@ body {
   background-attachment: fixed;
   height: 100vh;
   width: 100%;
-  font-family: 'Montserrat', sans-serif; /* Set Montserrat as the default font for all text */
+  font-family: 'Montserrat', sans-serif;
+  /* Set Montserrat as the default font for all text */
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .container {
@@ -13,6 +22,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
+  flex-direction: column;
 }
 
 .pictureButtonContainer {
@@ -50,7 +61,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-top: 15px;
-  text-align: left;    
+  text-align: left;
   justify-content: center;
   align-items: center;
   padding-left: 10px;
@@ -59,11 +70,11 @@ body {
 .labelAndBoxContainer {
   display: flex;
   flex-direction: column;
-  align-items: left;
-  justify-content: space-between;
   margin-right: 15px;
   justify-content: center;
   align-items: center;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .backgroundImage {
@@ -79,6 +90,21 @@ body {
   border-radius: 10px;
   text-align: center;
   color: #5E6C5B;
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin-top: 20px;
+    /* Adjust this value as needed */
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    margin-top: 40px;
+    /* Increase margin-top for phones */
+  }
 }
 
 .logo {
@@ -88,15 +114,19 @@ body {
   padding: 0;
   line-height: 0;
   color: #5e6c5b;
-  font-family: 'Bitter', serif; /* Set Bitter font for the logo */
+  font-family: 'Bitter', serif;
+  max-width: 100%;
 }
 
 .logo-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-bottom: 5px;
-  margin-top: 35px;
+  margin-top: 45px;
+  width: 100%;
+  position: relative;
 }
 
 .logoImg {
@@ -138,16 +168,17 @@ body {
 }
 
 .image-container {
-  position: absolute; /* Position absolutely */
-  top: 10px; /* Adjust top position if needed */
-  left: 10px; /* Adjust left position if needed */
+  position: absolute;
+  top: 10px;
+  left: 10px;
   display: flex;
-  align-items: center; /* Center items vertically */
-  justify-content: flex-start; /* Align items to the start (left) */
-  margin: 0; /* Ensure no margin is applied */
-  padding: 0; /* Ensure no padding is applied */
-  gap: 0; /* Ensures no gap between items */
-  right: 10px; /* Allow content to stretch across the row */
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+  gap: 5px !important;
+  flex-direction: row;
+  z-index: 100;
 }
 
 .welcome {
@@ -159,6 +190,7 @@ body {
   font-size: 24px;
   margin-top: 20px;
   text-align: left;
+  color: #5E6C5B;
 }
 
 .boxTitle {
@@ -169,10 +201,12 @@ body {
 }
 
 .middleBox {
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .middleFormBox {
@@ -183,7 +217,9 @@ body {
   align-items: center;
 }
 
-.formBoxes,.loginBox,.buttons {
+.formBoxes,
+.loginBox,
+.buttons {
   width: 345.5px;
   height: 65.4px;
   border: none;
@@ -199,7 +235,8 @@ body {
   color: #162a2c;
 }
 
-.formBoxes,.loginBox {
+.formBoxes,
+.loginBox {
   line-height: 65.4px;
 }
 
@@ -235,9 +272,9 @@ body {
 .inlineButton {
   background: none;
   border: none;
-  color: #5E6C5B; 
+  color: #5E6C5B;
   cursor: pointer;
-  font-size: inherit; 
+  font-size: inherit;
   padding: 0;
 }
 
@@ -250,10 +287,6 @@ body {
   cursor: pointer;
   background-color: transparent;
   color: #5E6C5B;
-}
-
-.guestButton:hover {
-  text-decoration: underline;
 }
 
 .input {
@@ -271,11 +304,13 @@ body {
 
 /* Default styles for both web and mobile */
 .backgroundImage {
-  display: none; /* Hide by default */
+  display: none;
+  /* Hide by default */
 }
 
 .backgroundImageMobile {
-  display: none; /* Hide by default */
+  display: none;
+  /* Hide by default */
 }
 
 .profileImage {
@@ -290,7 +325,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  gap: 20px; /* Adjust the gap between the elements */
+  gap: 20px;
+  /* Adjust the gap between the elements */
   text-align: center;
 }
 
@@ -323,7 +359,7 @@ body {
 .rowBoxTitle {
   font-size: 12px;
   margin-top: 1px;
-  margin-right: 100px; 
+  margin-right: 100px;
   text-align: left;
 }
 
@@ -333,17 +369,23 @@ body {
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
+  padding: 0px;
+  margin: 0px;
 }
 
 .pictureButtonProfileImageHomePage {
   border: none;
   background: none;
   position: relative;
+  padding: 0px;
+  margin: 0px;
 }
 
 * {
   box-sizing: border-box;
 }
+
+/*doleva - check*/
 
 .wrapper {
   max-width: 360px;
@@ -399,7 +441,8 @@ body {
 @media (max-width: 767px) {
   .backgroundImageMobile {
     display: block;
-    background-image: url('./background-pictures/welcome-background-mobile.jpg'); /* Provide the correct path */
+    background-image: url('./background-pictures/welcome-background-mobile.jpg');
+    /* Provide the correct path */
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -408,7 +451,8 @@ body {
 
   .backgroundImageMobileNewAccount {
     display: block;
-    background-image: url('./background-pictures/newAccount-background-mobile.jpg'); /* Provide the correct path */
+    background-image: url('./background-pictures/newAccount-background-mobile.jpg');
+    /* Provide the correct path */
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -421,17 +465,13 @@ body {
   top: 50px;
   left: 300px;
   padding: 5px 10px;
-  background-color: #133f4b;
+  background-color: #162a2c;
   border: none;
   border-radius: 5px;
-  color: white;
+  color: #d6e0e2;
   font-size: 14px;
   cursor: pointer;
   margin-top: 20px;
-}
-
-.logoutButton:hover {
-  background-color: #21a1f1;
 }
 
 .profileContainer {
@@ -439,16 +479,6 @@ body {
 }
 
 /* Additional styles for the FindRoommatePage */
-.find-roommate-page {
-  font-family: 'Montserrat', sans-serif;
-  background-image: url('./background-pictures/welcome-background-web.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 20px;
-  text-align: center;
-  position: relative;  /* Added to position the home button relative to the page */
-}
 
 .header {
   display: flex;
@@ -470,19 +500,7 @@ body {
   left: 20px;
 }
 
-.home-button {
-  background-color: #f0f0f0;
-  border-radius: 50%;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
 
-.home-button:hover {
-  background-color: #d6d6d6;
-}
-
-/* Styling for the ImageListItem and ImageListItemBar */
 .MuiImageList-root {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -524,41 +542,760 @@ body {
   font-size: 12px;
 }
 
-.home-button, .mail-button {
-  padding: 0; /* Remove default padding */
+.home-button,
+.mail-button {
+  padding: 0;
   margin-top: 0px;
-  margin-left: 5px; /* Adjust spacing if needed */
-  font-size: 35px; /* Set size of the icon */
-  color: #162A2C; /* Set color of the icon */
-  display: flex; /* Ensure it aligns well inside the flex container */
+  margin-left: 5px;
+  font-size: 35px;
+  color: #162A2C;
+  display: flex;
   cursor: pointer;
   border: none;
   background: none;
   position: relative;
 }
 
-.home-button:hover, .mail-button:hover, .back-button:hover {
-  background-color: transparent !important; /* Ensure the background is fully transparent */
-  box-shadow: none !important; /* Remove any shadow on hover */
+.home-button:hover,
+.mail-button:hover,
+.back-button:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
-.home-button .MuiTouchRipple-root, .mail-button .MuiTouchRipple-root, .back-button .MuiTouchRipple-root {
-  display: none; /* This removes the ripple effect */
+.home-button .MuiTouchRipple-root,
+.mail-button .MuiTouchRipple-root,
+.back-button .MuiTouchRipple-root {
+  display: none;
 }
 
 .custom-badge .MuiBadge-badge {
-  background-color: #162a2c !important;  /* Set the background color to dark */
-  color: #FEFCF6;           /* Set the text color to white */
+  background-color: #162a2c !important;
+  color: #FEFCF6;
 }
 
 .back-button {
-  margin-left: 0; 
   padding: 0;
-  font-size: 35px; 
+  margin-left: 150px;
+  margin-top: 16px;
+  font-size: 35px;
   color: #162A2C;
   cursor: pointer;
   border: none;
   background: none;
+}
+
+.apartment-card {
+  position: relative;
+  border: 0 transparent;
+  border-radius: 20px;
+  overflow: visible;
+  width: 340px;
+  height: 340px;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.apartment-card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 0px;
+  margin-bottom: 40px;
+  margin-top: 30px;
+}
+
+.apartment-card_data {
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.apartment-img {
+  position: relative;
+  overflow: visible;
+  /* Ensure avatars can extend outside */
+}
+
+.apartment-image {
+  width: 100%;
+  height: 100%;
+}
+
+.roommates {
+  position: absolute;
+  top: -25px;
+  /* Adjust to move the avatars out of the top edge */
+  left: -25px;
+  /* Adjust to move the avatars out of the left edge */
+  display: flex;
+  gap: 1px;
+  z-index: 20;
+  /* מבטיח שהתמונה תוצג מעל התמונה העיקרית */
+}
+
+.roommate {
+  width: 60px;
+  /* Adjust size as needed */
+  height: 60px;
+  /* Adjust size as needed */
+  overflow: hidden;
+  border-radius: 50%;
+  z-index: 1;
+  /* מבטיח שהתמונה תוצג מעל הכל */
+}
+
+.roommate:not(:first-child) {
+  margin-left: -15px;
+  /* חפיפה חלקית בין התמונות */
+  z-index: 2;
+  /* מבטיח שהתמונות העליונות יעלו על התמונות התחתונות */
+}
+
+.roommate-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.extra-roommates {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #d6e0e2;
+  color: #162a2c;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 3;
+  margin-left: -15px;
+  /* חפיפה חלקית בין התמונות */
+}
+
+.info-btn,
+.message-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #162A2C;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Slider and Progress Dots */
+.photo-slider {
+  position: relative;
+  width: 340px;
+  height: 340px;
+  overflow: visible;
+  border-radius: 10px;
+}
+
+.photo-slider-images {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  /* Add smooth transition */
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.photo-slider img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.apartment-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  position: relative;
+  z-index: 100;
+}
+
+.dot {
+  height: 7px;
+  width: 7px;
+  background-color: #686867;
+  border-radius: 50%;
+  margin: 0 2px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dot.active {
+  width: 15px;
+  border-radius: 5px;
+  background-color: #162a2c;
+  cursor: default;
+}
+
+.photo-slider .arrow-left,
+.photo-slider .arrow-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  width: 50%;
+  height: 100%;
+}
+
+.photo-slider .arrow-left {
+  left: 0;
+}
+
+.photo-slider .arrow-right {
+  right: 0;
+}
+
+.photo-slider .arrow-left:active,
+.photo-slider .arrow-right:active {
+  background: transparent;
+  /* סימון אזור לחיצה */
+}
+
+.slide-hidden {
+  display: none;
+}
+
+.clickable-area {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 15%;
+  /* רק 10% מרוחב התמונה */
+  cursor: pointer;
+  z-index: auto;
+  background-color: transparent;
+}
+
+.clickable-area.left {
+  left: 0;
+}
+
+.clickable-area.right {
+  right: 0;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0px;
+  margin-top: 4px;
+}
+
+.apartment-list {
+  gap: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+
+.apartment-info {
+  width: 100%;
+  text-align: left;
+  color: #686867;
+  position: relative;
+  margin-top: 10px;
+  gap: 0;
+}
+
+.apartment-info h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.apartment-info p {
+  font-size: 14px;
+  margin: 0;
+  /* מסיר רווחים סביב ה-P */
+  padding: 0;
+  /* מסיר רווחים פנימיים */
+}
+
+.apartmentBio {
+  font-size: 15px;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.apartmentAdrees {
+  font-size: 15px;
+  margin-top: 3px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.alert-box {
+  position: absolute;
+  background: #F6EEE0;
+  border-radius: 8px;
+  border: #F6EEE0;
+  padding: 10px;
+  z-index: 1000;
+  width: 300px;
+  /* Fixed width */
+  max-width: 300px;
+  height: 100px;
+  transform: translate(-50%, -50%);
+  word-wrap: break-word;
+  /* Allow long words to wrap */
+}
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.alert-content h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.alert-content p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.alert-icon {
+  font-size: 17px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.info-alart {
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 15px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  border: transparent;
+  color: #162A2C;
+}
+
+.alert-close {
+  background: none;
+  border: none;
+  font-size: 15px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.formRowEdit {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  /* Adjust the gap between the elements */
+  gap: 0px;
+  justify-content: space-between;
+}
+
+.filterButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: #5E6C5B;
+  margin: 0;
+  padding: 0;
+}
+
+.sortButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: #5E6C5B;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.icon-buttons {
+  display: flex;
+  gap: 5px;
+  /* Adds space between the icons */
+  justify-content: flex-end;
+  /* Aligns the icons to the right */
+}
+
+.roommate-popup {
+  position: absolute;
+  top: -30px;
+  left: -10px;
+  width: 310px;
+  background-color: #f6eee0;
+  border-radius: 10px;
+  z-index: 30;
+}
+
+.popup-header {
+  display: flex;
+  align-items: left;
+  margin-top: 0px;
+}
+
+.popup-header h3 {
+  margin-top: 24px;
+  margin-left: 4px;
+  padding: 0;
+  font-size: 16px;
+  color: #162a2c;
+}
+
+.popup-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-right: 0px;
+}
+
+.popup-content {
+  margin-top: 0px;
+  color: #162a2c;
+  font-size: 14px;
+  text-align: left;
+  margin-left: 30px;
+}
+
+.popup-footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #686867;
+  position: absolute;
+  top: 0px;
+  /* מיקום מדויק כדי שיהיה צמוד לפינה */
+  right: -8px;
+}
+
+.info-btn-popup {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  color: #686867;
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  padding: 0;
+  margin: 0;
+}
+
+.message-btn-popup {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  color: #686867;
+  position: absolute;
+  bottom: -2px;
+  right: 16px;
+  padding: 0;
+  margin: 0;
+}
+
+.filter-menu {
+  position: absolute;
+  top: 240px;
+  left: 250px;
+  background-color: #f6eee0;
+  border: 0.5px solid #162a2c;
+  /*check*/
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 100;
+  width: auto;
+  /* התאמת הרוחב לתוכן */
+  white-space: nowrap;
+}
+
+.filter-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: #5e6c5b;
+  font-size: 13px;
+}
+
+.filter-menu ul li {
+  padding: 5px 8px;
+  cursor: pointer;
+  border-bottom: 0.5px solid #686867;
+}
+
+.filter-menu ul li:last-child {
+  border-bottom: none;
+}
+
+.filter-menu ul li:hover {
+  background-color: transparent;
+  box-shadow: none
+}
+
+.filter-menu ul li.selected {
+  text-decoration: underline !important;
+  font-weight: bold !important;
+}
+
+.filter-sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  background-color: #f6eee0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.filter-sidebar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #162a2c;
+  align-content: center;
+  font-size: 15px;
+}
+
+.filter-sidebar-content {
+  flex: 1;
+  color: #162a2c;
+  font-size: 13px;
+  overflow-y: auto;
+}
+
+.filter-sidebar-content label {
+  display: block;
+  margin-bottom: 5px;
+  color: #162a2c;
+  font-size: 13px;
+}
+
+.filter-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #d6e0e2;
+  border-radius: 5px;
+  color: #162a2c;
+  padding: 4px;
+  margin-bottom: 3px;
+  border: 1px transparent;
+  /* הוספת מסגרת לכל תיבות הטקסט */
+  outline: none;
+  /* מסיר את ה-outline */
+  width: 90%;
+  box-sizing: border-box;
+}
+
+
+.filter-box::placeholder {
+  color: #686867;
+  /* צבע אפור כפי שכבר מוגדר */
+}
+
+
+.filter-sidebar input[type="text"],
+.filter-sidebar input[type="number"],
+.filter-sidebar select,
+.filter-sidebar input[type="date"] {
+  width: 90%;
+  /* להחיל את הרוחב על כל סוגי הקלט */
+  box-sizing: border-box;
+}
+
+.filter-checkBox {
+  color: #5E6C5B;
+  text-align: left;
+  border-color: #d6e0e2;
+}
+
+.filter-type-header {
+  margin-top: 7px;
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #162a2c;
+}
+
+.filter-group {
+  margin-bottom: 8px;
+  gap: 5px;
+}
+
+.filter-sidebar-footer {
+  padding-top: 10px;
+  text-align: center;
+  align-items: center;
+}
+
+.entry-btn {
+  background: #162a2c;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fefcf6;
+  bottom: 0;
+  right: 0;
+  width: 80%;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: #162a2c;
+  top: 0;
+  right: 0;
+  position: absolute;
+}
+
+.apartment-details-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  max-width: 800px;
+  background-color: #f6eee0;
+  border: 1.5px solid #d6e0e2;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  margin-bottom: 3px;
+}
+
+.apartment-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.apartment-popup-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #5e6c5b;
+  text-align: center;
+}
+
+.apartment-popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.apartment-description {
+  font-size: 14px;
+  color: #686867;
+}
+
+.apartment-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #686867;
+  text-align: left;
+}
+
+.apartment-image-popup {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.input-with-clear {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: #686867;
+}
+
+.input-with-clear input {
+  width: 100%;
+  padding-right: 20px;
+  /* מוסיף מקום לכפתור ה-X */
+  border: 1px solid #ccc;
+  /* מסגרת ברירת מחדל */
+  border-radius: 4px;
+  /* פינות מעוגלות */
+  outline: none;
+  /* מסיר את ה-outline */
+}
+
+
+.clear-button {
+  position: absolute;
+  right: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #999;
+}
+
+.clear-button:hover {
+  background-color: transparent;
 }
 
 .profileInfo {
@@ -578,14 +1315,18 @@ body {
 }
 
 .bioBox {
-  display: inline-block; /* Allow container to shrink to fit content */
+  display: inline-block;
+  /* Allow container to shrink to fit content */
   border: none;
   border-radius: 10px;
   background-color: #D6E0E2;
   color: #162a2c;
-  width: 345.5px; /* Fixed width */
-  max-width: 345.5px; /* Max width to keep it fixed */
-  word-wrap: break-word; /* Allow long words to wrap */
+  width: 345.5px;
+  /* Fixed width */
+  max-width: 345.5px;
+  /* Max width to keep it fixed */
+  word-wrap: break-word;
+  /* Allow long words to wrap */
   margin-top: 6px;
 }
 
@@ -595,6 +1336,12 @@ body {
   margin-left: 2px;
   margin-top: 0;
   margin-bottom: 0;
+  text-decoration: bold;
+}
+
+.space {
+  margin: 10px;
+  padding: 10px;
 }
 
 .profileDetails {
@@ -603,7 +1350,7 @@ body {
   margin-left: 2px;
   margin-top: 10px;
   margin-bottom: 6px;
-  text-decoration: underline;  
+  text-decoration: underline;
 }
 
 .profileContent {
@@ -615,11 +1362,227 @@ body {
 }
 
 .profileImageProfile {
-  height: 110px;
-  width: 110px;
+  height: 180px;
+  width: 180px;
   border-radius: 50%;
   background-color: transparent;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 10px;
   padding: 0;
+}
+
+.roommate-list-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f6eee0;
+  border-radius: 10px;
+  z-index: 1000;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  max-height: 90%;
+  width: 210px;
+}
+
+.roommate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.roommate-list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #d6e0e2;
+  cursor: pointer;
+}
+
+.roommate-list-item:last-child {
+  border-bottom: none;
+}
+
+.roommate-list-item:hover {
+  background-color: transparent;
+}
+
+.roommate-list-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.roommate-list-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #5E6C5B;
+  font-weight: bold;
+}
+
+@media (max-width: 767px) {
+  .container {
+    padding: 20px;
+    /* Adds padding to ensure content doesn't stick to edges */
+    max-width: 100%;
+    /* Limits the width on larger screens */
+    max-height: 100%;
+  }
+
+  .content {
+    padding: 0px;
+    /* Adds padding to ensure content doesn't stick to edges */
+    margin-top: 20px;
+  }
+
+  .apartment-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 0px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 5px;
+  }
+
+  .card-actions,
+  .apartment-card_data {
+    margin-left: 10px;
+    margin-top: 0px;
+  }
+
+  .roommates {
+    position: absolute;
+    top: -40px;
+    left: -15px;
+    display: flex;
+    gap: 1px;
+    z-index: 20;
+  }
+
+  .welcome {
+    font-size: 30px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  .middleFormBox {
+    margin-top: 10px;
+    padding: 0px;
+  }
+
+  .pageName {
+    font-size: 24px;
+    margin-top: 20px;
+    text-align: left;
+    margin-left: 25px;
+  }
+
+  .popup-header h3 {
+    margin-top: 24px;
+    margin-left: 4px;
+    padding: 0;
+    font-size: 16px;
+    color: #162a2c;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 100%;
+    /* Limits the width on larger screens */
+    margin: 0 auto;
+    /* Centers the content */
+  }
+}
+
+@media (max-width: 360px) {
+  .apartment-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 0px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 0px;
+  }
+
+  .card-actions,
+  .apartment-card_data {
+    margin-left: 13px;
+    margin-top: 0px;
+  }
+
+  .roommates {
+    position: absolute;
+    top: -45px;
+    left: -5px;
+    display: flex;
+    gap: 1px;
+    z-index: 20;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
+
+  .apartment-card img {
+    width: 100%;
+    height: auto;
+  }
+
+  .profileInfo {
+    padding: 15px;
+  }
+
+  .roommates {
+    margin-top: 10px;
+  }
+
+  .logo-container {
+    margin-top: 30px;
+  }
+
+  .apartment-card {
+    width: 90%;
+  }
+
+  .roommate-popup {
+    width: 310px;
+    /* Fixed width like on desktop */
+    left: 0;
+    top: 15%;
+    transform: translateY(-50%);
+    max-width: none;
+  }
+
+  .popup-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 50%;
+  }
+
+  .popup-header h3 {
+    font-size: 18px;
+  }
+
+  .popup-content {
+    font-size: 16px;
+  }
+
+  .info-btn-popup {
+    font-size: 18px;
+  }
 }

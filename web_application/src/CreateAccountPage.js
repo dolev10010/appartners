@@ -4,7 +4,8 @@ import AlertHandler from './AlertHandler';
 import { useNavigate } from 'react-router-dom';
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import userpool from './UserPool';
-import config from './config.json'
+import config from './config.json';
+import Logo from "./Logo";
 
 function CreateUserProfile(userData) {
   fetch(`http://${config.serverPublicIP}:5433/create-profile`, {
@@ -150,7 +151,7 @@ function CreateAccountPage() {
       <div className="backgroundImage"></div> {/* For larger screens */}
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       <div className="content">
-        <h1 className="logo">Appartners</h1>
+        <Logo />
         <h2 className="pageName">Create new Account</h2>
         <div className="middleFormBox">
           <p className="boxTitle">EMAIL</p>

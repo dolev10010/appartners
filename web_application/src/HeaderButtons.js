@@ -3,8 +3,7 @@ import React from 'react';
 import UserButton from './UserButton';
 import HomeButton from './HomeButton';
 import ChatButton from './ChatButton';
-import BackButton from './BackButton';
-
+import './styles.css';
 
 const HeaderButtons = ({ badgeContent }) => {
   return (
@@ -12,7 +11,6 @@ const HeaderButtons = ({ badgeContent }) => {
       <UserButton />
       <HomeButton />
       <ChatButton badgeContent={badgeContent} />
-      <BackButton />
     </div>
   );
 };

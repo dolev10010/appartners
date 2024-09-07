@@ -11,7 +11,8 @@
 }
 
 .alertHandlerContent {
-    background: white;
+    background: #d6e0e2;;
+    color: #162a2c;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
@@ -29,13 +30,6 @@ button {
     outline: none; /* Remove the outline to keep the design clean */
     transition: background-color 0.3s, transform 0.2s; /* Smooth transitions for hover and active states */
 }
-
-/* button:hover {
-    background-color: #387880; 
-} 
-DolevA - when moving on button, the color changes to a darker shade of the original color. 
-i'm keeping it so we can use it again */
-*/
 
 button:active {
     transform: scale(0.95); /* Slightly scale down when clicked */

@@ -2,7 +2,7 @@ class Queries:
 
     @staticmethod
     def insert_new_user_profile_query(table_name):
-        return f"INSERT INTO {table_name} (email, creation_time) VALUES(%s, to_timestamp(%s))"
+        return f"INSERT INTO {table_name} (email, creation_time) VALUES(%s, %s)"
 
     @staticmethod
     def update_user_profile_query(table_name, email):
@@ -19,9 +19,9 @@ class Queries:
                         num_of_toilets, price, post_bio, has_parking, has_elevator, has_mamad, num_of_roommates,
                         allow_pets, has_balcony, status, has_sun_water_heater, is_accessible_to_disabled,
                         has_air_conditioner, has_bars, entry_date, is_sublet, end_date, photos_url, 
-                        roommate_emails, creation_timestamp
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """
+                        roommate_emails, creation_timestamp, latitude, longitude
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
 
     @staticmethod
     def update_apartment_post_query(table_name):
@@ -49,7 +49,7 @@ class Queries:
 
     @staticmethod
     def fetch_all_user_profiles(table_name):
-        return f"SELECT * FROM {table_name}"
+        return f"SELECT * FROM {table_name} WHERE 1=1"
 
     @staticmethod
     def fetch_apartment_query(table_name, email, post_id):
@@ -63,6 +63,7 @@ class Queries:
     def delete_user_apartment_query(table_name):
         return f"DELETE FROM {table_name} WHERE email = %s AND post_id = %s"
 
+    @staticmethod
     def find_emails_query(table_name, placeholders):
         return f"SELECT email FROM {table_name} WHERE email IN ({placeholders})"
 
@@ -120,3 +121,39 @@ class Queries:
             FROM messages
             WHERE receiver_email = %s AND sender_email = %s AND is_read = FALSE
         """
+      
+    def fetch_apartments_by_city_query(table_name, city):
+        return f"""
+            SELECT *
+            FROM {table_name}
+            WHERE city = '{city}'
+        """
+      
+    @staticmethod
+    def fetch_all_apartments_query(table_name):
+        return f"SELECT * FROM {table_name} WHERE 1=1"
+
+    @staticmethod
+    def fetch_apartment_roommates_details(table_name, emails):
+        return f""" SELECT * FROM {table_name} WHERE email IN ({emails})"""
+        #  return f"""SELECT CONCAT(first_name, ' ', last_name) AS full_name,profile_bio,
+        #            photo_url,
+        #            age,
+        #            profession,
+        #            smoking,
+        #            like_animals,
+        #            has_animals,
+        #            keeps_kosher,
+        #            sex,
+        #            allergies,
+        #            hobbies,
+        #            status
+        #     FROM {table_name}
+        #     WHERE email IN ({emails})
+        # """
+
+    @staticmethod
+    def fetch_apartment_roomates_details_for_popup(table_name, emails):
+        return f"SELECT CONCAT(first_name, ' ', last_name) as full_name, profile_bio, photo_url, email " \
+               f"FROM {table_name} WHERE email IN ({emails})"
+

@@ -8,6 +8,7 @@ import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
 import LoginPage from "./LoginPage";
 import "./styles.css";
 import ProfilePage from "./ProfilePage";
+import Logo from "./Logo";
 
 export default function App() {
   return (
@@ -35,7 +36,7 @@ export default function App() {
 function WelcomePage() {
   return (
     <div>
-      <h1 className="logo">Appartners</h1>
+      <Logo />
       <h2 className="welcome">WELCOME!</h2>
       <div className="middleBox">
         <Link className="formBoxes" to="/signup">Create Account</Link>

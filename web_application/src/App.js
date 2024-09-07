@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from "./HomePage";
 import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
@@ -13,6 +13,8 @@ import FindRoommatePage from "./FindRoommatePage";
 import DisplayProfile from "./DisplayProfile";
 import ChatConversationsPage from "./ChatConversationsPage";
 import ChatConversationPage from "./ChatConversationPage";
+import ShowApartments from "./ShowApartments";
+import ApartmentDetails from "./ApartmentDetails";
 import "./styles.css";
 
 function App() {
@@ -39,10 +41,22 @@ function App() {
         <Route path="/chat" element={<ChatConversationsPage />} />
         <Route path="/chat/:receiverEmail" element={<ChatConversationPage />} />
         {isLoggedIn ? <Route path="/profile" element={<CreateProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
+        {/* Conditional Routes */}
+        {isLoggedIn ? (
+          <>
+            <Route path="/post-apartment" element={<PostApartmentPage />} />
+            <Route path="/profile" element={<CreateProfilePage />} />
+          </>
+        ) : (
+          <>
+            <Route path="/post-apartment" element={<Navigate to="/homepage" />} />
+            <Route path="/profile" element={<Navigate to="/login" />} />
+          </>
+        )}
         <Route path="/find-roomate" element={<FindRoommatePage />} />
-        <Route path="/post-apartment" element={<PostApartmentPage />} />
-        <Route path="/find-apartment" element={<FindApartmentPage />} />
+        <Route path="/find-apartment" element={<ShowApartments />} />
         <Route path="/apartments-in-my-area" element={<ApartmentsInMyAreaPage />} />
+        <Route path="/apartment-details/:id" element={<ApartmentDetails />} />
         <Route path="/profile/:email" element={<DisplayProfile />} />
       </Routes>
     </Router>

@@ -7,8 +7,12 @@ import config from './config.json';
 
 import { FaBirthdayCake, FaSmoking, FaPaw, FaDog, FaBriefcase, FaHeart, FaGamepad, FaStarOfDavid } from 'react-icons/fa';
 import { MdWc, MdLocalHospital } from 'react-icons/md';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function DisplayProfile() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const { email } = useParams();
     const [loading, setLoading] = useState(true);
     const [profileData, setProfileData] = useState({
@@ -26,6 +30,15 @@ function DisplayProfile() {
         bio: '',
         profileImage: profileImagePlaceholder,
     });
+
+    const handleBackClick = () => {
+        if (location.state?.from === 'find-roommate' && location.state?.filters) {
+          navigate('/find-roomate', { state: { filters: location.state.filters } });
+        } else {
+          navigate(-1);  // Just go back to the previous page
+        }
+      };
+     
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -74,6 +87,7 @@ function DisplayProfile() {
             <div className="backgroundImageMobile"></div> {/* For smaller screens */}
             <div className="image-container">
                 <HeaderButtons badgeContent={4} />
+                <BackButton onClick={handleBackClick}/>
             </div>
             <div className="content">
                 <Logo />

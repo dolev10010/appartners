@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import "./styles.css";
+import Logo from "./Logo";
 import AlertHandler from './AlertHandler';
 import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 import userPool from './UserPool';
@@ -77,7 +78,7 @@ function LoginPage() {
       <div className="backgroundImage"></div> {/* For larger screens */}
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       <div className="content">
-        <h1 className="logo">Appartners</h1>
+        <Logo />
         <h2 className="pageName">Login</h2>
         <div className="middleFormBox">
           <p className="boxTitle">EMAIL</p>
@@ -103,13 +104,6 @@ function LoginPage() {
               placeholder="Please enter your password"
               className="input"
             />
-          </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "15px"}}>
-            <label htmlFor="staySignedInCheckbox" style={{ display: "flex", alignItems: "center", marginRight: "10px" }}>
-              <input type="checkbox" id="staySignedInCheckbox" />
-              Stay signed in
-            </label>
-            <button className="inlineButton" onClick={handleForgetPasswordClick}>Forgot Password</button>
           </div>
           <button className="buttons" onClick={handleSignin}>Sign in</button>
           <p className="smallText"> Don't have an account yet?&nbsp;&nbsp;  

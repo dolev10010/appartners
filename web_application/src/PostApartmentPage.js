@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
+import Logo from "./Logo";
 import UserContext from './UserContext';
-import logo from './background-pictures/Logo.jpg';
 import config from './config.json';
 import AWS from 'aws-sdk';
 import ApartmentForm from './ApartmentForm';
+import HeaderButtons from "./HeaderButtons";
 import PostView from './PostView';
 import './PostApartmentPage.css';
 import './ApartmentForm.css';
 import './PostView.css';
 import AlertHandler from './AlertHandler';
-import ConfirmDialog from './ConfirmDialog'; // New component for confirmation dialog
+import ConfirmDialog from './ConfirmDialog';
+import "./styles.css";
 
 const labCredentials = config.labCredentials;
 const accessKeyId = labCredentials.accessKeyId;
@@ -99,6 +101,7 @@ function PostApartmentPage() {
   const [alertHandlerMessage, setAlertHandlerMessage] = useState('');
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
+  const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
 
   const fetchApartments = async () => {
     try {
@@ -280,7 +283,8 @@ function PostApartmentPage() {
       ...newApartment,
       photos_url: photoUrls,
       email: userEmail,
-      roommate_emails: JSON.stringify(newApartment.roommate_emails) // Ensure emails are stored as JSON string
+      roommate_emails: JSON.stringify(newApartment.roommate_emails), // Ensure emails are stored as JSON string
+      coordinates, // Add coordinates to the form data
     };
 
     try {
@@ -345,7 +349,8 @@ function PostApartmentPage() {
       photos_url: [...updatedPhotos, ...newPhotoUrls],
       email: userEmail,
       post_id: editingPost.post_id,
-      roommate_emails: JSON.stringify(newApartment.roommate_emails) // Ensure emails are stored as JSON string
+      roommate_emails: JSON.stringify(newApartment.roommate_emails), // Ensure emails are stored as JSON string
+      coordinates, // Add coordinates to the form data
     };
 
     try {
@@ -426,6 +431,7 @@ function PostApartmentPage() {
     });
     setImagePreviews([]);
     setEditingPost(null); // Reset editing post
+    setCoordinates({ lat: null, lng: null }); // Reset coordinates
   };
 
   const handleCancel = () => {
@@ -486,6 +492,7 @@ function PostApartmentPage() {
     });
     setImagePreviews(apartment.photos || []);
     setShowForm(true);
+    setCoordinates(apartment.coordinates || { lat: null, lng: null }); // Set coordinates if editing
   };
 
   const handleDeleteClick = (apartment) => {
@@ -504,6 +511,10 @@ function PostApartmentPage() {
     setPostToDelete(null);
   };
 
+  const handleCoordinatesChange = (newCoordinates) => {
+    setCoordinates(newCoordinates);
+  };
+
   console.log('Apartments to be passed to PostView:', apartments);
 
   return (
@@ -511,11 +522,12 @@ function PostApartmentPage() {
       <AlertHandler isOpen={alertHandlerOpen} message={alertHandlerMessage} onClose={() => setAlertHandlerOpen(false)} />
       <ConfirmDialog isOpen={confirmDialogOpen} onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
       <div className="post-apartment-container">
+        <div className="image-container">
+        <HeaderButtons badgeContent={4} />
+        </div>
+        <div className='space'></div>
+        <div className="content"><Logo /></div>
         <div className="post-apartment-content">
-          <div className="logo-container">
-            <img src={logo} className="logoImg" alt="Logo" loading="lazy" />
-            <h1 className="post-apartment-logo">Appartners</h1>
-          </div>
           <div className="post-apartment-buttonContainer">
             {!showForm && (
               <>
@@ -540,6 +552,7 @@ function PostApartmentPage() {
               onRemovePhoto={handleRemovePhoto}
               onSubmit={editingPost ? handleUpdateApartment : handlePostApartment}
               onCancel={handleCancel}
+              onCoordinatesChange={handleCoordinatesChange} // Pass the coordinates handler to the form
             />
           ) : (
             <PostView apartments={apartments} onSelect={handleSelectPost} onDelete={handleDeleteClick} />
