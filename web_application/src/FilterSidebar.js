@@ -36,7 +36,16 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
 
     const cityRef = useRef(null);
     const streetRef = useRef(null);
+    const isStreetDisabled = !filters.city;
 
+    const extractStreetName = (addressComponents) => {
+        for (const component of addressComponents) {
+            if (component.types.includes('route')) {
+                return component.long_name.replace(/ street| st| road/gi, '').trim();
+            }
+        }
+        return '';
+    };
 
     useEffect(() => {
         setFilters({
@@ -95,9 +104,10 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
         streetAutocomplete.addListener('place_changed', () => {
             const place = streetAutocomplete.getPlace();
             if (place.geometry) {
+                const streetName = extractStreetName(place.address_components);  // שימוש ב-extractStreetName
                 setFilters(prevFilters => ({
                     ...prevFilters,
-                    street: place.name
+                    street: streetName  // עדכון שם הרחוב לאחר ניקוי
                 }));
             }
         });
@@ -121,6 +131,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
     };
 
     const handleSubmit = () => {
+        console.log(filters);
         onApplyFilters(filters);
     };
 
@@ -160,6 +171,7 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                             value={filters.street}
                             onChange={handleChange}
                             className='filter-box'
+                            disabled={isStreetDisabled}
                         />
                         {filters.city && (
                             <button className="clear-button" onClick={() => handleClearField('street')}>

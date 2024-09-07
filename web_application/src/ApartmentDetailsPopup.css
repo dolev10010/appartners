@@ -31,7 +31,7 @@
     border: none;
     font-size: 14px;
     cursor: pointer;
-    color: black;
+    color: #686868;
 }
 
 .popup-title {
@@ -60,13 +60,13 @@
 }
 
 .details-button:hover {
-    background-color: #133f4b;
+    background-color: #162a2c;
 }
 
 /* Sublet banner styling */
 .sublet-banner {
-    background-color: #ff5733; /* A bright color to make it stand out */
-    color: white;
+    background-color: #5e6c5b; /* A bright color to make it stand out */
+    color: #fefcf6;
     text-align: center;
     padding: 5px 0;
     font-size: 14px;

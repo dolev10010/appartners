@@ -71,10 +71,18 @@ body {
   display: flex;
   flex-direction: column;
   margin-right: 15px;
-  justify-content: center;
-  align-items: center;
   align-items: flex-start;
   justify-content: flex-start;
+}
+
+.labelAndBoxContainerCheckbox {
+  display: flex;
+  flex-direction: column;
+  margin-right: 15px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
 }
 
 .backgroundImage {
@@ -189,15 +197,29 @@ body {
 .pageName {
   font-size: 24px;
   margin-top: 20px;
+  margin-bottom: 10px;
   text-align: left;
   color: #5E6C5B;
 }
+
 
 .boxTitle {
   font-size: 12px;
   margin-top: 15px;
   /*DolevA - did the margin top 15px for the profile page, i need to check if making issues in other pages (was 1) */
   text-align: left;
+  width: 100%; /* מבטיח שהלייבל יכסה את כל רוחב תיבת הטקסט */
+  padding-left: 0px; /* מבטל את הריווח בצד שמאל */
+  padding-right: 0px;
+}
+
+.checkbox-label {
+  font-size: 12px;
+  margin-top: 15px;
+  text-align: center;
+  width: 70px;
+  margin-right: 10px;
+  white-space: normal;
 }
 
 .middleBox {
@@ -265,8 +287,34 @@ body {
 .checkBox {
   margin-top: 15px;
   color: #5E6C5B;
-  text-align: left;
   border-color: #d6e0e2;
+}
+
+.checkbox-container {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  padding: 0; 
+  margin-right: 15px;
+}
+
+.checkboxes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.checkbox-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
 }
 
 .inlineButton {
@@ -615,42 +663,46 @@ body {
 .apartment-img {
   position: relative;
   overflow: visible;
-  /* Ensure avatars can extend outside */
+  object-fit: cover;  /* התמונה תתאים בדיוק בגבולות מבלי לעוות */
+  object-position: center;
 }
 
 .apartment-image {
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  position: relative;
+  object-fit: cover;  /* התמונה תתאים בדיוק בגבולות מבלי לעוות */
+  object-position: center;
+}
+
+.apartment-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* התמונה תתאים בדיוק בגבולות מבלי לעוות */
+  object-position: center;  /* ממקם את התמונה במרכז */
 }
 
 .roommates {
   position: absolute;
   top: -25px;
-  /* Adjust to move the avatars out of the top edge */
   left: -25px;
-  /* Adjust to move the avatars out of the left edge */
   display: flex;
   gap: 1px;
   z-index: 20;
-  /* מבטיח שהתמונה תוצג מעל התמונה העיקרית */
 }
 
 .roommate {
   width: 60px;
-  /* Adjust size as needed */
   height: 60px;
-  /* Adjust size as needed */
   overflow: hidden;
   border-radius: 50%;
   z-index: 1;
-  /* מבטיח שהתמונה תוצג מעל הכל */
 }
 
 .roommate:not(:first-child) {
   margin-left: -15px;
-  /* חפיפה חלקית בין התמונות */
   z-index: 2;
-  /* מבטיח שהתמונות העליונות יעלו על התמונות התחתונות */
 }
 
 .roommate-image {
@@ -664,16 +716,31 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-color: #d6e0e2;
   color: #162a2c;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
   z-index: 3;
   margin-left: -15px;
-  /* חפיפה חלקית בין התמונות */
+}
+
+@media (max-width: 600px) {
+  .roommates {
+    top: -15px;  /* Adjust the position for mobile */
+    left: 0;
+  }
+
+  .roommate {
+    width: 60px;  /* Smaller size for mobile */
+    height: 60px;
+  }
+
+  .roommate:not(:first-child) {
+    margin-left: -10px;  /* Slight overlap for smaller avatars */
+  }
 }
 
 .info-btn,
@@ -697,22 +764,27 @@ body {
   height: 340px;
   overflow: visible;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .photo-slider-images {
   display: flex;
   transition: transform 0.3s ease-in-out;
-  /* Add smooth transition */
   height: 100%;
   width: 100%;
   border-radius: 10px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .photo-slider img {
   max-width: 100%;
   max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 10px;
+  object-position: center;
 }
 
 .apartment-image {
@@ -720,6 +792,7 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
+  overflow: hidden;
 }
 
 .progress-dots {
@@ -832,15 +905,16 @@ body {
 .apartment-info p {
   font-size: 14px;
   margin: 0;
-  /* מסיר רווחים סביב ה-P */
   padding: 0;
-  /* מסיר רווחים פנימיים */
 }
 
 .apartmentBio {
   font-size: 15px;
-  margin-top: 0;
+  margin-top: 5px;
   padding-top: 0;
+  max-width: 340px;
+  word-wrap: break-word;
+  white-space: normal; 
 }
 
 .apartmentAdrees {
@@ -1465,7 +1539,8 @@ body {
     left: -15px;
     display: flex;
     gap: 1px;
-    z-index: 20;
+    z-index: 10;
+    overflow: visible;
   }
 
   .welcome {
@@ -1538,7 +1613,9 @@ body {
 
   .apartment-card img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;  /* התמונה תתאים בדיוק בגבולות מבלי לעוות */
+    object-position: center;
   }
 
   .profileInfo {
@@ -1554,7 +1631,10 @@ body {
   }
 
   .apartment-card {
-    width: 90%;
+    width: 89%;
+    margin-right: 5px;
+    object-fit: cover;  /* התמונה תתאים בדיוק בגבולות מבלי לעוות */
+    object-position: center;
   }
 
   .roommate-popup {
@@ -1574,6 +1654,15 @@ body {
     border-radius: 50%;
   }
 
+  .roommate-list-avatar{
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
   .popup-header h3 {
     font-size: 18px;
   }
@@ -1585,4 +1674,131 @@ body {
   .info-btn-popup {
     font-size: 18px;
   }
+
+  .roommate-list-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f6eee0;
+    border-radius: 10px;
+    z-index: 1000;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    max-height: 90%;
+    width: 210px;
+  }
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+  border-radius: 10px; /* שמור על הפינות המעוגלות */
+  color: #162A2C; /* שמור על צבע הטקסט לאחר כתיבה */
+  border: 1px solid transparent; /* שמור על גבול שקוף */
+  background-color: #d6e0e2; /* רקע לתיבות הטקסט */
+  transition: none;
+}
+
+input:focus,
+textarea:focus {
+  outline: none; /* מסיר את המסגרת השחורה בעת לחיצה */
+  border-radius: 10px; /* שמור על הפינות המעוגלות גם לאחר לחיצה */
+  border: 1px solid transparent; /* שומר על המסגרת שקופה */
+}
+
+input::placeholder {
+  color: #162A2C; /* צבע placeholder תואם */
+}
+
+input[type="email"] {
+  color: #162A2C; /* מבטיח שהצבע לא ישתנה לאחר ההקלדה */
+  background-color: #D6E0E2;
+}
+
+input[type="email"]:focus {
+  color: #162A2C; /* שמור על הצבע גם לאחר פוקוס */
+  background-color: #D6E0E2;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  background-color: #d6e0e2 !important; /* צבע קבוע של תיבת הטקסט */
+  color: #162A2C !important; /* צבע הטקסט */
+  border: 1px solid transparent !important; /* ביטול גבולות */
+  border-radius: 10px !important; /* שמירה על פינות מעוגלות */
+  outline: none !important; /* ביטול ה-outline */
+  box-shadow: none !important; /* ביטול הצללה בעת פוקוס */
+  transition: none !important; /* ביטול אנימציה */
+}
+
+input[type="email"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus {
+  background-color: #d6e0e2 !important; /* צבע קבוע גם בעת פוקוס */
+  color: #162A2C !important; /* צבע קבוע בעת פוקוס */
+  border: 1px solid transparent !important; /* ביטול גבול בעת פוקוס */
+  outline: none !important; /* ביטול ה-outline בעת פוקוס */
+  box-shadow: none !important; /* ביטול הצללה בעת פוקוס */
+}
+
+input:-webkit-autofill {
+  background-color: #d6e0e2 !important; /* הצבע של התיבה גם כאשר משתמשים ב-autocomplete */
+  -webkit-box-shadow: 0 0 0px 1000px #d6e0e2 inset !important; /* ביטול שינוי הצבע של התיבה */
+  color: #162A2C !important;
+}
+
+input:-webkit-autofill::first-line {
+  color: #162A2C !important; /* צבע הטקסט */
+}
+
+input:-internal-autofill-selected {
+  background-color: #d6e0e2 !important;
+  color: #162A2C !important;
+  border-radius: 10px !important;
+  border: none !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #d6e0e2 inset !important;
+  box-shadow: 0 0 0px 1000px #d6e0e2 inset !important;
+  background-color: #d6e0e2 !important;
+  color: #162A2C !important;
+  border-radius: 10px !important;
+  border: none !important;
+}
+
+select {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background-color: #d6e0e2; /* צבע רקע */
+  color: #162a2c; /* צבע טקסט */
+  border-radius: 10px; /* שומר על הפינות המעוגלות */
+}
+
+select:focus {
+  outline: none;
+  box-shadow: none; /* מבטל את ההצללה של הפוקוס */
+  border: none; /* מסיר את המסגרת בזמן פוקוס */
+}
+
+/* styles.css */
+
+html {
+  scroll-behavior: smooth;
+}
+
+.loading-indicator {
+  text-align: center;
+  font-size: 18px;
+  padding: 10px;
 }

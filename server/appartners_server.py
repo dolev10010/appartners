@@ -381,10 +381,11 @@ def filter_roommates(roommates, filters):
 def find_apartments():
     try:
         sort_order = request.args.get('sortOrder')
+        # page = int(request.args.get('page', 1))
+        # per_page = int(request.args.get('per_page', 10))
 
         filters = {
             'city': request.args.get('city'),
-            'street': request.args.get('street'),
             'priceMin': request.args.get('priceMin'),
             'priceMax': request.args.get('priceMax'),
             'hasParking': request.args.get('hasParking'),
@@ -400,8 +401,11 @@ def find_apartments():
             'keepKosher': request.args.get('keepKosher'),
             'status': request.args.get('status'),
             'entryDate': request.args.get('entryDate'),
-            'available_rooms': request.args.get('available_rooms')
+            'available_rooms': request.args.get('available_rooms'),
+            'street': request.args.get('street')
         }
+
+        print("filters:", filters)
 
         roomate_filters = {
             'ageMin': request.args.get('ageMin'),
@@ -466,6 +470,9 @@ def find_apartments():
             query = base_query + " ORDER BY entry_date DESC"
         else:
             query = base_query
+
+        # offset = (page - 1) * per_page
+        # query += f" LIMIT {per_page} OFFSET {offset}"
 
         apartments = postgres_client.read_from_db(query, single_match=False)
 
@@ -533,9 +540,8 @@ def find_apartments():
             else:
                 return jsonify({"errorMessage": "No apartments found"}), 404
 
-        else:
-            if mapped_apartments:
-                return jsonify(mapped_apartments), 200
+        if mapped_apartments:
+            return jsonify(mapped_apartments), 200
 
     except Exception as e:
         logger.log_error(f"Fetching apartments list failed | reason: {e}")
