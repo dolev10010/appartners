@@ -132,22 +132,6 @@ function ProfilePage() {
         return age;
     };
 
-    const validateDateOfBirth = () => {
-        if (!dateOfBirth) {
-            return false;
-        }
-        const birthDate = new Date(dateOfBirth);
-        const currentDate = new Date();
-        const ageDifference = currentDate.getFullYear() - birthDate.getFullYear();
-        const isOlderThan18 = ageDifference > 18 || (ageDifference === 18 && currentDate.getMonth() > birthDate.getMonth());
-        return isOlderThan18;
-    };
-
-    const validateAnimalOwnership = () => {
-        const alphanumericRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])/;
-        return alphanumericRegex.test(animalOwnership);
-    };
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setFile(file);

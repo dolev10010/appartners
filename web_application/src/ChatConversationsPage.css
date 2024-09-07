@@ -1,0 +1,129 @@
+.chat-conversations-page {
+  padding: 20px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.chat-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+} 
+
+.logo-chat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left */
+  position: relative;
+  margin-top: 15px; /* Add margin to separate the logo from the header buttons */
+}
+
+.chat-title {
+  font-size: 40px;
+  color: #5e6c5b;
+  margin: 0;
+  font-weight: lighter;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.search-bar-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+  background-color: F6EEE0;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+  border:#D6E0E2;
+  border-radius: 25px;
+  font-size: 16px;
+  color: #162A2C;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #F6EEE0
+  ;
+}
+
+.conversations-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #D6E0E2;
+  cursor: pointer;
+  position: relative; /* Allow absolute positioning within this container */
+}
+
+.conversation-item:first-child {
+  border-top: 1px solid #D6E0E2; /* Add a top border to the first conversation item */
+}
+
+.conversation-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.conversation-details {
+  flex-grow: 1;
+}
+
+.conversation-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #686867;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.conversation-last-message {
+  font-size: 12px;
+  color: #5E6C5B;
+  margin-top: 20px; /* Add margin to separate it from the unread badge */
+}
+
+.conversation-meta {
+  text-align: center; /* Center-align the text within the container */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align the date and time vertically */
+  position: absolute;
+  top: 0; /* Align to the top of the container */
+  right: 10px; /* Add some space from the right edge */
+}
+
+.conversation-date {
+  font-size: 12px;
+  color: #5E6C5B;
+  margin-bottom: 0;
+  margin-top: 5px; /* Add margin to create space between the date and the line above */
+}
+
+.conversation-time {
+  font-size: 12px; /* Same size as the date */
+  color: #5E6C5B;
+}
+
+.unread-badge {
+  background-color: #D6E0E2;
+  color: #162A2C;
+  padding: 5px 10px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px; /* Add some space between the time and the unread badge */
+}
