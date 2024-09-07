@@ -223,6 +223,9 @@ function ProfilePage() {
 
             if (response.ok) {
                 console.log("Profile updated successfully");
+                localStorage.setItem('profileImage', imageUrl);
+                const event = new CustomEvent('profileImageUpdated', { detail: imageUrl });
+                window.dispatchEvent(event);
                 navigate('/homepage');
             } else {
                 console.error("Failed to update profile");

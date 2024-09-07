@@ -35,7 +35,7 @@ function CreateAccountPage() {
   const [alertHandlerMessage, setAlertHandlerMessage] = useState(null);
   
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+    setEmail(event.target.value.toLowerCase());
   };
 
   const handlePasswordChange = (event) => {

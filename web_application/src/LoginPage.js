@@ -5,18 +5,18 @@ import AlertHandler from './AlertHandler';
 import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 import userPool from './UserPool';
 import { useNavigate } from 'react-router-dom';
-import UserContext from './UserContext'; // Import UserContext for storing user email
+import UserContext from './UserContext';
 
-function LoginPage() {
+function LoginPage({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [alertHandlerOpen, setAlertHandlerOpen] = useState(false);
   const [alertHandlerMessage, setAlertHandlerMessage] = useState('');
   const navigate = useNavigate();
-  const { setUserEmail } = useContext(UserContext); // Access setUserEmail from context
+  const { setUserEmail } = useContext(UserContext);
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+    setEmail(event.target.value.toLowerCase());
   };
 
   const handlePasswordChange = (event) => {
@@ -42,12 +42,11 @@ function LoginPage() {
 
     cognitoUser.authenticateUser(authDetails, {
       onSuccess: (result) => {
-        console.log("Authentication successful!", result);
-        setUserEmail(email); // Store user email in context
+        setUserEmail(email);
+        setIsLoggedIn(true);
         navigate("/homepage");
       },
       onFailure: (err) => {
-        console.log(err.message)
         if (err.message === "User is not confirmed.") {
           setAlertHandlerMessage("Email is not verified yet");
         }
@@ -62,10 +61,6 @@ function LoginPage() {
 
   const handleDontHaveUserClick = () => {
     navigate("/signup");
-  };
-
-  const handleForgetPasswordClick = () => {
-    // Implement forgot password functionality if needed
   };
 
   const closeAlertHandler = () => {
