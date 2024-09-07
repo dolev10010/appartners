@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Logo from './Logo';
 import HeaderButtons from './HeaderButtons';
-import BackButton from './BackButton';
 import profileImagePlaceholder from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
 
-import { FaEdit, FaBirthdayCake, FaSmoking, FaPaw, FaDog, FaBriefcase, FaHeart, FaGamepad, FaStarOfDavid } from 'react-icons/fa';
+import { FaBirthdayCake, FaSmoking, FaPaw, FaDog, FaBriefcase, FaHeart, FaGamepad, FaStarOfDavid } from 'react-icons/fa';
 import { MdWc, MdLocalHospital } from 'react-icons/md';
 
 function DisplayProfile() {

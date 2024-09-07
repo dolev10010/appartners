@@ -41,6 +41,16 @@ function FindRoommatePage() {
     navigate(`/profile/${email}`);
   };
 
+  const handleMessageClick = (profile) => {
+    navigate(`/chat/${profile.profile_email}`, { 
+      state: { 
+        first_name: profile.full_name.split(" ")[0], 
+        last_name: profile.full_name.split(" ")[1], 
+        photo_url: profile.photo_url 
+      } 
+    });
+};
+
   return (
     <div className="find-roommate-page">
       <header className="header">
@@ -62,7 +72,7 @@ function FindRoommatePage() {
             />
             <ImageListItemBar
               title={profile.full_name}
-              subtitle={`${profile.age}, ${profile.profession}`} // Display only age and profession
+              subtitle={`${profile.age}, ${profile.profession}`}
               actionIcon={
                 <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                   <IconButton
@@ -75,7 +85,7 @@ function FindRoommatePage() {
                   <IconButton
                     sx={{ color: 'white', padding: '4px' }}
                     aria-label={`message ${profile.full_name}`}
-                    onClick={() => alert('Open Chat')}
+                    onClick={() => handleMessageClick(profile)}
                   >
                     <MessageIcon style={{ fontSize: '20px' }} />
                   </IconButton>

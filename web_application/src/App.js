@@ -11,6 +11,8 @@ import userpool from './UserPool';
 import CreateProfilePage from './ProfilePage';
 import FindRoommatePage from "./FindRoommatePage";
 import DisplayProfile from "./DisplayProfile";
+import ChatConversationsPage from "./ChatConversationsPage";
+import ChatConversationPage from "./ChatConversationPage";
 import "./styles.css";
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
         <Route path="/signup" element={<CreateAccountPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/homepage" element={<HomePage />} />
+        <Route path="/chat" element={<ChatConversationsPage />} />
+        <Route path="/chat/:receiverEmail" element={<ChatConversationPage />} />
         {isLoggedIn ? <Route path="/profile" element={<CreateProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
         <Route path="/find-roomate" element={<FindRoommatePage />} />
         <Route path="/post-apartment" element={<PostApartmentPage />} />
