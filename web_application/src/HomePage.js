@@ -15,7 +15,6 @@ function HomePage() {
   const navigate = useNavigate();
   const { userEmail } = useContext(UserContext);
   const [profileImage, setProfileImage] = useState(profilePlaceholder);
-  const [totalUnreadCount, setTotalUnreadCount] = useState(0); // State for total unread count
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -34,26 +33,6 @@ function HomePage() {
 
     if (userEmail) {
       fetchProfileImage();
-    }
-  }, [userEmail]);
-
-  useEffect(() => {
-    const fetchTotalUnreadCount = async () => {
-      try {
-        const response = await fetch(`http://${config.serverPublicIP}:5433/get-conversations?email=${userEmail}`);
-        if (response.ok) {
-          const data = await response.json();
-          setTotalUnreadCount(data.total_unread_count); // Set total unread count
-        } else {
-          console.error('Failed to fetch total unread count');
-        }
-      } catch (error) {
-        console.error('Error fetching total unread count:', error);
-      }
-    };
-
-    if (userEmail) {
-      fetchTotalUnreadCount();
     }
   }, [userEmail]);
 
@@ -87,7 +66,7 @@ function HomePage() {
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       <div className="image-container">
         <UserButton profileImage={profileImage} />
-        <ChatButton badgeContent={totalUnreadCount}/> {/* Pass the total unread count */}
+        <ChatButton badgeContent={0}/> {/* Pass the total unread count */}
       </div>
       <div className="content">
         <Logo />

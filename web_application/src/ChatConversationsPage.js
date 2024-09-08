@@ -14,7 +14,6 @@ function ChatConversationsPage() {
   const { userEmail } = useContext(UserContext);
 
   useEffect(() => {
-    // Fetch all conversations directly from the backend without using sockets
     const fetchConversations = async () => {
       try {
         const response = await fetch(`http://${config.serverPublicIP}:5433/get-conversations?email=${userEmail}`);
