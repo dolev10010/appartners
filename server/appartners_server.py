@@ -392,8 +392,8 @@ def validate_emails():
         emails = data['emails']
         placeholders = ','.join(['%s'] * len(emails))
         query = Queries.find_emails_query('user_profile', placeholders)
-        print(query)
-        print(emails)
+        # print(query)
+        # print(emails)
         result = postgres_client.read_from_db(query, single_match=False, values=emails)
         valid_emails = [row[0] for row in result] if result else []
         invalid_emails = [email for email in emails if email not in valid_emails]
@@ -457,8 +457,6 @@ def find_apartments():
             'available_rooms': request.args.get('available_rooms'),
             'street': request.args.get('street')
         }
-
-        print("filters:", filters)
 
         roomate_filters = {
             'ageMin': request.args.get('ageMin'),
@@ -598,7 +596,6 @@ def find_apartments():
 
     except Exception as e:
         logger.log_error(f"Fetching apartments list failed | reason: {e}")
-        print(f"Fetching apartments list failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
 

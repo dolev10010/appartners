@@ -8,6 +8,7 @@ import "./ProfilePage.css"
 import profileImage from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
 import AWS from 'aws-sdk';
+import AlertHandler from './AlertHandler';
 
 const labCredentials = config.labCredentials;
 const accessKeyId = labCredentials.accessKeyId;
@@ -42,6 +43,9 @@ function ProfilePage() {
     const [bio, setBio] = useState('');
     const [uploadedImage, setFile] = useState();
     const [presentedImage, setImage] = useState(profileImage);
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -192,6 +196,25 @@ function ProfilePage() {
         console.log("Save button clicked");
         const [firstName, lastName] = fullName.split(" ");
 
+        const mandatory_fields = ['first_name', 'last_name', 'gender', 'dateOfBirth'];
+        let missingFields = '';
+
+        if (!firstName || !lastName) {
+            missingFields += 'First name and last name are required.\n';
+        }
+        if (!gender) {
+            missingFields += 'Gender is required.\n';
+        }
+        if (!dateOfBirth) {
+            missingFields += 'Date of birth is required.\n';
+        }
+
+        if (missingFields) {
+            setAlertMessage(missingFields);
+            setAlertOpen(true);
+            return;
+        }
+
         try {
             const imageUrl = uploadedImage ? await uploadToS3(uploadedImage) : presentedImage;
 
@@ -264,6 +287,7 @@ function ProfilePage() {
                 <h2 className="pageName">Profile</h2>
                 <button className="logoutButton" onClick={handleLogout}>Log Out</button>
                 <div className="middleFormBox">
+                <AlertHandler isOpen={alertOpen} message={alertMessage} onClose={() => setAlertOpen(false)} />  {/* *** כאן ההתראה מוצגת בהתאם לשדות החסרים *** */}
                     <div className="pictureButtonContainer">
                         <label className="pictureButton">
                             <img
@@ -302,9 +326,9 @@ function ProfilePage() {
                                     value={gender}
                                     onChange={handleGenderChange}
                                     className="input"
-                                    placeholder= "Select your Gender"
+                                    placeholder="Select your Gender"
                                 >
-                                    <option value="">Select your Gender</option>
+                                    <option style={{color: "#686867"}} value="">Select your Gender</option>
                                     <option value="female">Female</option>
                                     <option value="male">Male</option>
                                     <option value="other">Other</option>
@@ -326,36 +350,36 @@ function ProfilePage() {
                             </div>
                         </div>
                     </div>
-<div className="checkboxes-container">
-    <div className="checkbox-row">
-        <div className="labelAndBoxContainerCheckbox">
-            <label htmlFor="smoker" className="checkbox-label">SMOKER</label>
-            <div className="checkbox-container">
-            <input type="checkbox" id="smoker" checked={smoker} onChange={handleSmokerChange} />
-        </div>
-        </div>
-        <div className="labelAndBoxContainerCheckbox">
-            <label htmlFor="kosher" className="checkbox-label">KEEPS KOSHER</label>
-            <div className="checkbox-container">
-            <input type="checkbox" id="kosher" checked={kosher} onChange={handleKosherChange} />
-            </div>
-        </div>
-    </div>
-    <div className="checkbox-row">
-        <div className="labelAndBoxContainerCheckbox">
-            <label htmlFor="animalOwner" className="checkbox-label">ANIMAL OWNER</label>
-            <div className="checkbox-container">
-            <input type="checkbox" id="animalOwner" checked={animalOwnership} onChange={handleAnimalOwnershipChange} />
-            </div>
-        </div>
-        <div className="labelAndBoxContainerCheckbox">
-            <label htmlFor="animalLover" className="checkbox-label">ANIMAL LOVER</label>
-            <div className="checkbox-container">
-            <input type="checkbox" id="animalLover" checked={animalLover} onChange={handleAnimalLoverChange} />
-            </div>
-        </div>
-    </div>
-</div>
+                    <div className="checkboxes-container">
+                        <div className="checkbox-row">
+                            <div className="labelAndBoxContainerCheckbox">
+                                <label htmlFor="smoker" className="checkbox-label">SMOKER</label>
+                                <div className="checkbox-container">
+                                    <input type="checkbox" id="smoker" checked={smoker} onChange={handleSmokerChange} />
+                                </div>
+                            </div>
+                            <div className="labelAndBoxContainerCheckbox">
+                                <label htmlFor="kosher" className="checkbox-label">KEEPS KOSHER</label>
+                                <div className="checkbox-container">
+                                    <input type="checkbox" id="kosher" checked={kosher} onChange={handleKosherChange} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="checkbox-row">
+                            <div className="labelAndBoxContainerCheckbox">
+                                <label htmlFor="animalOwner" className="checkbox-label">ANIMAL OWNER</label>
+                                <div className="checkbox-container">
+                                    <input type="checkbox" id="animalOwner" checked={animalOwnership} onChange={handleAnimalOwnershipChange} />
+                                </div>
+                            </div>
+                            <div className="labelAndBoxContainerCheckbox">
+                                <label htmlFor="animalLover" className="checkbox-label">ANIMAL LOVER</label>
+                                <div className="checkbox-container">
+                                    <input type="checkbox" id="animalLover" checked={animalLover} onChange={handleAnimalLoverChange} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div className="rowBoxesContainer">
                         <div className="labelAndBoxContainer">
@@ -381,7 +405,7 @@ function ProfilePage() {
                                     onChange={handleRelationshipChange}
                                     className="input"
                                 >
-                                    <option value="">Relationship Status</option>
+                                    <option style={{color: "#686867"}} value="">Relationship Status</option>
                                     <option value="single">Single</option>
                                     <option value="inRelationship">In Relationship</option>
                                     <option value="other">Other</option>

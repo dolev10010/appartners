@@ -22,7 +22,9 @@ function ShowApartments() {
   const [errorMessage, setErrorMessage] = useState(''); // State for error message
   const filterButtonRef = useRef(null);
 
+
   const fetchApartments = async (sortOrder = '', filters = {}) => {
+
     try {
       const params = new URLSearchParams();
 
@@ -47,6 +49,7 @@ function ShowApartments() {
         setApartments(Array.isArray(data) && data.length > 0 ? data : []);
         setErrorMessage(''); // Clear error message if results found
       }
+
     } catch (error) {
       console.error("Failed to fetch apartments:", error);
       setApartments([]);

@@ -40,14 +40,13 @@
     background-color: #d6e0e2;
     color: #162a2c;
     font-size: 14px;
-    font-weight: bold;
     text-align: center;
     padding: 10px;
     box-sizing: border-box;
   }
   
   .post-apartment-input::placeholder {
-    color: #a0a0a0; 
+    color: #686868; 
   }
   
   .post-apartment-fileInput {
