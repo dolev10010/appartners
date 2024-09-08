@@ -2,7 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import userPool from './UserPool';
 import UserContext from './UserContext';
+import HeaderButtons from "./HeaderButtons";
 import "./styles.css";
+import "./ProfilePage.css"
 import profileImage from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
 import AWS from 'aws-sdk';
@@ -136,17 +138,6 @@ function ProfilePage() {
         return age;
     };
 
-    const validateDateOfBirth = () => {
-        if (!dateOfBirth) {
-            return false;
-        }
-        const birthDate = new Date(dateOfBirth);
-        const currentDate = new Date();
-        const ageDifference = currentDate.getFullYear() - birthDate.getFullYear();
-        const isOlderThan18 = ageDifference > 18 || (ageDifference === 18 && currentDate.getMonth() > birthDate.getMonth());
-        return isOlderThan18;
-    };
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setFile(file);
@@ -257,6 +248,9 @@ function ProfilePage() {
 
             if (response.ok) {
                 console.log("Profile updated successfully");
+                localStorage.setItem('profileImage', imageUrl);
+                const event = new CustomEvent('profileImageUpdated', { detail: imageUrl });
+                window.dispatchEvent(event);
                 navigate('/homepage');
             } else {
                 console.error("Failed to update profile");
@@ -285,6 +279,9 @@ function ProfilePage() {
         <div className="container profileContainer">
             <div className="backgroundImage"></div>
             <div className="backgroundImageMobile"></div>
+            <div className="header-buttons">
+                <HeaderButtons className="header-buttons" />
+            </div>
             <div className="content">
                 <h1 className="logo">Appartners</h1>
                 <h2 className="pageName">Profile</h2>

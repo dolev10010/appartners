@@ -10,16 +10,15 @@ import "./styles.css";
 import ProfilePage from "./ProfilePage";
 import Logo from "./Logo";
 
-export default function App() {
+export default function EntryPage({ onContinueAsGuest }) {
   return (
     <div className="container">
       <div className="backgroundImage"></div> {/* For larger screens */}
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       
       <div className="content">
-        
         <Routes>
-          <Route path="/" element={<WelcomePage />} />
+          <Route path="/" element={<WelcomePage onContinueAsGuest={onContinueAsGuest} />} />
           <Route path="/signup" element={<CreateAccountPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/homepage" element={<HomePage />} />
@@ -33,7 +32,7 @@ export default function App() {
   );
 }
 
-function WelcomePage() {
+function WelcomePage({ onContinueAsGuest }) {
   return (
     <div>
       <Logo />
@@ -41,7 +40,9 @@ function WelcomePage() {
       <div className="middleBox">
         <Link className="formBoxes" to="/signup">Create Account</Link>
         <Link className="loginBox" to="/login">Login</Link>
-        <Link className="nonBoxButton" to="/homepage">Continue as a guest</Link>
+        <button className="nonBoxButton" onClick={onContinueAsGuest}>
+          <Link to="/homepage">Continue as a guest</Link>
+        </button>
       </div>
     </div>
   );

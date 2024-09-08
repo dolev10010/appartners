@@ -8,7 +8,7 @@ const ChatButton = ({ badgeContent }) => {
   const navigate = useNavigate();
 
   const handleChatClick = () => {
-    navigate('/messages');
+    navigate('/chat');
   };
 
   return (

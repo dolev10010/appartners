@@ -5,12 +5,13 @@ import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
 import EntryPage from "./EntryPage";
 import PostApartmentPage from "./PostApartmentPage";
-import FindApartmentPage from "./FindApartmentPage";
 import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
 import userpool from './UserPool';
 import CreateProfilePage from './ProfilePage';
 import FindRoommatePage from "./FindRoommatePage";
 import DisplayProfile from "./DisplayProfile";
+import ChatConversationsPage from "./ChatConversationsPage";
+import ChatConversationPage from "./ChatConversationPage";
 import ShowApartments from "./ShowApartments";
 import ApartmentDetails from "./ApartmentDetails";
 import "./styles.css";
@@ -29,13 +30,21 @@ function App() {
     checkUser();
   }, []);
 
+  const handleContinueAsGuest = () => {
+    localStorage.removeItem('profileImage'); // Remove cached profile image
+    setIsLoggedIn(false); // Set guest mode
+  };
+
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<EntryPage />} />
+        <Route path="*" element={<EntryPage onContinueAsGuest={handleContinueAsGuest} />} />
         <Route path="/signup" element={<CreateAccountPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/homepage" element={<HomePage />} />
+        <Route path="/chat" element={<ChatConversationsPage />} />
+        <Route path="/chat/:receiverEmail" element={<ChatConversationPage />} />
+        {isLoggedIn ? <Route path="/profile" element={<CreateProfilePage />} /> : <Route path="/login" element={<LoginPage />} />}
         {/* Conditional Routes */}
         {isLoggedIn ? (
           <>

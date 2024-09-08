@@ -34,6 +34,18 @@ const UserButton = () => {
     };
 
     fetchProfileImage();
+
+    // Listen for the custom 'profileImageUpdated' event
+    const handleProfileImageUpdate = (event) => {
+      setProfileImage(event.detail); // Update the profile image state
+    };
+
+    window.addEventListener('profileImageUpdated', handleProfileImageUpdate);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('profileImageUpdated', handleProfileImageUpdate);
+    };
   }, [userEmail]);
 
   const handleProfileImageClick = () => {

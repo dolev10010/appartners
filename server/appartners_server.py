@@ -5,11 +5,50 @@ from server_logger import Logger
 from writer_to_postgres import DataBase
 from sql_queries import Queries
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit, join_room, leave_room
+
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 postgres_client = DataBase()
 logger = Logger()
+
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+
+@socketio.on('join')
+def on_join(data):
+    room = data['email']  # Assuming the room name is the user's email
+    join_room(room)
+    print(f'User {room} has joined the room.')
+
+
+@socketio.on('leave')
+def on_leave(data):
+    room = data['email']  # Assuming the room name is the user's email
+    leave_room(room)
+    print(f'User {room} has left the room.')
+
+
+@socketio.on('send_message')
+def handle_send_message(data):
+    # Emit the message to the receiver's room
+    emit('receive_message', data, room=data['receiver'])
+
+    # Also emit the message to the sender's room
+    emit('receive_message', data, room=data['sender'])
+
+# Note: We are not saving the message in the database here
+# This ensures that the message is only saved once, through the HTTP POST request.
 
 
 def get_current_timestamp():
@@ -162,7 +201,6 @@ def post_apartment():
         if request.method == 'OPTIONS':
             return {}, 200
         apartment_data = request.get_json()
-        print(apartment_data)
         email = apartment_data.get('email')
         city = apartment_data.get('city')
         street = apartment_data.get('street')
@@ -258,10 +296,18 @@ def update_apartment():
                    'available_rooms', 'num_of_toilets', 'price', 'post_bio', 'has_parking', 'has_elevator', 'has_mamad',
                    'num_of_roommates', 'allow_pets', 'has_balcony', 'status', 'has_sun_water_heater',
                    'is_accessible_to_disabled', 'has_air_conditioner', 'has_bars', 'entry_date', 'is_sublet',
-                   'end_date', 'photos_url', 'roommate_emails', 'creation_timestamp']
+                   'end_date', 'photos_url', 'roommate_emails', 'creation_timestamp', 'latitude', 'longitude']
 
         existing_apartment_dict = {columns[i]: existing_apartment_list[0][i] for i in range(len(columns))}
 
+        # Get latitude and longitude from apartment_data or keep the original ones if null
+        latitude = apartment_data.get('coordinates', {}).get('lat')
+        if latitude is None:
+            latitude = existing_apartment_dict['latitude']
+        longitude = apartment_data.get('coordinates', {}).get('lng')
+        if longitude is None:
+            longitude = existing_apartment_dict['longitude']
+        # Updated apartment object with latitude and longitude
         updated_apartment = {
             'city': apartment_data.get('city'),
             'street': apartment_data.get('street'),
@@ -289,8 +335,12 @@ def update_apartment():
             'end_date': apartment_data.get('end_date') if apartment_data.get('is_sublet') else None,
             'photos_url': json.dumps(apartment_data.get('photos_url') if apartment_data.get('photos_url') else []),
             'roommate_emails': apartment_data.get('roommate_emails') if apartment_data.get('roommate_emails') else [],
-            'creation_timestamp': existing_apartment_dict['creation_timestamp']}
+            'creation_timestamp': existing_apartment_dict['creation_timestamp'],
+            'latitude': latitude,  # Use updated or original latitude
+            'longitude': longitude  # Use updated or original longitude
+        }
 
+        # Update query with latitude and longitude included
         update_apartment_query = Queries.update_apartment_post_query('apartments_post')
         postgres_client.write_to_db(update_apartment_query, list(updated_apartment.values()) + [email, post_id])
         logger.log_info(f"Apartment updated successfully for post_id: {post_id}")
@@ -298,6 +348,8 @@ def update_apartment():
     except Exception as e:
         logger.log_error(f"Apartment updating failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
+
+
 
 @app.route('/get-roommate-photos', methods=['POST', 'OPTIONS'])
 def get_roommate_photos():
@@ -662,6 +714,115 @@ def get_roommate_profiles():
         return jsonify({"errorMessage": str(e)}), 500
 
 
+@app.route('/get-conversations', methods=['GET', 'OPTIONS'])
+def get_conversations():
+    try:
+        if request.method == 'OPTIONS':  # Handling CORS preflight requests
+            return {}, 200
+
+        email = request.args.get('email')
+        if not email:
+            return jsonify({"errorMessage": "Email is required"}), 400
+
+        # Fetch the latest message from each conversation
+        query = Queries.fetch_latest_conversations_query()
+        conversations = postgres_client.read_from_db(query, single_match=False, values=[email, email])
+
+        total_unread_count = 0
+        result = []
+        for conversation in conversations:
+            last_message_query = Queries.fetch_last_message_by_id_query()
+            last_message = postgres_client.read_from_db(last_message_query, single_match=False, values=[conversation[1]])
+            unread_count_query = Queries.fetch_unread_message_count_query()
+            unread_count = postgres_client.read_from_db(unread_count_query, single_match=True, values=[email, conversation[0]])
+            if unread_count:
+                total_unread_count += unread_count
+            opposite_email = last_message[0][1] if last_message[0][1] != email else last_message[0][2]
+            user_profile_query = Queries.fetch_user_profile_query('user_profile', opposite_email)
+            user_profile = postgres_client.read_from_db(user_profile_query, single_match=False)
+            print(conversation)
+            result.append({
+                "email": opposite_email,
+                "full_name": f"{user_profile[0][4]} {user_profile[0][5]}",
+                "photo_url": user_profile[0][3],
+                "last_message": last_message[0][3],
+                "last_timestamp": last_message[0][4],
+                "unread_count": unread_count if unread_count else 0  # Unread count from query
+            })
+
+        return jsonify({"conversations": result, "total_unread_count": total_unread_count}), 200
+    except Exception as e:
+        logger.log_error(f"Fetching conversations failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+@app.route('/get-messages', methods=['GET', 'OPTIONS'])
+def get_messages():
+    try:
+        if request.method == 'OPTIONS':  # Handling CORS preflight requests
+            return {}, 200
+
+        sender_email = request.args.get('sender')
+        receiver_email = request.args.get('receiver')
+
+        if not sender_email or not receiver_email:
+            return jsonify({"errorMessage": "Both sender and receiver emails are required"}), 400
+
+        query = Queries.fetch_messages_between_users_query()
+        messages = postgres_client.read_from_db(query, single_match=False, values=[sender_email, receiver_email, receiver_email, sender_email])
+
+        # Mark messages as read if the receiver is viewing the messages
+        update_query = Queries.mark_messages_as_read_query()
+        postgres_client.write_to_db(update_query, values=[sender_email, receiver_email])
+
+        return jsonify(messages), 200
+    except Exception as e:
+        logger.log_error(f"Fetching messages failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+@app.route('/send-message', methods=['POST', 'OPTIONS'])
+def send_message():
+    try:
+        if request.method == 'OPTIONS':  # Handling CORS preflight requests
+            return {}, 200
+
+        data = request.get_json()
+        sender_email = data.get('sender')
+        receiver_email = data.get('receiver')
+        message_text = data.get('message')
+
+        if not sender_email or not receiver_email or not message_text:
+            return jsonify({"errorMessage": "Sender, receiver, and message are required"}), 400
+
+        query = Queries.insert_message_query()
+        postgres_client.write_to_db(query, values=[sender_email, receiver_email, message_text])
+
+        return jsonify({"message": "Message sent successfully"}), 200
+    except Exception as e:
+        logger.log_error(f"Sending message failed | reason: {e}")
+        return jsonify({"errorMessage": str(e)}), 500
+
+
+@app.route('/mark-messages-as-read', methods=['POST'])
+def mark_messages_as_read():
+    try:
+        data = request.get_json()
+        sender_email = data.get('sender')
+        receiver_email = data.get('receiver')
+
+        if not sender_email or not receiver_email:
+            return jsonify({"errorMessage": "Both sender and receiver emails are required"}), 400
+
+        # Update the messages in the database to mark them as read
+        update_query = Queries.mark_messages_as_read_query()
+        postgres_client.write_to_db(update_query, values=[sender_email, receiver_email])
+
+        return jsonify({"message": "Messages marked as read successfully"}), 200
+    except Exception as e:
+        logger.log_error(f"Marking messages as read failed | reason: {e}")
+
+        
 @app.route('/get-roommate-details', methods=['POST', 'OPTIONS'])
 def get_roommate_details():
     try:
@@ -718,4 +879,4 @@ def get_roommate_details():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5433, debug=True)
+    socketio.run(app, host="0.0.0.0", port=5433, debug=True, allow_unsafe_werkzeug=True)

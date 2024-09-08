@@ -37,6 +37,7 @@ const ApartmentDetailsPopup = ({ apartments, onClose }) => {
     const apartmentWithRoommates = { ...apartment, roommates };
 
     sessionStorage.setItem('fromPopup', 'true'); // Set a flag in sessionStorage
+
     navigate(`/apartment-details/${apartment.post_id}`, { state: { apartment: apartmentWithRoommates } });
   };
 

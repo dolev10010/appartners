@@ -108,14 +108,11 @@ function PostApartmentPage() {
       const response = await fetch(`http://${config.serverPublicIP}:5433/user-apartments?email=${userEmail}`);
       if (response.ok) {
         const data = await response.json();
-        console.log('Fetched apartments:', data);
         const convertedData = data.map(convertApartmentArrayToObject);
-        console.log('Converted apartments:', convertedData);
         // Fetch roommate photos for each apartment
         const roommateEmails = Array.from(new Set(convertedData.flatMap(apartment => apartment.roommate_emails)));
         if (roommateEmails.length > 0) {
           const roommatePhotos = await fetchRoommatePhotos(roommateEmails);
-          console.log(roommateEmails);
           const apartmentsWithPhotos = convertedData.map(apartment => ({
             ...apartment,
             roommate_photos: apartment.roommate_emails.map(email => roommatePhotos[email] || '')
@@ -214,7 +211,6 @@ function PostApartmentPage() {
         body: JSON.stringify({ emails }),
       });
       const data = await response.json();
-      console.log(data);
       if (data.invalid_emails.length > 0) {
         setAlertHandlerMessage(`The following emails are invalid: ${data.invalid_emails.join(', ')}`);
         setAlertHandlerOpen(true);
@@ -514,8 +510,6 @@ function PostApartmentPage() {
   const handleCoordinatesChange = (newCoordinates) => {
     setCoordinates(newCoordinates);
   };
-
-  console.log('Apartments to be passed to PostView:', apartments);
 
   return (
     <div className="post-apartment-wrapper">

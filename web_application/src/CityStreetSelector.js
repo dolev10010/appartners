@@ -6,9 +6,11 @@ const CityStreetSelector = ({ city, street, number, floor, onCityChange, onStree
   const [selectedNumber, setSelectedNumber] = useState(number || '');
   const [selectedFloor, setSelectedFloor] = useState(floor || '');
   const [isStreetValid, setIsStreetValid] = useState(false);
-  const [streetDisabled, setStreetDisabled] = useState(true);
+  const [streetDisabled, setStreetDisabled] = useState(!city); // Enable street editing if city exists
+  const [cityCoordinates, setCityCoordinates] = useState(null); // Store city coordinates for street autocomplete
 
   useEffect(() => {
+    // Initialize city autocomplete
     const cityAutocomplete = new window.google.maps.places.Autocomplete(
       document.getElementById('city-autocomplete'),
       {
@@ -20,42 +22,55 @@ const CityStreetSelector = ({ city, street, number, floor, onCityChange, onStree
     cityAutocomplete.addListener('place_changed', () => {
       const place = cityAutocomplete.getPlace();
       const cityName = place.name;
-      const cityCoordinates = place.geometry.location;
+      const cityCoords = place.geometry.location;
       setSelectedCity(cityName);
       onCityChange(cityName);
-      onCoordinatesChange({ lat: cityCoordinates.lat(), lng: cityCoordinates.lng() });
+      setCityCoordinates(cityCoords);
+      onCoordinatesChange({ lat: cityCoords.lat(), lng: cityCoords.lng() });
       setStreetDisabled(false);
 
-      const streetInput = document.getElementById('street-autocomplete');
-      const streetAutocomplete = new window.google.maps.places.Autocomplete(
-        streetInput,
-        {
-          types: ['address'],
-          componentRestrictions: { country: 'il' },
-          bounds: new window.google.maps.LatLngBounds(cityCoordinates),
-        }
-      );
-
-      streetAutocomplete.addListener('place_changed', () => {
-        const streetPlace = streetAutocomplete.getPlace();
-        const streetName = extractStreetName(streetPlace.address_components);
-        const streetCoordinates = streetPlace.geometry.location;
-        setSelectedStreet(streetName);
-        setIsStreetValid(true);
-        onStreetChange(streetName);
-
-        // Adjust coordinates if number is entered
-        if (selectedNumber) {
-          const fullAddress = `${streetName} ${selectedNumber}, ${cityName}`;
-          getCoordinatesFromAddress(fullAddress, (newCoordinates) => {
-            onCoordinatesChange(newCoordinates);
-          });
-        } else {
-          onCoordinatesChange({ lat: streetCoordinates.lat(), lng: streetCoordinates.lng() });
-        }
-      });
+      initializeStreetAutocomplete(cityCoords);
     });
-  }, [onCityChange, onStreetChange, onCoordinatesChange, selectedNumber]);
+
+    // Initialize street autocomplete if the city is already provided (for editing)
+    if (city && selectedCity) {
+      getCoordinatesFromAddress(city, (coords) => {
+        setCityCoordinates(coords);
+        initializeStreetAutocomplete(coords);
+      });
+    }
+  }, [onCityChange, onStreetChange, onCoordinatesChange, selectedNumber, city, selectedCity]);
+
+  const initializeStreetAutocomplete = (cityCoords) => {
+    const streetInput = document.getElementById('street-autocomplete');
+    const streetAutocomplete = new window.google.maps.places.Autocomplete(
+      streetInput,
+      {
+        types: ['address'],
+        componentRestrictions: { country: 'il' },
+        bounds: new window.google.maps.LatLngBounds(cityCoords),
+      }
+    );
+
+    streetAutocomplete.addListener('place_changed', () => {
+      const streetPlace = streetAutocomplete.getPlace();
+      const streetName = extractStreetName(streetPlace.address_components);
+      const streetCoords = streetPlace.geometry.location;
+      setSelectedStreet(streetName);
+      setIsStreetValid(true);
+      onStreetChange(streetName);
+
+      // Adjust coordinates if number is entered
+      if (selectedNumber) {
+        const fullAddress = `${streetName} ${selectedNumber}, ${selectedCity}`;
+        getCoordinatesFromAddress(fullAddress, (newCoordinates) => {
+          onCoordinatesChange(newCoordinates);
+        });
+      } else {
+        onCoordinatesChange({ lat: streetCoords.lat(), lng: streetCoords.lng() });
+      }
+    });
+  };
 
   const extractStreetName = (addressComponents) => {
     for (const component of addressComponents) {
