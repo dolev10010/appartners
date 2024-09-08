@@ -25,7 +25,7 @@ function DisplayProfile() {
         kosher: false,
         profession: '',
         relationshipStatus: '',
-        animalOwnership: '',
+        animalOwnership: false,
         allergies: '',
         hobbies: '',
         bio: '',
@@ -34,12 +34,12 @@ function DisplayProfile() {
 
     const handleBackClick = () => {
         if (location.state?.from === 'find-roommate' && location.state?.filters) {
-          navigate('/find-roomate', { state: { filters: location.state.filters } });
+            navigate('/find-roomate', { state: { filters: location.state.filters } });
         } else {
-          navigate(-1);  // Just go back to the previous page
+            navigate(-1);  // Just go back to the previous page
         }
-      };
-     
+    };
+
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -57,7 +57,7 @@ function DisplayProfile() {
                         kosher: data.keeps_kosher,
                         profession: data.profession,
                         relationshipStatus: data.status,
-                        animalOwnership: data.has_animals ? 'true' : 'false',
+                        animalOwnership: data.has_animals,
                         allergies: data.alergies,
                         hobbies: data.hobbies,
                         bio: data.profile_bio,
@@ -88,7 +88,7 @@ function DisplayProfile() {
             <div className="backgroundImageMobile"></div> {/* For smaller screens */}
             <div className="image-container">
                 <HeaderButtons badgeContent={4} />
-                <BackButton onClick={handleBackClick}/>
+                <BackButton onClick={handleBackClick} />
             </div>
             <div className="content">
                 <Logo />
@@ -109,10 +109,12 @@ function DisplayProfile() {
                         <p className='profileContent'><FaSmoking /> I am {profileData.smoker ? '' : 'not'} a smoker</p>
                         <p className='profileContent'><FaStarOfDavid /> I {profileData.kosher ? '' : 'dont'} eat kosher</p>
                         <p className='profileContent'><FaPaw /> I {profileData.animalLover ? '' : 'dont'} love animals</p>
-                        <p className='profileContent'><FaDog /> I have {profileData.animalOwnership}</p>
+                        <p className='profileContent'><FaDog /> I {profileData.animalOwnership ? '': 'dont'} have animals</p>
                         <p className='profileContent'><FaBriefcase /> My profession is {profileData.profession}</p>
                         <p className='profileContent'><FaHeart /> I am {profileData.relationshipStatus}</p>
-                        <p className='profileContent'><MdLocalHospital /> My allergies are {profileData.allergies}</p>
+                        {profileData.allergies && (
+                            <p className='profileContent'><MdLocalHospital /> My allergies are {profileData.allergies}</p>
+                        )}
                         <p className='profileContent'><FaGamepad /> My Hobbies are {profileData.hobbies}</p>
                     </div>
                 </div>

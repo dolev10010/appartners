@@ -11,7 +11,7 @@
 }
 
 .alertHandlerContent {
-    background: #d6e0e2;;
+    background: #f6eee0;;
     color: #162a2c;
     padding: 20px;
     border-radius: 5px;
@@ -22,8 +22,8 @@
 button {
     padding: 10px 20px; /* Increased padding for better clickability */
     font-size: 16px; /* Larger font size for readability */
-    color: #fff; /* White text */
-    background-color: #50a0ae; /* A matching color for the button */
+    color: #fefcf6; /* White text */
+    background-color: #162a2c; /* A matching color for the button */
     border: none; /* No border */
     border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Cursor indicates the element is clickable */

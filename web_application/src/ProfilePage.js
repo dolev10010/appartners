@@ -34,7 +34,7 @@ function ProfilePage() {
     const [kosher, setKosher] = useState(false);
     const [profession, setProfession] = useState('');
     const [relationshipStatus, setRelationshipStatus] = useState('');
-    const [animalOwnership, setAnimalOwnership] = useState('');
+    const [animalOwnership, setAnimalOwnership] = useState(false);
     const [allergies, setAllergies] = useState('');
     const [hobbies, setHobbies] = useState('');
     const [bio, setBio] = useState('');
@@ -56,7 +56,7 @@ function ProfilePage() {
                         setKosher(data.keeps_kosher);
                         setProfession(data.profession);
                         setRelationshipStatus(data.status);
-                        setAnimalOwnership(data.has_animals ? 'true' : 'false');
+                        setAnimalOwnership(data.has_animals);
                         setAllergies(data.alergies);
                         setHobbies(data.hobbies);
                         setBio(data.profile_bio);
@@ -171,7 +171,7 @@ function ProfilePage() {
     };
 
     const handleAnimalOwnershipChange = (event) => {
-        setAnimalOwnership(event.target.value);
+        setAnimalOwnership(!animalOwnership);
     };
 
     const handleAllergiesChange = (event) => {
@@ -209,7 +209,7 @@ function ProfilePage() {
                 profession: profession,
                 status: relationshipStatus,
                 hobbies: hobbies,
-                has_animals: animalOwnership === 'true',
+                has_animals: animalOwnership,
                 alergies: allergies
             };
 
@@ -296,10 +296,10 @@ function ProfilePage() {
                                     name="Gender"
                                     value={gender}
                                     onChange={handleGenderChange}
-                                    placeholder="Gender"
                                     className="input"
+                                    placeholder= "Select your Gender"
                                 >
-                                    <option value="" disabled hidden>Select your Gender</option>
+                                    <option value="">Select your Gender</option>
                                     <option value="female">Female</option>
                                     <option value="male">Male</option>
                                     <option value="other">Other</option>
@@ -321,20 +321,37 @@ function ProfilePage() {
                             </div>
                         </div>
                     </div>
-                    <div className="rowBoxesContainer">
-                        <div className="labelAndBoxContainer">
-                            <label htmlFor="smoker" className="boxTitle">SMOKER</label>
-                            <input type="checkbox" id="smoker" name="smoker" checked={smoker} onChange={handleSmokerChange} />
-                        </div>
-                        <div className="labelAndBoxContainer">
-                            <label htmlFor="animalLover" className="boxTitle">ANIMAL LOVER</label>
-                            <input type="checkbox" id="animalLover" name="animalLover" checked={animalLover} onChange={handleAnimalLoverChange} />
-                        </div>
-                        <div className="labelAndBoxContainer">
-                            <label htmlFor="kosher" className="boxTitle">KEEPS KOSHER</label>
-                            <input type="checkbox" id="kosher" name="kosher" checked={kosher} onChange={handleKosherChange} />
-                        </div>
-                    </div>
+<div className="checkboxes-container">
+    <div className="checkbox-row">
+        <div className="labelAndBoxContainerCheckbox">
+            <label htmlFor="smoker" className="checkbox-label">SMOKER</label>
+            <div className="checkbox-container">
+            <input type="checkbox" id="smoker" checked={smoker} onChange={handleSmokerChange} />
+        </div>
+        </div>
+        <div className="labelAndBoxContainerCheckbox">
+            <label htmlFor="kosher" className="checkbox-label">KEEPS KOSHER</label>
+            <div className="checkbox-container">
+            <input type="checkbox" id="kosher" checked={kosher} onChange={handleKosherChange} />
+            </div>
+        </div>
+    </div>
+    <div className="checkbox-row">
+        <div className="labelAndBoxContainerCheckbox">
+            <label htmlFor="animalOwner" className="checkbox-label">ANIMAL OWNER</label>
+            <div className="checkbox-container">
+            <input type="checkbox" id="animalOwner" checked={animalOwnership} onChange={handleAnimalOwnershipChange} />
+            </div>
+        </div>
+        <div className="labelAndBoxContainerCheckbox">
+            <label htmlFor="animalLover" className="checkbox-label">ANIMAL LOVER</label>
+            <div className="checkbox-container">
+            <input type="checkbox" id="animalLover" checked={animalLover} onChange={handleAnimalLoverChange} />
+            </div>
+        </div>
+    </div>
+</div>
+
                     <div className="rowBoxesContainer">
                         <div className="labelAndBoxContainer">
                             <label htmlFor="gender" className="boxTitle">PROFESSION</label>
@@ -357,32 +374,15 @@ function ProfilePage() {
                                     name="relationshipStatus"
                                     value={relationshipStatus}
                                     onChange={handleRelationshipChange}
-                                    placeholder="relationshipStatus"
                                     className="input"
                                 >
-                                    <option value="" disabled hidden>Relationship Status</option>
+                                    <option value="">Relationship Status</option>
                                     <option value="single">Single</option>
                                     <option value="inRelationship">In Relationship</option>
                                     <option value="other">Other</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div className="rowBoxesContainer">
-                        <div className="labelAndBoxContainer">
-                            <text className="boxTitle">ANIMAL OWNERSHIP</text>
-                            <div className="formBoxes">
-                                <input
-                                    type="text"
-                                    id="animalOwnership"
-                                    value={animalOwnership}
-                                    onChange={handleAnimalOwnershipChange}
-                                    placeholder="Animal type and quantity"
-                                    className="input"
-                                />
-                            </div>
-                        </div>
-
                     </div>
                     <div className="rowBoxesContainer">
                         <div className="labelAndBoxContainer">

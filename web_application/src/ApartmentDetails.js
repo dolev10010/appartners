@@ -48,7 +48,7 @@ const ApartmentDetails = () => {
 
 
   const handleViewProfile = (email) => {
-    window.location.href = `/display-profile?email=${email}`;
+    navigate(`/profile/${email}`);
   };
 
   const handleNextImage = () => {
