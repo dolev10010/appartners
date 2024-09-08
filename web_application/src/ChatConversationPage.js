@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import config from './config.json';
 import io from 'socket.io-client';
 import UserContext from './UserContext';
-import BackButton from './BackButton';
+import HeaderButtons from './HeaderButtons';
 import Picker from 'emoji-picker-react';
 import './ChatConversationPage.css';
 
@@ -163,7 +163,7 @@ function ChatConversationPage() {
   return (
     <div className="chat-conversation-page">
       <header className="chat-header">
-        <BackButton className="back-button" />
+        <HeaderButtons className="header-button" />
         <div className="profile-container">
           <img
             src={state.photo_url} // Use the photo_url passed via state

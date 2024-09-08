@@ -740,10 +740,12 @@ def get_conversations():
             unread_count = postgres_client.read_from_db(unread_count_query, single_match=True, values=[email, conversation[0]])
             if unread_count:
                 total_unread_count += unread_count
-            user_profile_query = Queries.fetch_user_profile_query('user_profile', conversation[0])
+            opposite_email = last_message[0][1] if last_message[0][1] != email else last_message[0][2]
+            user_profile_query = Queries.fetch_user_profile_query('user_profile', opposite_email)
             user_profile = postgres_client.read_from_db(user_profile_query, single_match=False)
+            print(conversation)
             result.append({
-                "email": conversation[0],
+                "email": opposite_email,
                 "full_name": f"{user_profile[0][4]} {user_profile[0][5]}",
                 "photo_url": user_profile[0][3],
                 "last_message": last_message[0][3],

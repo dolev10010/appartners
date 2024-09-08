@@ -2,7 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import userPool from './UserPool';
 import UserContext from './UserContext';
+import HeaderButtons from "./HeaderButtons";
 import "./styles.css";
+import "./ProfilePage.css"
 import profileImage from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
 import AWS from 'aws-sdk';
@@ -254,6 +256,9 @@ function ProfilePage() {
         <div className="container profileContainer">
             <div className="backgroundImage"></div>
             <div className="backgroundImageMobile"></div>
+            <div className="header-buttons">
+                <HeaderButtons className="header-buttons" />
+            </div>
             <div className="content">
                 <h1 className="logo">Appartners</h1>
                 <h2 className="pageName">Profile</h2>

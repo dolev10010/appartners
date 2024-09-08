@@ -64,6 +64,15 @@
   position: relative; /* Allow absolute positioning within this container */
 }
 
+.conversation-item.unread {
+  background-color: rgba(214, 224, 226, 0.3); /* Matches the border color (#D6E0E2) with transparency */
+}
+
+.conversation-item.unread .conversation-name,
+.conversation-item.unread .conversation-last-message {
+  font-weight: bold; /* Optionally make the text bold to highlight unread messages */
+}
+
 .conversation-item:first-child {
   border-top: 1px solid #D6E0E2; /* Add a top border to the first conversation item */
 }

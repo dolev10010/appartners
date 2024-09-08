@@ -6,10 +6,11 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import MessageIcon from '@mui/icons-material/Chat';
-import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './styles.css';
+
 import logo from "./background-pictures/Logo.jpg";
+import HeaderButtons from './HeaderButtons';
 import RoomatesFilterMenu from './RoomatesFilterMenu';
 import { CiFilter } from "react-icons/ci";
 
@@ -56,10 +57,6 @@ function FindRoommatePage() {
     setShowFilterSidebar(false);
   };
 
-  const handleHomeClick = () => {
-    navigate('/homepage');
-  };
-
   const handleProfileClick = (email) => {
     navigate(`/profile/${email}`, { state: { filters: filters, from: 'find-roommate' } });
   };
@@ -82,6 +79,9 @@ function FindRoommatePage() {
 
   return (
     <div className="find-roommate-page">
+      <div className="header-buttons">
+        <HeaderButtons className="header-buttons" />
+      </div>
       <div className="content">
         <header className="header">
           <div className="logo-container">
@@ -177,11 +177,6 @@ function FindRoommatePage() {
           </ImageListItem>
         ))}
       </ImageList>
-      <div className="home-button-container">
-        <IconButton className="home-button" onClick={handleHomeClick}>
-          <HomeIcon style={{ fontSize: '35px', color: '#162A2C' }} />
-        </IconButton>
-      </div>
     </div>
   );
 }
