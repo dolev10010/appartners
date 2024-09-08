@@ -6,7 +6,7 @@
   
   .post-apartment-apartmentItem {
     position: relative;
-    border: 1px solid #ccc;
+    border: 1.5px solid #d6e0e2;
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 15px;
@@ -20,7 +20,7 @@
     right: -12px;
     background: none;
     border: none;
-    color: black;
+    color: #686868;
     font-size: 18px;
     cursor: pointer;
     outline: none;
@@ -53,7 +53,7 @@
     height: 55px; /* Size of the circle */
     border-radius: 50%;
     object-fit: cover; /* Ensures the image covers the circle */
-    border: 2px solid #ccc; /* Optional: Border around the circle */
+    border: 1.5px solid #5e6c5b; /* Optional: Border around the circle */
     margin-top: 10px; /* Adjust margin if needed to align properly */
   }
   

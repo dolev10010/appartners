@@ -12,7 +12,7 @@
   }
   
   .confirm-dialog {
-    background: white;
+    background: #f6eee0;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
@@ -28,14 +28,14 @@
   .confirm-dialog-button {
     padding: 10px 20px;
     border: none;
-    background: #007BFF;
-    color: white;
+    background: #162a2c;
+    color: #fefcf6;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
   }
   
   .confirm-dialog-button:hover {
-    background: #0056b3;
+    background: #162a2c;
   }
   

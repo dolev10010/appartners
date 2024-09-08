@@ -11,12 +11,12 @@
 }
 
 .apartment-details-popup {
-    background-color: #fff;
+    background-color: #fefcf6;
     padding: 20px;
     border-radius: 10px;
     width: 90%; /* Adjust width to 90% of the viewport */
     max-width: 400px;
-    max-height: 70vh; /* Adjust max height to 70% of the viewport height */
+    max-height: 50vh; /* Adjust max height to 70% of the viewport height */
     overflow-y: auto;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
