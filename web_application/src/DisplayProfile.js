@@ -5,6 +5,8 @@ import HeaderButtons from './HeaderButtons';
 import profileImagePlaceholder from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
 import BackButton from './BackButton';
+import './DisplayProfile.css'
+
 
 import { FaBirthdayCake, FaSmoking, FaPaw, FaDog, FaBriefcase, FaHeart, FaGamepad, FaStarOfDavid } from 'react-icons/fa';
 import { MdWc, MdLocalHospital } from 'react-icons/md';

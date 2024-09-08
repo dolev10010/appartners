@@ -5,7 +5,6 @@ import CreateAccountPage from "./CreateAccountPage";
 import LoginPage from "./LoginPage";
 import EntryPage from "./EntryPage";
 import PostApartmentPage from "./PostApartmentPage";
-import FindApartmentPage from "./FindApartmentPage";
 import ApartmentsInMyAreaPage from "./ApartmentsInMyAreaPage";
 import userpool from './UserPool';
 import CreateProfilePage from './ProfilePage';

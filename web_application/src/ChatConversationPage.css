@@ -11,15 +11,17 @@
   justify-content: center;
   padding: 20px;
   position: relative;
+  margin-bottom: 0px;
 }
 
-.chat-conversation-page .back-button {
+.chat-conversation-page .header-buttons {
   margin-right: auto;
 }
 
 .profile-container {
   display: flex;
   align-items: center;
+  margin-top: 40px;
 }
 
 .profile-image {
@@ -45,22 +47,24 @@
 .message-item {
   display: flex;
   flex-direction: column;
-  max-width: 60%;
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 10px;
   position: relative;
+  max-width: 60%; /* Set a max width to avoid very long messages */
+  width: fit-content; /* Automatically adjust width based on the message length */
+  word-wrap: break-word; /* Ensure long words wrap inside the message box */
 }
 
 .message-item.sent {
   background-color: #d6e0e2;
-  margin-right: auto; /* Keep on the left */
+  margin-right: auto;
   color: #686867;
 }
 
 .message-item.received {
   background-color: #686867;
-  margin-left: auto; /* Push to the right */
+  margin-left: auto;
   color: #d6e0e2;
 }
 
@@ -75,14 +79,19 @@
   margin-top: 5px;
 }
 
+
 .date-separator {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 20px 0;
+  margin: 10px 0;
   font-size: 12px;
   color: #5e6c5b;
   width: 100%;
+}
+
+.date-separator:first-child {
+  margin-top: 0; 
 }
 
 .date-separator::before,
@@ -122,10 +131,12 @@
   margin-right: 10px; /* Space between emoji button and send button */
 }
 
-.emoji-picker {
+.emoji-picker-container {
   position: absolute;
-  bottom: 50px; /* Position the picker above the input container */
-  right: 10px; /* Align it to the right side */
+  bottom: 60px;
+  right: 60px;
+  z-index: 1000;
+  width: 300px;
 }
 
 .send-button {
