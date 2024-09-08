@@ -26,9 +26,6 @@ function ChatConversationPage() {
             .map(timestamp => data.find(msg => msg[3] === timestamp));
 
           setMessages(uniqueMessages);
-
-          // Cache updated messages
-          localStorage.setItem(`chat-${userEmail}-${receiverEmail}`, JSON.stringify(uniqueMessages));
         } else {
           console.error('Failed to fetch messages');
         }
@@ -60,12 +57,6 @@ function ChatConversationPage() {
       ...prevMessages,
       [message.sender, message.receiver, message.message, message.timestamp, message.sender_name, message.sender_image],
     ]);
-
-    // Cache the updated messages
-    localStorage.setItem(
-      `chat-${userEmail}-${receiverEmail}`,
-      JSON.stringify([...messages, [message.sender, message.receiver, message.message, message.timestamp, message.sender_name, message.sender_image]])
-    );
 
     try {
       // Send the message via an HTTP POST request
