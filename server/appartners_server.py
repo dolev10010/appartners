@@ -237,6 +237,7 @@ def user_apartments():
         logger.log_error(f"Fetching user apartments failed | reason: {e}")
         return jsonify({"errorMessage": str(e)}), 500
 
+
 @app.route('/update-apartment', methods=['POST', 'OPTIONS'])
 def update_apartment():
     try:
