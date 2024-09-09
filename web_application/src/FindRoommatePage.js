@@ -8,12 +8,11 @@ import InfoIcon from '@mui/icons-material/Info';
 import MessageIcon from '@mui/icons-material/Chat';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './styles.css';
-
-import logo from "./background-pictures/Logo.jpg";
 import HeaderButtons from './HeaderButtons';
 import RoomatesFilterMenu from './RoomatesFilterMenu';
 import { CiFilter } from "react-icons/ci";
 import  UserContext from './UserContext';
+import Logo from './Logo';
 
 
 
@@ -87,105 +86,98 @@ function FindRoommatePage() {
   }, [location.state]);
 
   return (
-    <div className="find-roommate-page">
-      <div className="header-buttons">
-        <HeaderButtons className="header-buttons" />
-      </div>
+    <div className="container">
+        <HeaderButtons />
       <div className="content">
-        <header className="header">
-          <div className="logo-container">
-            <img src={logo} className="logoImg" alt="Appartners Logo" />
-            <h1 className="logo">Appartners</h1>
+        <Logo />
+        <div className="formRowEdit">
+          <h3 className="pageName">Find Roommate</h3>
+          <div className="icon-buttons">
+            <button ref={filterButtonRef} className="sortButton" onClick={handleFilterClick}>
+              <CiFilter />
+            </button>
           </div>
-          <div className="formRowEdit">
-            <h3 className="pageName">Find Roommate</h3>
-            <div className="icon-buttons">
-              <button ref={filterButtonRef} className="sortButton" onClick={handleFilterClick}>
-                <CiFilter />
-              </button>
-            </div>
-          </div>
-        </header>
-      </div>
-      {showFilterSidebar &&
-        <RoomatesFilterMenu
-          onApplyFilters={handleApplyFilters}
-          onClose={() => setShowFilterSidebar(false)}
-          initialFilters={filters}
-        />
-      }
+        </div>
+        {showFilterSidebar &&
+          <RoomatesFilterMenu
+            onApplyFilters={handleApplyFilters}
+            onClose={() => setShowFilterSidebar(false)}
+            initialFilters={filters}
+          />
+        }
 
-      <ImageList sx={{ width: '100%', maxWidth: '600px', margin: '0 auto' }} cols={2} gap={12}>
-        {profiles.map((profile) => (
-          <ImageListItem key={profile.profile_id} sx={{ borderRadius: '8px', overflow: 'hidden' }}>
-            <img
-              src={profile.photo_url}
-              alt={profile.full_name}
-              loading="lazy"
-              style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-            />
-            <ImageListItemBar
-              title={profile.full_name}
-              subtitle={`${profile.age}, ${profile.profession}`}
-              actionIcon={
-                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                  <IconButton
-                    sx={{ color: 'white', padding: '4px' }}
-                    aria-label={`info about ${profile.full_name}`}
-                    onClick={() => handleProfileClick(profile.profile_email)}
-                  >
-                    <InfoIcon style={{ fontSize: '20px' }} />
-                  </IconButton>
-                  <IconButton
-                    sx={{ color: 'white', padding: '4px' }}
-                    aria-label={`message ${profile.full_name}`}
-                    onClick={() => handleMessageClick(profile)}
-                  >
-                    <MessageIcon style={{ fontSize: '20px' }} />
-                  </IconButton>
-                </div>
-              }
-              sx={{
-                background: 'rgba(0, 0, 15, 0.65)',
-                borderBottomLeftRadius: '8px',
-                borderBottomRightRadius: '8px',
-                padding: '0.5px 1px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                position: 'absolute',
-                bottom: 0,
-                width: '100%',
-                height: 'auto',
-                minHeight: '50px',
-                overflow: 'hidden',
-              }}
-              titleTypographyProps={{
-                variant: 'h6',
-                component: 'span',
-                noWrap: false,
-                style: {
-                  whiteSpace: 'normal',
-                  textAlign: 'right',
-                  width: '100%',
-                  lineHeight: '1.2',
+        <ImageList sx={{ width: '100%', maxWidth: '600px', margin: '0 auto' }} cols={2} gap={12}>
+          {profiles.map((profile) => (
+            <ImageListItem key={profile.profile_id} sx={{ borderRadius: '8px', overflow: 'hidden' }}>
+              <img
+                src={profile.photo_url}
+                alt={profile.full_name}
+                loading="lazy"
+                style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+              />
+              <ImageListItemBar
+                title={profile.full_name}
+                subtitle={`${profile.age}, ${profile.profession}`}
+                actionIcon={
+                  <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                    <IconButton
+                      sx={{ color: 'white', padding: '4px' }}
+                      aria-label={`info about ${profile.full_name}`}
+                      onClick={() => handleProfileClick(profile.profile_email)}
+                    >
+                      <InfoIcon style={{ fontSize: '20px' }} />
+                    </IconButton>
+                    <IconButton
+                      sx={{ color: 'white', padding: '4px' }}
+                      aria-label={`message ${profile.full_name}`}
+                      onClick={() => handleMessageClick(profile)}
+                    >
+                      <MessageIcon style={{ fontSize: '20px' }} />
+                    </IconButton>
+                  </div>
                 }
-              }}
-              subtitleTypographyProps={{
-                variant: 'body2',
-                component: 'span',
-                noWrap: false,
-                style: {
-                  whiteSpace: 'normal',
-                  textAlign: 'right',
+                sx={{
+                  background: 'rgba(0, 0, 15, 0.65)',
+                  borderBottomLeftRadius: '8px',
+                  borderBottomRightRadius: '8px',
+                  padding: '0.5px 1px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  position: 'absolute',
+                  bottom: 0,
                   width: '100%',
-                  lineHeight: '1.2',
-                }
-              }}
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
+                  height: 'auto',
+                  minHeight: '50px',
+                  overflow: 'hidden',
+                }}
+                titleTypographyProps={{
+                  variant: 'h6',
+                  component: 'span',
+                  noWrap: false,
+                  style: {
+                    whiteSpace: 'normal',
+                    textAlign: 'right',
+                    width: '100%',
+                    lineHeight: '1.2',
+                  }
+                }}
+                subtitleTypographyProps={{
+                  variant: 'body2',
+                  component: 'span',
+                  noWrap: false,
+                  style: {
+                    whiteSpace: 'normal',
+                    textAlign: 'right',
+                    width: '100%',
+                    lineHeight: '1.2',
+                  }
+                }}
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </div>
     </div>
   );
 }

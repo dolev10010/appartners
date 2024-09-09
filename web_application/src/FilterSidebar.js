@@ -32,6 +32,8 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
         allergies: initialFilters.allergies || '',
         hobbies: initialFilters.hobbies || '',
         relationshipStatus: initialFilters.relationshipStatus || '',
+        isSublet: initialFilters.isSublet || false,
+        endDate: initialFilters.endDate || '',
     });
 
     const cityRef = useRef(null);
@@ -79,6 +81,8 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
             allergies: initialFilters.allergies || '',
             hobbies: initialFilters.hobbies || '',
             relationshipStatus: initialFilters.relationshipStatus || '',
+            isSublet: initialFilters.isSublet || false,
+            endDate: initialFilters.endDate || '',
         });
 
         const cityAutocomplete = new window.google.maps.places.Autocomplete(cityRef.current, {
@@ -181,6 +185,18 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                     </div>
                 </div>
                 <div className="filter-group">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="isSublet"
+                            checked={filters.isSublet}
+                            onChange={handleChange}
+                            className='filter-checkBox'
+                        />
+                        Sublet
+                    </label>
+                </div>
+                <div className="filter-group">
                     <label>Available Rooms</label>
                     <div className="input-with-clear">
                         <input
@@ -198,6 +214,42 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         )}
                     </div>
                 </div>
+                <div className="filter-group">
+                    <label>Entry Date</label>
+                    <div className="input-with-clear">
+                        <input
+                            type="date"
+                            name="entryDate"
+                            value={filters.entryDate}
+                            onChange={handleChange}
+                            className='filter-box'
+                        />
+                        {filters.entryDate && (
+                            <button className="clear-button" onClick={() => handleClearField('entryDate')}>
+                                X
+                            </button>
+                        )}
+                    </div>
+                </div>
+                {filters.isSublet && (
+                    <div className="filter-group">
+                        <label>End Date</label>
+                        <div className="input-with-clear">
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={filters.endDate}
+                                onChange={handleChange}
+                                className='filter-box'
+                            />
+                            {filters.endDate && (
+                                <button className="clear-button" onClick={() => handleClearField('endDate')}>
+                                    X
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
                 <div className="filter-group">
                     <label>Price Range (ILS)</label>
                     <div className="input-with-clear">
@@ -374,23 +426,6 @@ const FilterSidebar = ({ onApplyFilters, onClose, initialFilters = {} }) => {
                         />
                         Renovated
                     </label>
-                </div>
-                <div className="filter-group">
-                    <label>Entry Date</label>
-                    <div className="input-with-clear">
-                        <input
-                            type="date"
-                            name="entryDate"
-                            value={filters.entryDate}
-                            onChange={handleChange}
-                            className='filter-box'
-                        />
-                        {filters.entryDate && (
-                            <button className="clear-button" onClick={() => handleClearField('entryDate')}>
-                                X
-                            </button>
-                        )}
-                    </div>
                 </div>
                 <h5 className='filter-type-header'>Roommate Filters:</h5>
                 <div className="filter-group">
