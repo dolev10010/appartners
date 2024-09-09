@@ -23,7 +23,6 @@ function App() {
     const checkUser = async () => {
       let user = userpool.getCurrentUser();
       if (user) {
-        console.log(user);
         setIsLoggedIn(true);
       }
     };
