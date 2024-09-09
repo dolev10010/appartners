@@ -129,7 +129,7 @@ function ApartmentsInMyAreaPage() {
               // Show the Academic College of Tel Aviv–Yaffo location
               const collegeLocation = {
                 lat: 32.047627,
-                lng: 34.7608544,
+                lng: 34.7612444,
               };
               updateMapCenter(collegeLocation);
 

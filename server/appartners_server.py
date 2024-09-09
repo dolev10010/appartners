@@ -243,7 +243,6 @@ def post_apartment():
                 return jsonify({"errorMessage": f"{field} cannot be None"}), 400
 
         new_apartment_query = Queries.insert_new_apartment_post_query(table_name='apartments_post')
-        print(new_apartment_query)
         postgres_client.write_to_db(new_apartment_query, values=[
             email, city, street, number, floor, total_rooms, appartment_size, available_rooms,
             num_of_toilets, price, post_bio, has_parking, has_elevator, has_mamad, num_of_roommates,
@@ -389,8 +388,6 @@ def validate_emails():
         emails = data['emails']
         placeholders = ','.join(['%s'] * len(emails))
         query = Queries.find_emails_query('user_profile', placeholders)
-        # print(query)
-        # print(emails)
         result = postgres_client.read_from_db(query, single_match=False, values=emails)
         valid_emails = [row[0] for row in result] if result else []
         invalid_emails = [email for email in emails if email not in valid_emails]
@@ -743,7 +740,6 @@ def get_conversations():
             opposite_email = last_message[0][1] if last_message[0][1] != email else last_message[0][2]
             user_profile_query = Queries.fetch_user_profile_query('user_profile', opposite_email)
             user_profile = postgres_client.read_from_db(user_profile_query, single_match=False)
-            print(conversation)
             result.append({
                 "email": opposite_email,
                 "full_name": f"{user_profile[0][4]} {user_profile[0][5]}",
