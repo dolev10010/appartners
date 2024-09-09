@@ -30,8 +30,13 @@ function App() {
   }, []);
 
   const handleContinueAsGuest = () => {
-    localStorage.removeItem('profileImage'); // Remove cached profile image
-    setIsLoggedIn(false); // Set guest mode
+    let user = userpool.getCurrentUser();
+    if (user) {
+      setIsLoggedIn(true);
+    } else {
+      localStorage.removeItem('profileImage');
+      setIsLoggedIn(false);
+    }
   };
 
   return (
