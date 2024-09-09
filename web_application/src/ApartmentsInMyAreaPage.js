@@ -240,7 +240,7 @@ function ApartmentsInMyAreaPage() {
       <div className="backgroundImage"></div>
       <div className="backgroundImageMobile"></div>
       <div className="image-container">
-        <HeaderButtons badgeContent={4} />
+        <HeaderButtons badgeContent={0} />
       </div>
       <div className='space'></div>
       <div className="content"><Logo /></div>

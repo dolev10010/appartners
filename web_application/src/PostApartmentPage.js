@@ -517,7 +517,7 @@ function PostApartmentPage() {
       <ConfirmDialog isOpen={confirmDialogOpen} onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
       <div className="post-apartment-container">
         <div className="image-container">
-        <HeaderButtons badgeContent={4} />
+        <HeaderButtons badgeContent={0} />
         </div>
         <div className='space'></div>
         <div className="content"><Logo /></div>

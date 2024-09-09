@@ -5,11 +5,47 @@ from server_logger import Logger
 from writer_to_postgres import DataBase
 from sql_queries import Queries
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit, join_room, leave_room
+
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 postgres_client = DataBase()
 logger = Logger()
+
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+
+@socketio.on('join')
+def on_join(data):
+    room = data['email']  # Assuming the room name is the user's email
+    join_room(room)
+    print(f'User {room} has joined the room.')
+
+
+@socketio.on('leave')
+def on_leave(data):
+    room = data['email']  # Assuming the room name is the user's email
+    leave_room(room)
+    print(f'User {room} has left the room.')
+
+
+@socketio.on('send_message')
+def handle_send_message(data):
+    # Emit the message to the receiver's room
+    emit('receive_message', data, room=data['receiver'])
+
+    # Also emit the message to the sender's room
+    emit('receive_message', data, room=data['sender'])
 
 
 def get_current_timestamp():
@@ -840,4 +876,4 @@ def get_roommate_details():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5433, debug=True)
+    socketio.run(app, host="0.0.0.0", port=5433, debug=True, allow_unsafe_werkzeug=True)

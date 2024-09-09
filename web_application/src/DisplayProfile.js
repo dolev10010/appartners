@@ -89,7 +89,7 @@ function DisplayProfile() {
             <div className="createProfileBackground"></div> {/* For larger screens */}
             <div className="backgroundImageMobile"></div> {/* For smaller screens */}
             <div className="image-container">
-                <HeaderButtons badgeContent={4} />
+                <HeaderButtons badgeContent={0} />
                 <BackButton onClick={handleBackClick} />
             </div>
             <div className="content">

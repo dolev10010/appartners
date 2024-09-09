@@ -66,7 +66,7 @@ function HomePage() {
       <div className="backgroundImageMobile"></div> {/* For smaller screens */}
       <div className="image-container">
         <UserButton profileImage={profileImage} />
-        <ChatButton badgeContent={0}/> {/* Pass the total unread count */}
+        <ChatButton badgeContent={0}/> 
       </div>
       <div className="content">
         <Logo />
