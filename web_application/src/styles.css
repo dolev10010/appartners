@@ -1122,12 +1122,10 @@ body {
   left: 250px;
   background-color: #f6eee0;
   border: 0.5px solid #162a2c;
-  /*check*/
   border-radius: 5px;
   padding: 5px;
   z-index: 100;
   width: auto;
-  /* התאמת הרוחב לתוכן */
   white-space: nowrap;
 }
 
@@ -1350,13 +1348,9 @@ body {
 .input-with-clear input {
   width: 100%;
   padding-right: 20px;
-  /* מוסיף מקום לכפתור ה-X */
   border: 1px solid #ccc;
-  /* מסגרת ברירת מחדל */
-  border-radius: 4px;
-  /* פינות מעוגלות */
+  border-radius: 4px !important;
   outline: none;
-  /* מסיר את ה-outline */
 }
 
 
@@ -1513,6 +1507,21 @@ body {
     max-height: 100%;
   }
 
+  .filter-menu {
+    position: absolute;
+    top: 210px;
+    left: 190px;
+    background-color: #f6eee0;
+    border: 0.5px solid #162a2c;
+    /*check*/
+    border-radius: 5px;
+    padding: 5px;
+    z-index: 100;
+    width: auto;
+    /* התאמת הרוחב לתוכן */
+    white-space: nowrap;
+  }
+
   .content {
     padding: 0px;
     /* Adds padding to ensure content doesn't stick to edges */
@@ -1592,6 +1601,21 @@ body {
     margin-right: 0px;
   }
 
+  .filter-menu {
+    position: absolute;
+    top: 210px;
+    left: 173px;
+    background-color: #f6eee0;
+    border: 0.5px solid #162a2c;
+    /*check*/
+    border-radius: 5px;
+    padding: 5px;
+    z-index: 100;
+    width: auto;
+    /* התאמת הרוחב לתוכן */
+    white-space: nowrap;
+  }
+
   .card-actions,
   .apartment-card_data {
     margin-left: 13px;
@@ -1613,6 +1637,8 @@ body {
     color: #162a2c;
     background-color: #d6e0e2;
     width: 100%;
+    justify-content: center;
+    align-items: center;
   }
 
   .container {
