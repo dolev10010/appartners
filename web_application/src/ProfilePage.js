@@ -4,11 +4,12 @@ import userPool from './UserPool';
 import UserContext from './UserContext';
 import HeaderButtons from "./HeaderButtons";
 import "./styles.css";
-import "./ProfilePage.css"
+// import "./ProfilePage.css"
 import profileImage from "./background-pictures/profilePicture.jpg";
 import config from './config.json';
 import AWS from 'aws-sdk';
 import AlertHandler from './AlertHandler';
+import Logo from "./Logo";
 
 const labCredentials = config.labCredentials;
 const accessKeyId = labCredentials.accessKeyId;
@@ -276,18 +277,18 @@ function ProfilePage() {
     }
 
     return (
-        <div className="container profileContainer">
+        <div className="container">
             <div className="backgroundImage"></div>
             <div className="backgroundImageMobile"></div>
-            <div className="header-buttons">
-                <HeaderButtons className="header-buttons" />
-            </div>
+            <HeaderButtons />
             <div className="content">
-                <h1 className="logo">Appartners</h1>
-                <h2 className="pageName">Profile</h2>
-                <button className="logoutButton" onClick={handleLogout}>Log Out</button>
+                <Logo />
+                <div className="formRowEdit">
+                    <h2 className="pageName">Profile</h2>
+                    <button className="logoutButton" onClick={handleLogout}>Log Out</button>
+                </div>
                 <div className="middleFormBox">
-                <AlertHandler isOpen={alertOpen} message={alertMessage} onClose={() => setAlertOpen(false)} />  {/* *** כאן ההתראה מוצגת בהתאם לשדות החסרים *** */}
+                    <AlertHandler isOpen={alertOpen} message={alertMessage} onClose={() => setAlertOpen(false)} />  {/* *** כאן ההתראה מוצגת בהתאם לשדות החסרים *** */}
                     <div className="pictureButtonContainer">
                         <label className="pictureButton">
                             <img
@@ -328,7 +329,7 @@ function ProfilePage() {
                                     className="input"
                                     placeholder="Select your Gender"
                                 >
-                                    <option style={{color: "#686867"}} value="">Select your Gender</option>
+                                    <option style={{ color: "#686867" }} value="">Select your Gender</option>
                                     <option value="female">Female</option>
                                     <option value="male">Male</option>
                                     <option value="other">Other</option>
@@ -405,7 +406,7 @@ function ProfilePage() {
                                     onChange={handleRelationshipChange}
                                     className="input"
                                 >
-                                    <option style={{color: "#686867"}} value="">Relationship Status</option>
+                                    <option style={{ color: "#686867" }} value="">Relationship Status</option>
                                     <option value="single">Single</option>
                                     <option value="inRelationship">In Relationship</option>
                                     <option value="other">Other</option>
