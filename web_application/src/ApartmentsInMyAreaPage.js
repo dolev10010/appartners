@@ -10,6 +10,7 @@ function ApartmentsInMyAreaPage() {
   const [city, setCity] = useState('');
   const [citySelected, setCitySelected] = useState(false);
   const [selectedApartments, setSelectedApartments] = useState([]); // State to track selected apartments at the same location
+  const [showCollegeLocation, setShowCollegeLocation] = useState(true); // Flag for showing the academic college location
   const mapRef = useRef(null); // Use ref to hold the map instance
   const markersRef = useRef([]); // Use ref to hold the markers
   const userMarkerRef = useRef(null); // Use ref to hold the user location marker
@@ -124,28 +125,50 @@ function ApartmentsInMyAreaPage() {
         // Handle location button click
         locationButton.addEventListener('click', () => {
           if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-              const userLocation = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
+            if (showCollegeLocation) {
+              // Show the Academic College of Tel Aviv–Yaffo location
+              const collegeLocation = {
+                lat: 32.047487,
+                lng: 34.7607544,
               };
+              updateMapCenter(collegeLocation);
 
-              updateMapCenter(userLocation); // Center the map on user's current location
-
-              // Add or update the user location marker
               if (userMarkerRef.current) {
-                userMarkerRef.current.setPosition(userLocation);
+                userMarkerRef.current.setPosition(collegeLocation);
               } else {
                 userMarkerRef.current = new window.google.maps.Marker({
-                  position: userLocation,
+                  position: collegeLocation,
                   map: mapRef.current,
-                  title: 'Your Location',
+                  title: 'The Academic College of Tel Aviv–Yaffo',
                   icon: {
-                    url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" // Blue marker icon for user's location
+                    url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" // Blue marker icon for the college location
                   }
                 });
               }
-            });
+            } else {
+              // Show the user's real location
+              navigator.geolocation.getCurrentPosition((position) => {
+                const userLocation = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                };
+
+                updateMapCenter(userLocation);
+
+                if (userMarkerRef.current) {
+                  userMarkerRef.current.setPosition(userLocation);
+                } else {
+                  userMarkerRef.current = new window.google.maps.Marker({
+                    position: userLocation,
+                    map: mapRef.current,
+                    title: 'Your Location',
+                    icon: {
+                      url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" // Blue marker icon for user's location
+                    }
+                  });
+                }
+              });
+            }
           } else {
             console.error('Geolocation is not supported by this browser.');
           }
@@ -189,7 +212,7 @@ function ApartmentsInMyAreaPage() {
         setSelectedApartments(storedSelectedApartments);
       }
     }
-  }, [updateMapCenter]);
+  }, [updateMapCenter, showCollegeLocation]);
 
   // Restore map state when the component mounts
   useEffect(() => {
