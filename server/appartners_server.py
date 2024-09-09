@@ -882,4 +882,5 @@ def get_roommate_details():
 
 
 if __name__ == "__main__":
+    # socket io
     socketio.run(app, host="0.0.0.0", port=5433, debug=True, allow_unsafe_werkzeug=True)
