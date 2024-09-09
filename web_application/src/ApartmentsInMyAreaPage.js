@@ -262,12 +262,7 @@ function ApartmentsInMyAreaPage() {
     <div className="container">
       <div className="backgroundImage"></div>
       <div className="backgroundImageMobile"></div>
-      <div className="image-container">
-        <HeaderButtons badgeContent={0} />
-      </div>
-      <div className='space'></div>
-      <div className="content"><Logo /></div>
-      <div className="apartments-content">
+      <HeaderButtons />
       <div className="content">
         <Logo />
         <h2 className="pageName">Apartments in My Area</h2>
