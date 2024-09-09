@@ -8,15 +8,13 @@
 }
 
 @media (max-width: 767px) {
+  /* Make entry date, end date, and status fields wider and center them on small screens */
   input[name="entry_date"],
-  input[name="end_date"] {
-    width: 100%; /* Increase the width to full */
-  }
-}
-
-@media (max-width: 767px) {
+  input[name="end_date"],
   select[name="status"] {
-    text-align: center; /* Center text in the dropdown */
+    width: 100%; /* Set full width */
+    text-align: center; /* Center the text in the input */
+    margin: 0 auto; /* Center the entire input */
   }
 }
 
