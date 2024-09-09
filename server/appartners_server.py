@@ -455,7 +455,9 @@ def find_apartments():
             'status': request.args.get('status'),
             'entryDate': request.args.get('entryDate'),
             'available_rooms': request.args.get('available_rooms'),
-            'street': request.args.get('street')
+            'street': request.args.get('street'),
+            'isSublet': request.args.get('isSublet'),
+            'endDate': request.args.get('endDate')
         }
 
         roomate_filters = {
@@ -510,6 +512,10 @@ def find_apartments():
             base_query += f" AND entry_date >= '{filters['entryDate']}'"
         if filters['available_rooms']:
             base_query += f" AND available_rooms>= '{filters['available_rooms']}'"
+        if filters['isSublet'] == 'true':
+            base_query += " AND is_sublet = TRUE"
+            if filters['endDate']:
+                base_query += f" AND end_date >= '{filters['endDate']}'"
 
         if sort_order == 'priceHighToLow':
             query = base_query + " ORDER BY price DESC"
