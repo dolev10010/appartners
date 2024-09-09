@@ -7,6 +7,19 @@
   }
 }
 
+@media (max-width: 767px) {
+  input[name="entry_date"],
+  input[name="end_date"] {
+    width: 100%; /* Increase the width to full */
+  }
+}
+
+@media (max-width: 767px) {
+  select[name="status"] {
+    text-align: center; /* Center text in the dropdown */
+  }
+}
+
 .post-apartment-apartmentForm {
     padding: 20px;
     margin-top: 20px;
