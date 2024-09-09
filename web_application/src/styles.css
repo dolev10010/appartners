@@ -508,17 +508,21 @@ body {
 }
 
 .logoutButton {
-  position: absolute;
-  top: 50px;
-  left: 300px;
-  padding: 5px 10px;
+  padding: 0px 10px;
   background-color: #162a2c;
   border: none;
   border-radius: 5px;
   color: #d6e0e2;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
-  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  font-family: 'Montserrat', sans-serif;
+  width: 80px;
+  height: 30px;
+  margin-top: 19px;
 }
 
 .profileContainer {
@@ -1562,7 +1566,12 @@ body {
 
   .middleFormBox {
     margin-top: 10px;
+    margin-left: 0px;
     padding: 0px;
+    max-width: 100%;
+    max-height: 100%;
+    justify-content: center;
+    align-items: center;
   }
 
   .pageName {
@@ -1588,6 +1597,17 @@ body {
     margin: 0 auto;
     /* Centers the content */
   }
+
+  /* .apartment-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 40px; 
+    align-items: start; 
+    justify-items: center; 
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  } */
 }
 
 @media (max-width: 360px) {
@@ -1663,6 +1683,18 @@ body {
   .logo-container {
     margin-top: 30px;
   }
+
+  /* .logo-container {
+    position: absolute; 
+    top: 20px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px; 
+    height: auto;
+    z-index: 100; 
+    margin-top: 20px;
+    margin-bottom: 30px;
+  } */
 
   .apartment-card {
     width: 89%;
@@ -1834,8 +1866,10 @@ option:hover {
 }
 
 select option:hover {
-  background-color: #4e6e70 !important; /* צבע כאשר העכבר מעל האפשרות */
-  color: white; /* צבע טקסט כאשר העכבר מעל האפשרות */
+  background-color: #4e6e70 !important;
+  /* צבע כאשר העכבר מעל האפשרות */
+  color: white;
+  /* צבע טקסט כאשר העכבר מעל האפשרות */
 }
 
 select:focus {

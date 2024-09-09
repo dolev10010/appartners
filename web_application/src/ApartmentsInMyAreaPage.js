@@ -236,44 +236,45 @@ function ApartmentsInMyAreaPage() {
   };
 
   return (
-    <div className="apartments-container">
+    <div className="container">
       <div className="backgroundImage"></div>
       <div className="backgroundImageMobile"></div>
-      <div className="image-container">
-        <HeaderButtons badgeContent={4} />
-      </div>
-      <div className='space'></div>
-      <div className="content"><Logo /></div>
-      <div className="apartments-content">
+      <HeaderButtons />
+      <div className="content">
+        <Logo />
         <h2 className="pageName">Apartments in My Area</h2>
-        <div className="apartments-searchBox">
-          <input
-            id="city-input"
-            type="text"
-            placeholder="Enter city"
-            className="apartments-searchInput"
-            onChange={() => setCitySelected(false)} // Reset city selection if user types manually
-          />
-          <button
-            className="apartments-buttons"
-            onClick={handleSearchByCity}
-            disabled={!citySelected} // Disable button if city is not selected from the list
-          >
-            Search by City
-          </button>
-        </div>
-        <div id="map"></div>
       </div>
+      <div className="apartments-container">
+        <div className="apartments-content">
+          <div className="apartments-searchBox">
+            <input
+              id="city-input"
+              type="text"
+              placeholder="Enter city"
+              className="apartments-searchInput"
+              onChange={() => setCitySelected(false)} // Reset city selection if user types manually
+            />
+            <button
+              className="apartments-buttons"
+              onClick={handleSearchByCity}
+              disabled={!citySelected} // Disable button if city is not selected from the list
+            >
+              Search by City
+            </button>
+          </div>
+          <div id="map"></div>
+        </div>
 
-      {selectedApartments.length > 0 && (
-        <ApartmentDetailsPopup 
-          apartments={selectedApartments} // Pass all apartments at the same location
-          onClose={() => {
-            setSelectedApartments([]); // Clear selected apartments when the popup is closed
-            sessionStorage.removeItem('selectedApartments'); // Remove from sessionStorage
-          }} 
-        />
-      )}
+        {selectedApartments.length > 0 && (
+          <ApartmentDetailsPopup
+            apartments={selectedApartments} // Pass all apartments at the same location
+            onClose={() => {
+              setSelectedApartments([]); // Clear selected apartments when the popup is closed
+              sessionStorage.removeItem('selectedApartments'); // Remove from sessionStorage
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }

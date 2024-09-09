@@ -512,48 +512,48 @@ function PostApartmentPage() {
   };
 
   return (
-    <div className="post-apartment-wrapper">
-      <AlertHandler isOpen={alertHandlerOpen} message={alertHandlerMessage} onClose={() => setAlertHandlerOpen(false)} />
-      <ConfirmDialog isOpen={confirmDialogOpen} onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
-      <div className="post-apartment-container">
-        <div className="image-container">
-        <HeaderButtons badgeContent={4} />
-        </div>
-        <div className='space'></div>
-        <div className="content"><Logo /></div>
-        <div className="post-apartment-content">
-          <div className="post-apartment-buttonContainer">
-            {!showForm && (
-              <>
-                <button className="post-apartment-button addApartment" onClick={() => {
-                  setEditingPost(null); // Ensure we're not in edit mode
-                  setShowForm(true);
-                }}>
-                  Add new apartment
-                </button>
-                <button className="post-apartment-button managePosts" onClick={handleManagePosts}>
-                  Manage my posts
-                </button>
-              </>
+    <div className='container'>
+      <div className="post-apartment-wrapper">
+        <AlertHandler isOpen={alertHandlerOpen} message={alertHandlerMessage} onClose={() => setAlertHandlerOpen(false)} />
+        <ConfirmDialog isOpen={confirmDialogOpen} onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
+            <HeaderButtons />
+        <div className="post-apartment-container">
+          {/* <div className='space'></div> */}
+          <div className="content"><Logo /></div>
+          <div className="post-apartment-content">
+            <div className="post-apartment-buttonContainer">
+              {!showForm && (
+                <>
+                  <button className="post-apartment-button addApartment" onClick={() => {
+                    setEditingPost(null); // Ensure we're not in edit mode
+                    setShowForm(true);
+                  }}>
+                    Add new apartment
+                  </button>
+                  <button className="post-apartment-button managePosts" onClick={handleManagePosts}>
+                    Manage my posts
+                  </button>
+                </>
+              )}
+            </div>
+            {showForm ? (
+              <ApartmentForm
+                apartment={newApartment}
+                imagePreviews={imagePreviews}
+                onChange={handleInputChange}
+                onPhotoUpload={handlePhotoUpload}
+                onRemovePhoto={handleRemovePhoto}
+                onSubmit={editingPost ? handleUpdateApartment : handlePostApartment}
+                onCancel={handleCancel}
+                onCoordinatesChange={handleCoordinatesChange} // Pass the coordinates handler to the form
+              />
+            ) : (
+              <PostView apartments={apartments} onSelect={handleSelectPost} onDelete={handleDeleteClick} />
             )}
           </div>
-          {showForm ? (
-            <ApartmentForm
-              apartment={newApartment}
-              imagePreviews={imagePreviews}
-              onChange={handleInputChange}
-              onPhotoUpload={handlePhotoUpload}
-              onRemovePhoto={handleRemovePhoto}
-              onSubmit={editingPost ? handleUpdateApartment : handlePostApartment}
-              onCancel={handleCancel}
-              onCoordinatesChange={handleCoordinatesChange} // Pass the coordinates handler to the form
-            />
-          ) : (
-            <PostView apartments={apartments} onSelect={handleSelectPost} onDelete={handleDeleteClick} />
-          )}
         </div>
+        {modalPhoto && <PhotoModal src={modalPhoto} onClose={() => setModalPhoto(null)} />}
       </div>
-      {modalPhoto && <PhotoModal src={modalPhoto} onClose={() => setModalPhoto(null)} />}
     </div>
   );
 }
