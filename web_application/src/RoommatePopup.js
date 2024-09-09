@@ -19,9 +19,16 @@ const RoommatePopup = ({ roommate, onClose, onViewProfile }) => {
         }
     };
 
-    const handleNavigateToChat = (email) => {
+    const handleNavigateToChat = (email, fullName, photoUrl) => {
         if (userEmail) {
-            navigate(`/chat?email=${email}`);
+            const [first_name, last_name] = fullName.split(" ");
+            navigate(`/chat/${email}`, { 
+                state: { 
+                    first_name, 
+                    last_name, 
+                    photo_url: photoUrl 
+                } 
+            });
         } else {
             navigate('/login');
         }
@@ -40,7 +47,7 @@ const RoommatePopup = ({ roommate, onClose, onViewProfile }) => {
             </div>
             <div className="popup-footer">
                 <button className="info-btn-popup" onClick={handleViewProfileClick}><RiInfoI /></button>
-                <button className="message-btn-popup" onClick={() => handleNavigateToChat(roommate.email)}><CiLocationArrow1 /></button>
+                <button className="message-btn-popup" onClick={() => handleNavigateToChat(roommate.email, roommate.full_name, roommate.photo_url)}><CiLocationArrow1 /></button>
             </div>
         </div>
     );

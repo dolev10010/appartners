@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from './config.json';
+import io from 'socket.io-client';
 import UserContext from './UserContext';
 import './ChatConversationsPage.css';
 import HeaderButtons from './HeaderButtons';
 import Logo from './Logo';
+
+const socket = io(`http://${config.serverPublicIP}:5433`);
 
 function ChatConversationsPage() {
   const [conversations, setConversations] = useState([]);
@@ -13,13 +16,24 @@ function ChatConversationsPage() {
   const navigate = useNavigate();
   const { userEmail } = useContext(UserContext);
 
+  // Load cached conversations from localStorage on initial render
   useEffect(() => {
-    // Fetch all conversations directly from the backend without using sockets
+    const cachedConversations = JSON.parse(localStorage.getItem(`conversations-${userEmail}`));
+    if (cachedConversations) {
+      setConversations(cachedConversations);
+      const cachedUnreadCount = cachedConversations.reduce((count, conv) => count + conv.unread_count, 0);
+      setTotalUnreadCount(cachedUnreadCount);
+    }
+
+    // Fetch new conversations from the server
     const fetchConversations = async () => {
       try {
         const response = await fetch(`http://${config.serverPublicIP}:5433/get-conversations?email=${userEmail}`);
         if (response.ok) {
           const data = await response.json();
+
+          // Cache the updated conversations in localStorage
+          localStorage.setItem(`conversations-${userEmail}`, JSON.stringify(data.conversations));
           setConversations(data.conversations);
           setTotalUnreadCount(data.total_unread_count);
         } else {
@@ -31,6 +45,53 @@ function ChatConversationsPage() {
     };
 
     fetchConversations();
+
+    // Listen for real-time messages via socket.io
+    socket.emit('join', { email: userEmail });
+
+    socket.on('receive_message', (message) => {
+      if (message.receiver === userEmail) {
+        setConversations((prevConversations) => {
+          // Update the conversation list with the new message
+          const updatedConversations = prevConversations.map((conv) => {
+            if (conv.email === message.sender) {
+              return {
+                ...conv,
+                last_message: message.message,
+                last_timestamp: message.timestamp,
+                unread_count: conv.unread_count + 1, // Increment unread count
+              };
+            }
+            return conv;
+          });
+
+          // Add new conversation if it doesn't exist in the list
+          if (!updatedConversations.some((conv) => conv.email === message.sender)) {
+            updatedConversations.push({
+              email: message.sender,
+              full_name: `${message.sender_name}`,
+              photo_url: message.sender_image || '', // Provide a fallback in case image is missing
+              last_message: message.message,
+              last_timestamp: message.timestamp,
+              unread_count: 1, // New conversation, so set unread to 1
+            });
+          }
+
+          // Cache the updated conversation list
+          localStorage.setItem(`conversations-${userEmail}`, JSON.stringify(updatedConversations));
+
+          return updatedConversations;
+        });
+
+        // Update the total unread count
+        setTotalUnreadCount((prevUnreadCount) => prevUnreadCount + 1);
+      }
+    });
+
+    return () => {
+      socket.emit('leave', { email: userEmail });
+      socket.off('receive_message');
+    };
   }, [userEmail]);
 
   const handleSearchChange = (e) => {

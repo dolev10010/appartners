@@ -109,8 +109,15 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
     navigate(`/apartment-details/${apartment.post_id}`, { state: { apartment: apartmentWithRoommates, filters, sortOrder } });
   };
 
-  const handleNavigateToChat = (email) => {
-    navigate(`/chat?email=${email}`);
+  const handleNavigateToChat = (email, fullName, photoUrl) => {
+    const [first_name, last_name] = fullName.split(" ");
+    navigate(`/chat/${email}`, { 
+      state: { 
+        first_name, 
+        last_name, 
+        photo_url: photoUrl 
+      } 
+    });
   };
 
   const handleNavigateToProfile = (email) => {
@@ -152,11 +159,13 @@ const ApartmentCard = ({ apartment, filters, sortOrder }) => {
   const handleMessageClick = () => {
     if (userEmail) {
       if (apartmentData.roommates.length > 1) {
-        setShowRoommateList(true); // הצגת הפופ-אפ עם רשימת השותפים    
+        setShowRoommateList(true); // Show popup with the list of roommates    
       } else if (apartmentData.roommates.length === 1) {
-        handleNavigateToChat(apartmentData.roommates[0].email);
+        const roommate = apartmentData.roommates[0];
+        handleNavigateToChat(roommate.email, roommate.full_name, roommate.photo_url);
       } else {
-        handleNavigateToChat(apartment.email);
+        // If there are no roommates, fallback to the apartment owner
+        handleNavigateToChat(apartment.email, 'Apartment Owner', profileImagePlaceholder);
       }
     } else {
       navigate('/login');

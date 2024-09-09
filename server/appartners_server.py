@@ -47,9 +47,6 @@ def handle_send_message(data):
     # Also emit the message to the sender's room
     emit('receive_message', data, room=data['sender'])
 
-# Note: We are not saving the message in the database here
-# This ensures that the message is only saved once, through the HTTP POST request.
-
 
 def get_current_timestamp():
     return datetime.datetime.now()
@@ -740,7 +737,7 @@ def get_conversations():
             last_message_query = Queries.fetch_last_message_by_id_query()
             last_message = postgres_client.read_from_db(last_message_query, single_match=False, values=[conversation[1]])
             unread_count_query = Queries.fetch_unread_message_count_query()
-            unread_count = postgres_client.read_from_db(unread_count_query, single_match=True, values=[email, conversation[0]])
+            unread_count = postgres_client.read_from_db(unread_count_query, single_match=True, values=[email, last_message[0][1]])
             if unread_count:
                 total_unread_count += unread_count
             opposite_email = last_message[0][1] if last_message[0][1] != email else last_message[0][2]
@@ -885,4 +882,5 @@ def get_roommate_details():
 
 
 if __name__ == "__main__":
+    # socket io
     socketio.run(app, host="0.0.0.0", port=5433, debug=True, allow_unsafe_werkzeug=True)

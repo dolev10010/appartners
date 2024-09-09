@@ -4,7 +4,6 @@ import config from './config.json';
 import io from 'socket.io-client';
 import UserContext from './UserContext';
 import HeaderButtons from './HeaderButtons';
-import Picker from 'emoji-picker-react';
 import './ChatConversationPage.css';
 
 const socket = io(`http://${config.serverPublicIP}:5433`);
@@ -14,68 +13,85 @@ function ChatConversationPage() {
   const { userEmail } = useContext(UserContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { state } = useLocation(); // Access the state passed from ChatConversationsPage
   const navigate = useNavigate();
 
+  const markMessagesAsRead = async () => {
+    try {
+      await fetch(`http://${config.serverPublicIP}:5433/mark-messages-as-read`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sender: receiverEmail, receiver: userEmail }),
+      });
+    } catch (error) {
+      console.error('Failed to mark messages as read:', error);
+    }
+  };
+
+  const fetchMessagesAndMarkRead = async () => {
+    const cachedMessages = JSON.parse(localStorage.getItem(`messages-${userEmail}-${receiverEmail}`));
+
+    if (cachedMessages) {
+      setMessages(cachedMessages);
+    }
+
+    try {
+      const response = await fetch(
+        `http://${config.serverPublicIP}:5433/get-messages?sender=${userEmail}&receiver=${receiverEmail}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const uniqueMessages = Array.from(new Set(data.map((msg) => msg[3]))).map((timestamp) =>
+          data.find((msg) => msg[3] === timestamp)
+        );
+
+        setMessages(uniqueMessages);
+
+        // Cache updated messages
+        localStorage.setItem(`messages-${userEmail}-${receiverEmail}`, JSON.stringify(uniqueMessages));
+
+        // Mark all messages as read after fetching
+        await markMessagesAsRead();
+      } else {
+        console.error('Failed to fetch messages');
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchMessages = async () => {
-        try {
-            const response = await fetch(`http://${config.serverPublicIP}:5433/get-messages?sender=${userEmail}&receiver=${receiverEmail}`);
-            if (response.ok) {
-                const data = await response.json();
-                const uniqueMessages = Array.from(new Set(data.map(msg => msg[3])))
-                    .map(timestamp => data.find(msg => msg[3] === timestamp));
-                    
-                setMessages(uniqueMessages);
-
-                // Cache updated messages
-                localStorage.setItem(`chat-${userEmail}-${receiverEmail}`, JSON.stringify(uniqueMessages));
-            } else {
-                console.error('Failed to fetch messages');
-            }
-        } catch (error) {
-            console.error('Error fetching messages:', error);
-        }
-    };
-
-    fetchMessages();
+    fetchMessagesAndMarkRead();
 
     socket.emit('join', { email: userEmail });
 
     socket.on('receive_message', (message) => {
+      if (message.sender === receiverEmail || message.receiver === userEmail) {
         setMessages((prevMessages) => {
-            if (prevMessages.some(msg => msg[3] === message.timestamp)) {
-                return prevMessages;
-            }
-            const updatedMessages = [...prevMessages, [message.sender, message.receiver, message.message, message.timestamp]];
+          if (prevMessages.some((msg) => msg[3] === message.timestamp)) {
+            return prevMessages;
+          }
 
-            // Cache updated messages
-            localStorage.setItem(`chat-${userEmail}-${receiverEmail}`, JSON.stringify(updatedMessages));
+          const updatedMessages = [...prevMessages, [message.sender, message.receiver, message.message, message.timestamp]];
 
-            return updatedMessages;
+          // Cache updated messages
+          localStorage.setItem(`messages-${userEmail}-${receiverEmail}`, JSON.stringify(updatedMessages));
+
+          return updatedMessages;
         });
 
+        // Immediately mark the new message as read when it arrives
         if (message.receiver === userEmail && message.sender === receiverEmail) {
-            try {
-                fetch(`http://${config.serverPublicIP}:5433/mark-messages-as-read`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sender: receiverEmail, receiver: userEmail }),
-                });
-            } catch (error) {
-                console.error('Failed to mark message as read:', error);
-            }
+          markMessagesAsRead();
         }
+      }
     });
 
     return () => {
-        socket.emit('leave', { email: userEmail });
-        socket.off('receive_message');
+      socket.emit('leave', { email: userEmail });
+      socket.off('receive_message');
     };
-}, [receiverEmail, userEmail]);
-
-  
+  }, [receiverEmail, userEmail]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -83,12 +99,12 @@ function ChatConversationPage() {
 
     const timestamp = new Date().toISOString();
     const message = {
-        sender: userEmail,
-        receiver: receiverEmail,
-        message: newMessage,
-        timestamp,
-        sender_name: state?.first_name + ' ' + state?.last_name,  // Include sender's name
-        sender_image: state?.photo_url,  // Include sender's profile image
+      sender: userEmail,
+      receiver: receiverEmail,
+      message: newMessage,
+      timestamp,
+      sender_name: state?.first_name + ' ' + state?.last_name, // Include sender's name
+      sender_image: state?.photo_url, // Include sender's profile image
     };
 
     // Emit the message through the socket
@@ -96,32 +112,33 @@ function ChatConversationPage() {
 
     setNewMessage('');
 
-    // Directly add the message to the state to avoid waiting for the fetch response
-    setMessages((prevMessages) => [
+    // Add the message to the state immediately
+    setMessages((prevMessages) => {
+      const updatedMessages = [
         ...prevMessages,
         [message.sender, message.receiver, message.message, message.timestamp, message.sender_name, message.sender_image],
-    ]);
+      ];
 
-    // Update the cache immediately to prevent duplicate rendering
-    localStorage.setItem(
-        `chat-${userEmail}-${receiverEmail}`,
-        JSON.stringify([...messages, [message.sender, message.receiver, message.message, message.timestamp, message.sender_name, message.sender_image]])
-    );
+      // Cache updated messages
+      localStorage.setItem(`messages-${userEmail}-${receiverEmail}`, JSON.stringify(updatedMessages));
+
+      return updatedMessages;
+    });
 
     try {
-        const response = await fetch(`http://${config.serverPublicIP}:5433/send-message`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(message),
-        });
+      const response = await fetch(`http://${config.serverPublicIP}:5433/send-message`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(message),
+      });
 
-        if (!response.ok) {
-            console.error('Failed to send message');
-        }
+      if (!response.ok) {
+        console.error('Failed to send message');
+      }
     } catch (error) {
-        console.error('Error sending message:', error);
+      console.error('Error sending message:', error);
     }
-};
+  };
 
   const handleInputChange = (e) => {
     setNewMessage(e.target.value);
@@ -133,10 +150,6 @@ function ChatConversationPage() {
     if (e.key === 'Enter' && !e.shiftKey) {
       handleSendMessage(e);
     }
-  };
-
-  const handleEmojiClick = (emojiObject) => {
-    setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
   };
 
   const formatDate = (timestamp) => {
@@ -205,18 +218,6 @@ function ChatConversationPage() {
           className="message-input"
           rows={1}
         />
-        <button
-          className="emoji-button"
-          onClick={() => setShowEmojiPicker((val) => !val)}
-        >
-          😊
-        </button>
-        {showEmojiPicker && (
-          <Picker
-            onEmojiClick={handleEmojiClick}
-            pickerStyle={{ position: 'absolute', bottom: '60px', right: '10px' }}
-          />
-        )}
         <button onClick={handleSendMessage} className="send-button">
           Send
         </button>

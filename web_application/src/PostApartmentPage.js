@@ -512,11 +512,12 @@ function PostApartmentPage() {
   };
 
   return (
+
     <div className='container'>
       <div className="post-apartment-wrapper">
         <AlertHandler isOpen={alertHandlerOpen} message={alertHandlerMessage} onClose={() => setAlertHandlerOpen(false)} />
         <ConfirmDialog isOpen={confirmDialogOpen} onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
-            <HeaderButtons />
+            <HeaderButtons badgeContent={0} />
         <div className="post-apartment-container">
           {/* <div className='space'></div> */}
           <div className="content"><Logo /></div>

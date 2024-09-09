@@ -14,7 +14,7 @@ const RoommateListPopup = ({ roommates, onClose, onSelectRoommate }) => {
           <div
             key={index}
             className="roommate-list-item"
-            onClick={() => onSelectRoommate(roommate.email)}
+            onClick={() => onSelectRoommate(roommate.email, roommate.full_name, roommate.photo_url)}
           >
             <img
               src={roommate.photo_url || profileImagePlaceholder}

@@ -92,7 +92,7 @@ const ApartmentDetails = () => {
       <div className="createProfileBackground"></div>
       <div className="backgroundImageMobile"></div>
       <div className="image-container">
-        <HeaderButtons badgeContent={4} />
+        <HeaderButtons badgeContent={0} />
         <BackButton className="back-button" onClick={handleBackClick}/>
       </div>
       <div className="space"></div>

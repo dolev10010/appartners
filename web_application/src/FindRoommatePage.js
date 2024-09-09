@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import config from './config.json';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -11,11 +11,13 @@ import './styles.css';
 import HeaderButtons from './HeaderButtons';
 import RoomatesFilterMenu from './RoomatesFilterMenu';
 import { CiFilter } from "react-icons/ci";
+import  UserContext from './UserContext';
 import Logo from './Logo';
 
 
 
 function FindRoommatePage() {
+  const { userEmail } = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,15 +64,21 @@ function FindRoommatePage() {
   };
 
   const handleMessageClick = (profile) => {
-    navigate(`/chat/${profile.profile_email}`, {
-      state: {
-        first_name: profile.full_name.split(" ")[0],
-        last_name: profile.full_name.split(" ")[1],
-        photo_url: profile.photo_url
-      }
-    });
-  };
+    if(userEmail) {
+      navigate(`/chat/${profile.profile_email}`, { 
+        state: { 
+          first_name: profile.full_name.split(" ")[0], 
+          last_name: profile.full_name.split(" ")[1], 
+          photo_url: profile.photo_url 
+        } 
+      });
+    }
+  else {
+    navigate('/login');
+  }
 
+};
+  
   useEffect(() => {
     if (location.state?.filters) {
       setFilters(location.state.filters);
