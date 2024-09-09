@@ -37,7 +37,8 @@ function FindRoommatePage() {
         const response = await fetch(`http://${config.serverPublicIP}:5433/get-roommate-profiles?${queryString}`);
         if (response.ok) {
           const data = await response.json();
-          setProfiles(data);
+          const filteredProfiles = data.filter(profile => profile.full_name && profile.full_name.toLowerCase() !== 'none none');
+          setProfiles(filteredProfiles);
         } else {
           console.error('Failed to fetch profiles');
         }
